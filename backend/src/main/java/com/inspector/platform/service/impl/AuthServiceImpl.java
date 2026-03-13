@@ -82,6 +82,7 @@ public class AuthServiceImpl implements AuthService {
                     .email(user.getEmail())
                     .role(user.getRole())
                     .userId(user.getId())
+                    .profileCompleted(user.isProfileCompleted())
                     .build();
 
         } catch (DisabledException e) {
@@ -91,4 +92,3 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 }
-

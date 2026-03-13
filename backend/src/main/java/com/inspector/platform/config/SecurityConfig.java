@@ -50,8 +50,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/api/inspector/profile/ranks").hasAnyRole("INSPECTOR", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/inspector/profile/delegations").hasAnyRole("INSPECTOR", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/inspector/profile/dependencies").hasAnyRole("INSPECTOR", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/inspector/profile/departments").hasAnyRole("INSPECTOR", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/inspector/profile/etablissements").hasAnyRole("INSPECTOR", "ADMIN")
+
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
+                        .requestMatchers("/api/inspector/profile").hasRole("INSPECTOR")
                         .requestMatchers("/api/dashboard/inspector").hasRole("INSPECTOR")
                         .requestMatchers("/api/dashboard/teacher").hasRole("TEACHER")
                         .requestMatchers("/api/dashboard/responsible").hasRole("PEDAGOGICAL_RESPONSIBLE")
@@ -97,4 +104,3 @@ public class SecurityConfig {
         return source;
     }
 }
-

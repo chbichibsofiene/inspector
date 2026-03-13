@@ -24,20 +24,21 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    
     @Column(nullable = false, unique = true, length = 100)
     private String serialCode;
 
-    
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     @Builder.Default
     private Role role = Role.TEACHER;
 
-    
     @Column(nullable = false)
     @Builder.Default
     private boolean enabled = false;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean profileCompleted = false;
 
     @Column(nullable = false, updatable = false)
     @Builder.Default
@@ -53,4 +54,3 @@ public class User {
         }
     }
 }
-
