@@ -70,6 +70,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/dashboard/responsible").hasRole("PEDAGOGICAL_RESPONSIBLE")
                         .requestMatchers("/api/dashboard/admin").hasRole("ADMIN")
 
+                        .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers("/api/messages/files/**").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
