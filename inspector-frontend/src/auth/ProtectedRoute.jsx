@@ -28,11 +28,22 @@ export default function ProtectedRoute({ allowRoles, children }) {
     window.location.href = "/login";
   };
 
+  const getDashboardPath = (role) => {
+    switch (role) {
+      case "ADMIN": return "/admin";
+      case "INSPECTOR": return "/inspector";
+      case "TEACHER": return "/teacher";
+      case "PEDAGOGICAL_RESPONSIBLE": return "/responsible";
+      default: return "/login";
+    }
+  };
+
   return (
     <div className="layout-container">
       <nav className="main-nav">
         <div className="nav-brand">Inspector Platform</div>
         <div className="nav-actions">
+          <Link to={getDashboardPath(user.role)} style={{ fontSize: '0.85rem', marginRight: '1rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>Go to Dashboard</Link>
           <Link to="/profile/setup" style={{ fontSize: '0.85rem', marginRight: '0.5rem' }}>My Profile</Link>
           <span className="user-email">{user.email}</span>
           <button onClick={handleLogout} className="logout-btn">Logout</button>
