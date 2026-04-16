@@ -137,32 +137,49 @@ public class MessengerService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<Map<String, Object>> getContacts(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         if (user.getRole() == Role.INSPECTOR) {
             return inspectorProfileRepository.findByUserId(userId).map(p -> {
+                if (p.getDelegation() == null || p.getSubject() == null) return List.<Map<String, Object>>of();
+                
                 return teacherProfileRepository.findAll().stream()
-                        .filter(t -> t.getDelegation().getId().equals(p.getDelegation().getId()) && t.getSubject().equals(p.getSubject()))
-                        .map(t -> Map.of(
-                                "id", t.getUser().getId(),
-                                "name", t.getFirstName() + " " + t.getLastName(),
-                                "role", "TEACHER",
-                                "details", t.getEtablissement().getName()
-                        ))
+                        .filter(t -> t.getDelegation() != null && 
+                                    t.getDelegation().getId().equals(p.getDelegation().getId()) && 
+                                    t.getSubject() != null && 
+                                    t.getSubject().equals(p.getSubject()))
+                        .map(t -> {
+                            Map<String, Object> contact = new java.util.HashMap<>();
+                            contact.put("id", t.getUser() != null ? t.getUser().getId() : null);
+                            contact.put("name", t.getFirstName() + " " + t.getLastName());
+                            contact.put("role", "TEACHER");
+                            contact.put("details", t.getEtablissement() != null ? t.getEtablissement().getName() : "");
+                            return contact;
+                        })
+                        .filter(m -> m.get("id") != null)
                         .collect(Collectors.toList());
             }).orElse(List.of());
         } else if (user.getRole() == Role.TEACHER) {
             return teacherProfileRepository.findByUserId(userId).map(p -> {
+                if (p.getDelegation() == null || p.getSubject() == null) return List.<Map<String, Object>>of();
+                
                 return inspectorProfileRepository.findAll().stream()
-                        .filter(i -> i.getDelegation().getId().equals(p.getDelegation().getId()) && i.getSubject().equals(p.getSubject()))
-                        .map(i -> Map.of(
-                                "id", i.getUser().getId(),
-                                "name", i.getFirstName() + " " + i.getLastName(),
-                                "role", "INSPECTOR",
-                                "details", i.getRank().name()
-                        ))
+                        .filter(i -> i.getDelegation() != null && 
+                                    i.getDelegation().getId().equals(p.getDelegation().getId()) && 
+                                    i.getSubject() != null && 
+                                    i.getSubject().equals(p.getSubject()))
+                        .map(i -> {
+                            Map<String, Object> contact = new java.util.HashMap<>();
+                            contact.put("id", i.getUser() != null ? i.getUser().getId() : null);
+                            contact.put("name", i.getFirstName() + " " + i.getLastName());
+                            contact.put("role", "INSPECTOR");
+                            contact.put("details", i.getRank() != null ? i.getRank().name() : "");
+                            return contact;
+                        })
+                        .filter(m -> m.get("id") != null)
                         .collect(Collectors.toList());
             }).orElse(List.of());
         }
