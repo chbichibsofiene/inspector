@@ -236,13 +236,24 @@ export default function Messenger() {
                     <div className="bubble">
                         {m.content && <div className="text-content">{m.content}</div>}
                         {m.fileUrl && (
-                          <div className="file-box">
-                            <div className="file-icon">📄</div>
-                            <div className="file-details">
-                              <span className="filename">{m.fileName}</span>
-                              <a href={`http://localhost:8081${m.fileUrl}`} target="_blank" rel="noreferrer">Download</a>
+                          m.fileType && m.fileType.startsWith("image/") ? (
+                            <div className="image-preview">
+                              <img 
+                                src={`http://localhost:8081${m.fileUrl}`} 
+                                alt={m.fileName} 
+                                onClick={() => window.open(`http://localhost:8081${m.fileUrl}`, '_blank')}
+                                style={{ cursor: 'pointer', maxWidth: '100%', borderRadius: '12px' }}
+                              />
                             </div>
-                          </div>
+                          ) : (
+                            <div className="file-box">
+                              <div className="file-icon">📄</div>
+                              <div className="file-details">
+                                <span className="filename">{m.fileName}</span>
+                                <a href={`http://localhost:8081${m.fileUrl}`} target="_blank" rel="noreferrer">Download</a>
+                              </div>
+                            </div>
+                          )
                         )}
                     </div>
                   </div>
@@ -485,6 +496,19 @@ export default function Messenger() {
           font-size: 15px;
           line-height: 1.4;
           position: relative;
+          overflow: hidden;
+        }
+
+        .bubble:has(.image-preview) {
+          padding: 0;
+          background: transparent !important;
+        }
+
+        .image-preview img {
+          display: block;
+          max-width: 300px;
+          max-height: 400px;
+          border-radius: 12px;
         }
 
         .msg-row.other .bubble {
