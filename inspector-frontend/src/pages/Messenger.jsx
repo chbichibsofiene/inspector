@@ -253,10 +253,14 @@ export default function Messenger() {
 
             <footer className="chat-footer">
               <div className="footer-actions">
-                <button className="circle-btn small" onClick={() => fileInputRef.current.click()}>➕</button>
+                <button 
+                  className="circle-btn primary-action" 
+                  onClick={() => fileInputRef.current.click()}
+                  title="Attach file"
+                >
+                  ➕
+                </button>
                 <input type="file" hidden ref={fileInputRef} onChange={handleFileUpload} />
-                <button className="circle-btn small">🖼️</button>
-                <button className="circle-btn small">📋</button>
               </div>
               <form className="input-pills" onSubmit={handleSend}>
                 <input 
@@ -544,10 +548,21 @@ export default function Messenger() {
           justify-content: center;
           cursor: pointer;
           font-size: 18px;
-          transition: background 0.2s;
+          transition: all 0.2s ease;
         }
 
         .circle-btn:hover { background: #e4e6eb; }
+        
+        .circle-btn.primary-action {
+          color: var(--fb-blue);
+          font-weight: bold;
+          font-size: 20px;
+        }
+        
+        .circle-btn.primary-action:hover {
+          background: #e7f3ff;
+          transform: scale(1.05);
+        }
 
         .send-icon {
             background: transparent;
@@ -555,6 +570,11 @@ export default function Messenger() {
             font-size: 20px;
             cursor: pointer;
             margin-left: 8px;
+            transition: transform 0.2s;
+        }
+        
+        .send-icon:hover {
+          transform: scale(1.1);
         }
 
         .fb-placeholder {
