@@ -230,7 +230,7 @@ export default function ProfileSetup() {
               </div>
               <label style={{ marginTop: "1rem" }}>
                 Phone Number
-                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+216 ..." required />
+                <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="+216 ..." required />
               </label>
               <label style={{ marginTop: "1rem" }}>
                 Internal Communication Language

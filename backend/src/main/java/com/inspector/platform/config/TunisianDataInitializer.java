@@ -19,11 +19,18 @@ public class TunisianDataInitializer implements CommandLineRunner {
     private final DepartmentRepository departmentRepository;
     private final EtablissementRepository etablissementRepository;
     private final UserRepository userRepository;
+    private final InspectorProfileRepository inspectorProfileRepository;
+    private final TeacherProfileRepository teacherProfileRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public void run(String... args) {
+        if (delegationRepository.count() > 0) {
+            log.info("Database already seeded. Skipping Tunisian Data Seeding.");
+            return;
+        }
+
         log.info("Starting Tunisian Data Seeding...");
 
         try {
@@ -101,28 +108,70 @@ public class TunisianDataInitializer implements CommandLineRunner {
                     .build());
         }
 
-        // Inspector
-        if (!userRepository.existsByEmail("moez.benali@inspector.tn")) {
-            userRepository.save(User.builder()
-                    .email("moez.benali@inspector.tn")
-                    .password(passwordEncoder.encode("Password123!"))
-                    .role(Role.INSPECTOR)
-                    .serialCode("INS123")
-                    .profileCompleted(false)
-                    .build());
-        }
-
         // Teacher
         if (!userRepository.existsByEmail("samia.nasri@teacher.tn")) {
-            userRepository.save(User.builder()
+            User teacher = userRepository.save(User.builder()
                     .email("samia.nasri@teacher.tn")
                     .password(passwordEncoder.encode("Password123!"))
                     .role(Role.TEACHER)
                     .serialCode("TEA456")
-                    .profileCompleted(false)
+                    .profileCompleted(true)
+                    .build());
+            
+            Delegation tunis1 = delegationRepository.findAll().stream().filter(d -> d.getName().equals("Tunis 1")).findFirst().orElseThrow();
+            Dependency drtunis1 = dependencyRepository.findAll().stream()
+                    .filter(d -> d.getDelegation().getId().equals(tunis1.getId()))
+                    .findFirst().orElseThrow();
+            Etablissement school = etablissementRepository.findAll().stream()
+                    .filter(e -> e.getDependency().getId().equals(drtunis1.getId()))
+                    .findFirst().orElseThrow();
+
+            teacherProfileRepository.save(TeacherProfile.builder()
+                    .user(teacher)
+                    .firstName("Samia")
+                    .lastName("Nasri")
+                    .phone("+21611222333")
+                    .language("French")
+                    .subject(Subject.MATH)
+                    .delegation(tunis1)
+                    .dependency(drtunis1)
+                    .etablissement(school)
                     .build());
         }
 
-        log.info("Seeded Test Users.");
+        // Inspector
+        if (!userRepository.existsByEmail("moez.benali@inspector.tn")) {
+            User inspector = userRepository.save(User.builder()
+                    .email("moez.benali@inspector.tn")
+                    .password(passwordEncoder.encode("Password123!"))
+                    .role(Role.INSPECTOR)
+                    .serialCode("INS123")
+                    .profileCompleted(true)
+                    .build());
+
+            Delegation tunis1 = delegationRepository.findAll().stream().filter(d -> d.getName().equals("Tunis 1")).findFirst().orElseThrow();
+            Dependency drtunis1 = dependencyRepository.findAll().stream()
+                    .filter(d -> d.getDelegation().getId().equals(tunis1.getId()))
+                    .findFirst().orElseThrow();
+            Department inspection = departmentRepository.findAll().stream()
+                    .filter(d -> d.getDelegation().getId().equals(tunis1.getId()))
+                    .findFirst().orElseThrow();
+
+            inspectorProfileRepository.save(InspectorProfile.builder()
+                    .user(inspector)
+                    .firstName("Moez")
+                    .lastName("Ben Ali")
+                    .phone("+21655666777")
+                    .language("French")
+                    .rank(InspectorRank.INSPECTOR)
+                    .subject(Subject.MATH)
+                    .schoolLevel(SchoolLevel.SECONDARY)
+                    .delegation(tunis1)
+                    .dependency(drtunis1)
+                    .department(inspection)
+                    .build());
+        }
+
+        log.info("Seeded Test Users and Profiles.");
     }
 }

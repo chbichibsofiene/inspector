@@ -11,6 +11,7 @@ import InspectorPowerBi from "./pages/InspectorPowerBi";
 import TeacherHome from "./pages/TeacherHome";
 import ResponsibleHome from "./pages/ResponsibleHome";
 import ProfileSetup from "./pages/ProfileSetup";
+import Messenger from "./pages/Messenger";
 
 export default function App() {
   return (
@@ -90,6 +91,15 @@ export default function App() {
               element={
                 <ProtectedRoute allowRoles={["PEDAGOGICAL_RESPONSIBLE"]}>
                   <ResponsibleHome />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoute>
+                  <Messenger />
                 </ProtectedRoute>
               }
             />

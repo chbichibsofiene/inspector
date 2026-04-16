@@ -118,6 +118,26 @@ export default function InspectorHome() {
             Open Power BI
           </Link>
         </section>
+
+        <section className="card">
+          <div className="card-header">
+            <div>
+              <div className="card-title">Messenger</div>
+              <div className="card-subtitle">
+                Secure professional chat with teachers in your area.
+              </div>
+            </div>
+            <span className="tag">New</span>
+          </div>
+
+          <p className="muted">
+            Communicate directly and share files securely with teachers.
+          </p>
+
+          <Link className="primary-link-button" to="/messages">
+            Go to Messenger
+          </Link>
+        </section>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getTeacherDashboard } from "../api/dashboard";
 
 export default function TeacherHome() {
@@ -67,18 +68,21 @@ export default function TeacherHome() {
         <section className="card">
           <div className="card-header">
             <div>
-              <div className="card-title">Inspection follow-up</div>
+              <div className="card-title">Messenger</div>
               <div className="card-subtitle">
-                Upcoming visits and reports will appear here.
+                Chat with your assigned inspector and colleagues.
               </div>
             </div>
-            <span className="badge">Teacher</span>
+            <span className="tag">New</span>
           </div>
 
           <p className="muted">
-            The teacher can use this workspace to follow inspection schedules,
-            training invitations, and pedagogical feedback.
+            Communicate directly and share files securely with your inspector.
           </p>
+
+          <Link className="primary-link-button" to="/messages">
+            Go to Messenger
+          </Link>
         </section>
       </div>
 

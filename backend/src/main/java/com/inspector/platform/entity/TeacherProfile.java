@@ -30,6 +30,12 @@ public class TeacherProfile {
     @Column(nullable = false, length = 50)
     private Subject subject;
 
+    @Column(nullable = false, length = 20)
+    private String phone;
+
+    @Column(nullable = false, length = 10)
+    private String language;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "delegation_id", nullable = false)
     private Delegation delegation;
