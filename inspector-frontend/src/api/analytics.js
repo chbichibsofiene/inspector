@@ -1,3 +1,3 @@
 import http from "./http";
 
-export const getPowerBiDataset = () => http.get("/api/inspector/analytics/powerbi");
+export const getPowerBiDataset = () => http.get("/inspector/analytics/powerbi");
