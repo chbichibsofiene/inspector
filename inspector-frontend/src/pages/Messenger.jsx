@@ -213,11 +213,6 @@ export default function Messenger() {
                   <span className="status">Active now</span>
                 </div>
               </div>
-              <div className="chat-actions">
-                <button className="icon-btn">📞</button>
-                <button className="icon-btn">📹</button>
-                <button className="icon-btn">ℹ️</button>
-              </div>
             </header>
 
             <div className="messages-flow">
