@@ -12,6 +12,7 @@ export default function Messenger() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [inspectedImage, setInspectedImage] = useState(null);
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -238,7 +239,12 @@ export default function Messenger() {
                         {m.fileUrl && (
                           m.fileType && m.fileType.startsWith('image/') ? (
                             <div className="image-container">
-                              <img src={`http://localhost:8081${m.fileUrl}`} alt={m.fileName} className="chat-image" />
+                              <img 
+                                src={`http://localhost:8081${m.fileUrl}`} 
+                                alt={m.fileName} 
+                                className="chat-image selectable" 
+                                onClick={() => setInspectedImage({url: m.fileUrl, name: m.fileName})}
+                              />
                             </div>
                           ) : (
                             <div className="file-box">
@@ -289,6 +295,40 @@ export default function Messenger() {
           </div>
         )}
       </main>
+
+      {/* Image Inspection Overlay */}
+      {inspectedImage && (
+        <div className="image-overlay" onClick={() => setInspectedImage(null)}>
+          <div className="overlay-header">
+            <span className="overlay-filename">{inspectedImage.name}</span>
+            <div className="overlay-actions">
+              <a 
+                href={`http://localhost:8081${inspectedImage.url}`} 
+                target="_blank" 
+                rel="noreferrer" 
+                className="overlay-download-btn"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Download
+              </a>
+              <button 
+                className="overlay-close-btn" 
+                onClick={() => setInspectedImage(null)}
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+          <div className="overlay-content-wrapper">
+            <img 
+              src={`http://localhost:8081${inspectedImage.url}`} 
+              alt={inspectedImage.name} 
+              className="overlay-image" 
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
 
       <style>{`
         :root {
@@ -606,6 +646,86 @@ export default function Messenger() {
         }
 
         .role-snippet { font-size: 12px; color: var(--text-muted); }
+
+        /* Image Inspection Overlay */
+        .chat-image.selectable {
+          cursor: pointer;
+          transition: filter 0.2s;
+        }
+        .chat-image.selectable:hover {
+          filter: brightness(0.9);
+        }
+
+        .image-overlay {
+          position: fixed;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(0, 0, 0, 0.85);
+          z-index: 1000;
+          display: flex;
+          flex-direction: column;
+          backdrop-filter: blur(5px);
+        }
+
+        .overlay-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 16px 24px;
+          background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
+          color: white;
+        }
+
+        .overlay-filename {
+          font-weight: 500;
+          font-size: 16px;
+        }
+
+        .overlay-actions {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .overlay-download-btn {
+          color: white;
+          text-decoration: none;
+          background: rgba(255, 255, 255, 0.2);
+          padding: 6px 16px;
+          border-radius: 20px;
+          font-weight: 600;
+          font-size: 14px;
+          transition: background 0.2s;
+        }
+
+        .overlay-download-btn:hover {
+          background: rgba(255, 255, 255, 0.3);
+        }
+
+        .overlay-close-btn {
+          background: transparent;
+          border: none;
+          color: white;
+          font-size: 24px;
+          cursor: pointer;
+          padding: 0 8px;
+        }
+
+        .overlay-content-wrapper {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+          overflow: hidden;
+        }
+
+        .overlay-image {
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+          border-radius: 8px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
       `}</style>
     </div>
   );
