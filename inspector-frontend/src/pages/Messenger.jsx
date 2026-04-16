@@ -236,14 +236,9 @@ export default function Messenger() {
                     <div className="bubble">
                         {m.content && <div className="text-content">{m.content}</div>}
                         {m.fileUrl && (
-                          m.fileType && m.fileType.startsWith("image/") ? (
-                            <div className="image-preview">
-                              <img 
-                                src={`http://localhost:8081${m.fileUrl}`} 
-                                alt={m.fileName} 
-                                onClick={() => window.open(`http://localhost:8081${m.fileUrl}`, '_blank')}
-                                style={{ cursor: 'pointer', maxWidth: '100%', borderRadius: '12px' }}
-                              />
+                          m.fileType && m.fileType.startsWith('image/') ? (
+                            <div className="image-container">
+                              <img src={`http://localhost:8081${m.fileUrl}`} alt={m.fileName} className="chat-image" />
                             </div>
                           ) : (
                             <div className="file-box">
@@ -496,19 +491,6 @@ export default function Messenger() {
           font-size: 15px;
           line-height: 1.4;
           position: relative;
-          overflow: hidden;
-        }
-
-        .bubble:has(.image-preview) {
-          padding: 0;
-          background: transparent !important;
-        }
-
-        .image-preview img {
-          display: block;
-          max-width: 300px;
-          max-height: 400px;
-          border-radius: 12px;
         }
 
         .msg-row.other .bubble {
@@ -534,6 +516,18 @@ export default function Messenger() {
         }
 
         .file-box a { color: inherit; font-size: 12px; text-decoration: underline; }
+
+        .image-container {
+          margin-top: 4px;
+        }
+
+        .chat-image {
+          max-width: 100%;
+          max-height: 250px;
+          border-radius: 12px;
+          display: block;
+          object-fit: cover;
+        }
 
         .chat-footer {
           padding: 12px 16px;
