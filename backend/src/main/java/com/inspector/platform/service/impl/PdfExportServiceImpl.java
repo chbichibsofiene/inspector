@@ -27,16 +27,16 @@ public class PdfExportServiceImpl implements PdfExportService {
 
     @Override
     @Transactional(readOnly = true)
-    public byte[] exportReport(Long inspectorId, Long reportId) {
+    public byte[] exportReport(Long userId, Long reportId, boolean isTeacher) {
         ActivityReport report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Report not found"));
-        verifyOwner(inspectorId, report);
+        verifyAccess(userId, report, isTeacher);
 
         if (report.getImportedPdf() != null && report.getImportedPdf().length > 0) {
             return report.getImportedPdf();
         }
 
-        return buildPdf(report);
+        return buildPdf(report, isTeacher);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class PdfExportServiceImpl implements PdfExportService {
     public void importReportPdf(Long inspectorId, Long reportId, String fileName, byte[] content) {
         ActivityReport report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Report not found"));
-        verifyOwner(inspectorId, report);
+        verifyAccess(inspectorId, report, false);
 
         if (content == null || content.length == 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PDF file is empty");
@@ -59,24 +59,30 @@ public class PdfExportServiceImpl implements PdfExportService {
 
     @Override
     @Transactional(readOnly = true)
-    public String getReportPdfFileName(Long inspectorId, Long reportId) {
+    public String getReportPdfFileName(Long userId, Long reportId, boolean isTeacher) {
         ActivityReport report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Report not found"));
-        verifyOwner(inspectorId, report);
+        verifyAccess(userId, report, isTeacher);
 
         return report.getImportedPdfFileName() == null || report.getImportedPdfFileName().isBlank()
                 ? "activity-report-" + reportId + ".pdf"
                 : report.getImportedPdfFileName();
     }
 
-    private void verifyOwner(Long inspectorId, ActivityReport report) {
-        if (!report.getInspector().getId().equals(inspectorId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not own this report");
+    private void verifyAccess(Long userId, ActivityReport report, boolean isTeacher) {
+        if (isTeacher) {
+            if (report.getTeacher() == null || !report.getTeacher().getUser().getId().equals(userId)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This report does not belong to you");
+            }
+        } else {
+            if (!report.getInspector().getId().equals(userId)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not own this report");
+            }
         }
     }
 
-    private byte[] buildPdf(ActivityReport report) {
-        List<String> lines = buildReportLines(report);
+    private byte[] buildPdf(ActivityReport report, boolean isTeacher) {
+        List<String> lines = buildReportLines(report, isTeacher);
         StringBuilder stream = new StringBuilder();
         stream.append("BT\n");
         stream.append("/F1 16 Tf\n");
@@ -128,17 +134,21 @@ public class PdfExportServiceImpl implements PdfExportService {
         return output.toByteArray();
     }
 
-    private List<String> buildReportLines(ActivityReport report) {
+    private List<String> buildReportLines(ActivityReport report, boolean isTeacher) {
         Activity activity = report.getActivity();
         TeacherProfile teacher = report.getTeacher();
         String teacherName = teacher == null
                 ? "General activity report"
                 : teacher.getFirstName() + " " + teacher.getLastName();
 
+        String scoreDisplay = (report.getScore() == null || isTeacher) 
+                ? (isTeacher ? "Confidential" : "Not scored") 
+                : report.getScore() + "/20";
+
         return List.of(
                 "Report title: " + report.getTitle(),
                 "Status: " + report.getStatus(),
-                "Score: " + (report.getScore() == null ? "Not scored" : report.getScore() + "/20"),
+                "Score: " + scoreDisplay,
                 "Activity: " + activity.getTitle(),
                 "Activity type: " + activity.getType(),
                 "Activity date: " + activity.getStartDateTime().format(DATE_FORMAT),

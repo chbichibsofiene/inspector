@@ -57,6 +57,8 @@ public class TeacherProfileServiceImpl implements TeacherProfileService {
                 .delegation(delegation)
                 .dependency(dependency)
                 .etablissement(etablissement)
+                .phone(request.getPhone())
+                .language(request.getLanguage())
                 .build();
 
         TeacherProfile savedProfile = profileRepository.save(profile);
@@ -70,6 +72,7 @@ public class TeacherProfileServiceImpl implements TeacherProfileService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TeacherProfileResponse getProfile(Long userId) {
         TeacherProfile profile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found"));
@@ -97,6 +100,8 @@ public class TeacherProfileServiceImpl implements TeacherProfileService {
         profile.setDelegation(delegation);
         profile.setDependency(dependency);
         profile.setEtablissement(etablissement);
+        profile.setPhone(request.getPhone());
+        profile.setLanguage(request.getLanguage());
 
         TeacherProfile updatedProfile = profileRepository.save(profile);
         return mapToResponse(updatedProfile);
@@ -115,6 +120,8 @@ public class TeacherProfileServiceImpl implements TeacherProfileService {
                         profile.getEtablissement().getId(), 
                         profile.getEtablissement().getName(), 
                         profile.getEtablissement().getSchoolLevel()))
+                .phone(profile.getPhone())
+                .language(profile.getLanguage())
                 .build();
     }
 }

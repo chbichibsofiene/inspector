@@ -22,4 +22,10 @@ public class ActivityResponse {
     private ActivityType type;
     private String location;
     private List<TeacherDto> guests;
+    private Long personalReportId;
+    private String inspectorName;
+    @com.fasterxml.jackson.annotation.JsonProperty("isOnline")
+    private boolean isOnline;
+    private String meetingUrl;
+
 }

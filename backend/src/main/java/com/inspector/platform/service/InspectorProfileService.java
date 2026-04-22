@@ -1,11 +1,6 @@
 package com.inspector.platform.service;
 
-import com.inspector.platform.dto.EtablissementDto;
-import com.inspector.platform.dto.InspectorProfileRequest;
-import com.inspector.platform.dto.InspectorProfileResponse;
-import com.inspector.platform.dto.ReferenceDto;
-import com.inspector.platform.dto.TeacherDto;
-
+import com.inspector.platform.dto.*;
 import java.util.List;
 import java.util.Map;
 
@@ -31,4 +26,9 @@ public interface InspectorProfileService {
     
     List<EtablissementDto> getEtablissementsByDependency(Long dependencyId);
     List<EtablissementDto> getEtablissementsByDependencyAndSchoolLevel(Long dependencyId, String schoolLevel);
+    
+    // Teacher Insights for Inspectors
+    List<TimetableDto> getTeacherTimetable(Long inspectorUserId, Long teacherProfileId);
+    List<ReportResponse> getTeacherReports(Long inspectorUserId, Long teacherProfileId);
+    List<QuizSubmissionResponse> getTeacherQuizzes(Long inspectorUserId, Long teacherId);
 }

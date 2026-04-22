@@ -20,9 +20,12 @@ export default function ProfileSetup() {
     rank: "",
     subject: "",
     schoolLevel: "",
-    delegationId: "",
-    dependencyId: "",
-    departmentId: "",
+    delegationId: "", // For teachers
+    dependencyId: "", // For teachers
+    departmentId: "", 
+    delegationIds: [], // For inspectors
+    dependencyIds: [], // For inspectors
+    departmentIds: [], // For inspectors
     etablissementId: "", // For teachers
     etablissementIds: [], // For inspectors
   });
@@ -76,9 +79,12 @@ export default function ProfileSetup() {
             rank: p.rank || "",
             subject: p.subject || "",
             schoolLevel: p.schoolLevel || "",
-            delegationId: p.delegation.id,
-            dependencyId: p.dependency.id,
+            delegationId: p.delegation?.id || "",
+            dependencyId: p.dependency?.id || "",
             departmentId: p.department?.id || "",
+            delegationIds: p.delegations?.map(d => d.id) || [],
+            dependencyIds: p.dependencies?.map(d => d.id) || [],
+            departmentIds: p.departments?.map(d => d.id) || [],
             etablissementId: p.etablissement?.id || "",
             etablissementIds: p.etablissements?.map(e => e.id) || [],
           });
@@ -90,57 +96,68 @@ export default function ProfileSetup() {
 
     loadInitialData();
     loadExistingProfile();
-  }, [user, navigate]);
+  }, [user?.id, user?.profileCompleted, navigate]);
 
   // Load Dependencies/Departments when Delegation changes
   useEffect(() => {
-    if (formData.delegationId) {
+    const ids = user?.role === "INSPECTOR" ? formData.delegationIds : [formData.delegationId].filter(Boolean);
+    if (ids.length > 0) {
       async function loadRegionalData() {
         try {
-          const [depRes, deptRes] = await Promise.all([
-            profileApi.getDependencies(formData.delegationId),
-            profileApi.getDepartments(formData.delegationId),
-          ]);
-          setDependencies(depRes.data.data);
-          setDepartments(deptRes.data.data);
+          const deps = await Promise.all(ids.map(id => profileApi.getDependencies(id)));
+          const depts = await Promise.all(ids.map(id => profileApi.getDepartments(id)));
+          
+          const allDeps = deps.flatMap(res => res.data.data);
+          const allDepts = depts.flatMap(res => res.data.data);
+          
+          // Deduplicate
+          const uniqueDeps = Array.from(new Map(allDeps.map(item => [item.id, item])).values());
+          const uniqueDepts = Array.from(new Map(allDepts.map(item => [item.id, item])).values());
+          
+          setDependencies(uniqueDeps);
+          setDepartments(uniqueDepts);
         } catch (err) {
           setError("Failed to load regional data.");
         }
       }
       loadRegionalData();
     }
-  }, [formData.delegationId]);
+  }, [formData.delegationId, formData.delegationIds.length, user?.role]);
 
   // Load Etablissements when Dependency or Level changes
   useEffect(() => {
-    if (formData.dependencyId) {
+    const ids = user?.role === "INSPECTOR" ? formData.dependencyIds : [formData.dependencyId].filter(Boolean);
+    if (ids.length > 0) {
       async function loadEtablissements() {
         try {
-          const res = await profileApi.getEtablissements(
-            formData.dependencyId, 
-            user.role === "INSPECTOR" ? formData.schoolLevel : ""
-          );
-          setEtablissements(res.data.data);
+          const resArr = await Promise.all(ids.map(id => 
+            profileApi.getEtablissements(id, user.role === "INSPECTOR" ? formData.schoolLevel : "")
+          ));
+          
+          const allEtabs = resArr.flatMap(res => res.data.data);
+          const uniqueEtabs = Array.from(new Map(allEtabs.map(item => [item.id, item])).values());
+          
+          setEtablissements(uniqueEtabs);
         } catch (err) {
           setError("Failed to load institutions.");
         }
       }
       loadEtablissements();
     }
-  }, [formData.dependencyId, formData.schoolLevel, user.role]);
+  }, [formData.dependencyId, formData.dependencyIds.length, formData.schoolLevel, user?.role]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleMultiSelect = (id) => {
+  const handleMultiSelect = (field, id) => {
     setFormData((prev) => {
-      const exists = prev.etablissementIds.includes(id);
+      const exists = prev[field].includes(id);
       if (exists) {
-        return { ...prev, etablissementIds: prev.etablissementIds.filter((item) => item !== id) };
+        return { ...prev, [field]: prev[field].filter((item) => item !== id) };
       } else {
-        return { ...prev, etablissementIds: [...prev.etablissementIds, id] };
+        return { ...prev, [field]: [...prev[field], id] };
       }
     });
   };
@@ -183,7 +200,7 @@ export default function ProfileSetup() {
 
   const isStep1Valid = formData.firstName && formData.lastName && formData.phone;
   const isStep2Valid = user.role === "INSPECTOR" 
-    ? (formData.rank && formData.subject && formData.schoolLevel && formData.delegationId && formData.dependencyId && formData.departmentId)
+    ? (formData.rank && formData.subject && formData.schoolLevel && formData.delegationIds.length > 0 && formData.dependencyIds.length > 0 && formData.departmentIds.length > 0)
     : (formData.subject && formData.delegationId && formData.dependencyId && formData.etablissementId);
   const isStep3Valid = user.role === "INSPECTOR" ? formData.etablissementIds.length > 0 : true;
 
@@ -240,7 +257,9 @@ export default function ProfileSetup() {
                   <option value="English">English</option>
                 </select>
               </label>
+
               <div className="form-actions" style={{ marginTop: "2rem" }}>
+
                 <button type="button" onClick={nextStep} disabled={!isStep1Valid} style={{ width: "100%" }}>
                   Next Details
                 </button>
@@ -279,40 +298,73 @@ export default function ProfileSetup() {
                 </select>
               </label>
 
-              <div className="form-row" style={{ marginTop: "1rem" }}>
-                <label>
-                  Delegation
+              <div style={{ marginTop: "1rem" }}>
+                <label style={{ marginBottom: "0.5rem", display: "block" }}>Delegations</label>
+                {user.role === "INSPECTOR" ? (
+                  <div className="multi-select-grid">
+                    {delegations.map(d => (
+                      <div 
+                        key={d.id} 
+                        className={`chip ${formData.delegationIds.includes(d.id) ? "active" : ""}`}
+                        onClick={() => handleMultiSelect("delegationIds", d.id)}
+                      >
+                        {d.name}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
                   <select name="delegationId" value={formData.delegationId} onChange={handleChange} required>
                     <option value="">Select</option>
                     {delegations.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
                   </select>
-                </label>
-                <label>
-                  Regional Dependency
+                )}
+              </div>
+
+              <div style={{ marginTop: "1rem" }}>
+                <label style={{ marginBottom: "0.5rem", display: "block" }}>Regional Dependencies</label>
+                {user.role === "INSPECTOR" ? (
+                  <div className="multi-select-grid">
+                    {dependencies.map(d => (
+                      <div 
+                        key={d.id} 
+                        className={`chip ${formData.dependencyIds.includes(d.id) ? "active" : ""}`}
+                        onClick={() => handleMultiSelect("dependencyIds", d.id)}
+                      >
+                        {d.name}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
                   <select name="dependencyId" value={formData.dependencyId} onChange={handleChange} disabled={!formData.delegationId} required>
                     <option value="">Select</option>
                     {dependencies.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
                   </select>
-                </label>
+                )}
               </div>
 
-              {user.role === "INSPECTOR" ? (
-                <label style={{ marginTop: "1rem" }}>
-                  Assigned Department
-                  <select name="departmentId" value={formData.departmentId} onChange={handleChange} disabled={!formData.delegationId} required>
-                    <option value="">Select</option>
-                    {departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
-                  </select>
+              <div style={{ marginTop: "1rem" }}>
+                <label style={{ marginBottom: "0.5rem", display: "block" }}>
+                  {user.role === "INSPECTOR" ? "Assigned Departments" : "Primary School (Teacher Assignment)"}
                 </label>
-              ) : (
-                <label style={{ marginTop: "1rem" }}>
-                  Primary School (Teacher Assignment)
+                {user.role === "INSPECTOR" ? (
+                  <div className="multi-select-grid">
+                    {departments.map(d => (
+                      <div 
+                        key={d.id} 
+                        className={`chip ${formData.departmentIds.includes(d.id) ? "active" : ""}`}
+                        onClick={() => handleMultiSelect("departmentIds", d.id)}
+                      >
+                        {d.name}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
                   <select name="etablissementId" value={formData.etablissementId} onChange={handleChange} disabled={!formData.dependencyId} required>
                     <option value="">Select School</option>
                     {etablissements.map(e => <option key={e.id} value={e.id}>{e.name} ({e.schoolLevel})</option>)}
                   </select>
-                </label>
-              )}
+                )}
+              </div>
 
               <div className="form-actions" style={{ marginTop: "2rem" }}>
                 <button type="button" className="secondary-action-btn" onClick={prevStep}>Back</button>
@@ -339,7 +391,7 @@ export default function ProfileSetup() {
                   etablissements.map(e => (
                     <div 
                       key={e.id} 
-                      onClick={() => handleMultiSelect(e.id)}
+                      onClick={() => handleMultiSelect("etablissementIds", e.id)}
                       style={{ 
                         padding: "0.75rem 1rem", 
                         borderRadius: "10px", 

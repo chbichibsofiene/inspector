@@ -25,4 +25,10 @@ public class TeacherProfileRequest {
 
     @NotNull(message = "Etablissement is required")
     private Long etablissementId;
+
+    @NotBlank(message = "Phone number is required")
+    private String phone;
+
+    @NotBlank(message = "Language is required")
+    private String language;
 }

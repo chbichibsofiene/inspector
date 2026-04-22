@@ -5,6 +5,24 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import {
+  Clock,
+  MapPin,
+  Calendar,
+  ChevronRight,
+  Search,
+  Users,
+  CheckCircle2,
+  Trash2,
+  Plus,
+  LayoutGrid,
+  FileText,
+  Building2,
+  X,
+  Check,
+  Video,
+  Link as LinkIcon
+} from "lucide-react";
+import {
   createActivity,
   deleteActivity,
   getActivities,
@@ -20,6 +38,7 @@ const emptyForm = {
   endDateTime: "",
   type: "INSPECTION",
   location: "",
+  isOnline: false,
   guestTeacherIds: [],
 };
 
@@ -46,12 +65,31 @@ function addHours(value, hours) {
   return toDateTimeLocalValue(date);
 }
 
+function formatTime(value) {
+  return new Intl.DateTimeFormat(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
+const TYPE_LABELS = {
+  INVITATION_REUNION: "Invitation réunion",
+  VISITE_PEDAGOGIQUE: "Visite pédagogique",
+  INSPECTION: "Inspection",
+  FORMATION: "Formation",
+  LECON_TEMOIN: "Leçon témoin",
+  REUNION_TRAVAIL: "Réunion de travail",
+  SEMINAIRE: "Séminaire",
+  COMMISSION: "Commission"
+};
+
 export default function InspectorCalendar() {
   const [activities, setActivities] = useState([]);
   const [reports, setReports] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -134,6 +172,15 @@ export default function InspectorCalendar() {
     });
   }
 
+  function handleSelectAll() {
+    const allSelected = form.guestTeacherIds.length === teachers.length;
+    if (allSelected) {
+      updateForm("guestTeacherIds", []);
+    } else {
+      updateForm("guestTeacherIds", teachers.map(t => t.id));
+    }
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
@@ -195,7 +242,6 @@ export default function InspectorCalendar() {
   }
 
   function handleCalendarSelect(selection) {
-    setSuccess("Date selected. Complete the activity details and save.");
     setEditingId(null);
     setForm((current) => ({
       ...current,
@@ -204,16 +250,17 @@ export default function InspectorCalendar() {
         selection.end || new Date(selection.start.getTime() + 60 * 60 * 1000)
       ),
     }));
+    setShowModal(true);
   }
 
   function handleDateClick(selection) {
-    setSuccess("Date selected. Complete the activity details and save.");
     setEditingId(null);
     setForm((current) => ({
       ...current,
       startDateTime: toDateTimeLocalValue(selection.date),
       endDateTime: addHours(selection.date, 1),
     }));
+    setShowModal(true);
   }
 
   function handleEventClick(selection) {
@@ -226,14 +273,18 @@ export default function InspectorCalendar() {
       endDateTime: toDateTimeLocalValue(activity.endDateTime),
       type: activity.type || "INSPECTION",
       location: activity.location || "",
+      isOnline: activity.isOnline === true || activity.online === true,
+      meetingUrl: activity.meetingUrl || "",
       guestTeacherIds: (activity.guests || []).map((guest) => guest.id),
     });
-    setSuccess("Activity loaded. Edit the details and click Update activity.");
+
+    setShowModal(true);
   }
 
   function resetForm() {
     setEditingId(null);
     setForm(emptyForm);
+    setShowModal(false);
   }
 
   async function handleDropOrResize(info) {
@@ -259,249 +310,475 @@ export default function InspectorCalendar() {
     }
   }
 
+  function renderEventContent(eventInfo) {
+    const activity = eventInfo.event.extendedProps?.activity;
+    
+    if (!activity) {
+      return (
+        <div className="premium-event premium-event-inspection">
+          <div className="event-time">
+            <Clock size={10} /> {eventInfo.timeText}
+          </div>
+          <div className="event-title">{eventInfo.event.title}</div>
+        </div>
+      );
+    }
+
+    const typeClass = activity.type ? activity.type.toLowerCase() : 'inspection';
+
+    return (
+      <div className={`premium-event premium-event-${typeClass}`}>
+        <div className="event-time">
+          <Clock size={10} /> {eventInfo.timeText}
+        </div>
+        <div className="event-title">{activity.title}</div>
+        {activity.location && (
+          <div className="event-location">
+            <MapPin size={10} /> {activity.location}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div>
       <header className="page-header">
         <div>
-          <div className="page-title">Activity calendar</div>
+          <div className="page-title">Activity Calendar</div>
           <div className="page-subtitle">
-            Plan inspections and training sessions by date.
+            Your centralized planning workspace for pedagogical activities.
           </div>
         </div>
         <Link className="secondary-link-button" to="/inspector">
-          Back to dashboard
+          Back to Dashboard
         </Link>
       </header>
 
       {error && <div className="auth-error">{error}</div>}
       {success && <div className="success-message">{success}</div>}
 
-      <section className="calendar-shell">
-        <div className="calendar-panel">
-          <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView="timeGridWeek"
-            headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: "dayGridMonth,timeGridWeek,timeGridDay",
-            }}
-            buttonText={{
-              today: "Today",
-              month: "Month",
-              week: "Week",
-              day: "Day",
-            }}
-            events={calendarEvents}
-            editable
-            selectable
-            selectMirror
-            nowIndicator
-            height="auto"
-            allDaySlot={false}
-            slotMinTime="07:00:00"
-            slotMaxTime="19:00:00"
-            select={handleCalendarSelect}
-            dateClick={handleDateClick}
-            eventClick={handleEventClick}
-            eventDrop={handleDropOrResize}
-            eventResize={handleDropOrResize}
-          />
-        </div>
-      </section>
-
-      <div className="dashboard-grid activity-workspace">
-        <section className="card">
-          <div className="card-header">
-            <div>
-              <div className="card-title">
-                {editingId ? "Edit activity" : "New activity"}
-              </div>
-              <div className="card-subtitle">
-                Select a date in the calendar, then complete the details.
-              </div>
-            </div>
-            <span className="tag">{loading ? "Loading" : editingId ? "Editing" : "Planner"}</span>
-          </div>
-
-          <form className="activity-form" onSubmit={handleSubmit}>
-            <label>
-              Title
-              <input
-                value={form.title}
-                onChange={(event) => updateForm("title", event.target.value)}
-                required
+      <div className="calendar-layout">
+        <div className="calendar-main">
+          <section className="calendar-shell" style={{ marginTop: 0 }}>
+            <div className="calendar-panel">
+              <FullCalendar
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                initialView="timeGridWeek"
+                headerToolbar={{
+                  left: "prev,next today",
+                  center: "title",
+                  right: "dayGridMonth,timeGridWeek,timeGridDay",
+                }}
+                buttonText={{
+                  today: "Today",
+                  month: "Month",
+                  week: "Week",
+                  day: "Day",
+                }}
+                events={calendarEvents}
+                editable
+                selectable
+                selectMirror
+                nowIndicator
+                height="auto"
+                aspectRatio={1.8}
+                allDaySlot={false}
+                slotMinTime="08:00:00"
+                slotMaxTime="17:00:00"
+                select={handleCalendarSelect}
+                dateClick={handleDateClick}
+                eventClick={handleEventClick}
+                eventDrop={handleDropOrResize}
+                eventResize={handleDropOrResize}
+                eventContent={renderEventContent}
               />
-            </label>
-
-            <div className="form-row">
-              <label>
-                Type
-                <select
-                  value={form.type}
-                  onChange={(event) => updateForm("type", event.target.value)}
-                  required
-                >
-                  <option value="INSPECTION">Inspection</option>
-                  <option value="TRAINING">Training</option>
-                </select>
-              </label>
-
-              <label>
-                Location
-                <input
-                  value={form.location}
-                  onChange={(event) => updateForm("location", event.target.value)}
-                  required
-                />
-              </label>
             </div>
+          </section>
 
-            <div className="form-row">
-              <label>
-                Starts
-                <input
-                  type="datetime-local"
-                  value={form.startDateTime}
-                  onChange={(event) => updateForm("startDateTime", event.target.value)}
-                  required
-                />
-              </label>
-
-              <label>
-                Ends
-                <input
-                  type="datetime-local"
-                  value={form.endDateTime}
-                  onChange={(event) => updateForm("endDateTime", event.target.value)}
-                  required
-                />
-              </label>
-            </div>
-
-            <label>
-              Description
-              <textarea
-                value={form.description}
-                onChange={(event) => updateForm("description", event.target.value)}
-                rows="3"
-              />
-            </label>
-
-            <div className="teacher-picker">
-              <div className="card-subtitle">Guests</div>
-              {teachers.length === 0 ? (
-                <p className="muted">No teacher profiles are available yet.</p>
-              ) : (
-                <div className="teacher-options">
-                  {teachers.map((teacher) => (
-                    <label key={teacher.id} className="teacher-option">
-                      <input
-                        type="checkbox"
-                        checked={form.guestTeacherIds.includes(teacher.id)}
-                        onChange={() => toggleTeacher(teacher.id)}
-                      />
-                      <span>
-                        {teacher.firstName} {teacher.lastName}
-                        <small>{teacher.etablissement?.name || teacher.email}</small>
-                      </span>
-                    </label>
-                  ))}
+          <section className="card" style={{ marginTop: "1.5rem" }}>
+            <div className="card-header">
+              <div>
+                <div className="card-title">Upcoming Activities</div>
+                <div className="card-subtitle">
+                  Review your next scheduled pedagogical sessions.
                 </div>
-              )}
-            </div>
-
-            <div className="form-actions">
-              <button type="submit" disabled={saving || form.guestTeacherIds.length === 0}>
-                {saving ? "Saving..." : editingId ? "Update activity" : "Create activity"}
-              </button>
-              {editingId && (
-                <button type="button" className="secondary-action-btn" onClick={resetForm}>
-                  Cancel edit
-                </button>
-              )}
-            </div>
-          </form>
-        </section>
-
-        <section className="card">
-          <div className="card-header">
-            <div>
-              <div className="card-title">Planned activities</div>
-              <div className="card-subtitle">
-                Click an event in the calendar to load its details.
               </div>
+              <Link className="primary-link-button compact-link-button" to="/inspector">
+                Workspace Indicators
+              </Link>
             </div>
-            <span className="badge">{activities.length} activities</span>
-          </div>
 
-          {activities.length === 0 ? (
-            <p className="muted">No activities planned yet.</p>
-          ) : (
-            <div className="activity-list">
-              {activities.map((activity) => {
-                const latestReport = latestReportByActivity.get(activity.id);
-
-                return (
-                  <article className="activity-item" key={activity.id}>
-                    <div>
-                      <div className="activity-title">
-                        {activity.title}
-                        <span className="badge">{activity.type}</span>
-                      </div>
-                      <p>{activity.description || "No description added."}</p>
-                      <div className="activity-meta">
-                        <span>{formatDateTime(activity.startDateTime)}</span>
-                        <span>{activity.location}</span>
-                        <span>
-                          {(activity.guests || [])
-                            .map((guest) => `${guest.firstName} ${guest.lastName}`)
-                            .join(", ") || "No guests"}
-                        </span>
-                        <span>{latestReport ? "Report ready" : "No report yet"}</span>
-                      </div>
+            {activities.length === 0 ? (
+              <p className="muted" style={{ textAlign: 'center', padding: '2rem' }}>No activities planned yet.</p>
+            ) : (
+              <div className="activity-grid" style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+                gap: '1.25rem',
+                marginTop: '1rem' 
+              }}>
+                {activities.slice(0, 6).map((activity) => (
+                  <article className="card" key={activity.id} style={{ 
+                    padding: '1.25rem', 
+                    border: '1px solid var(--border-subtle)',
+                    background: '#fcfdfe'
+                  }}>
+                    <div className="activity-title" style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>
+                      {activity.title}
+                      <span className={`badge ${activity.type ? activity.type.toLowerCase() : ''}`}>{TYPE_LABELS[activity.type] || activity.type}</span>
                     </div>
-                    <div className="item-actions">
-                      {latestReport && (
-                        <button
-                          type="button"
-                          className="secondary-action-btn"
-                          onClick={() => handleDownloadReportPdf(latestReport)}
-                        >
-                          PDF
-                        </button>
-                      )}
+                    <div className="activity-meta" style={{ display: 'grid', gap: '0.4rem', fontSize: '0.82rem' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <Clock size={14} className="text-muted" /> {formatDateTime(activity.startDateTime)}
+                      </span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <MapPin size={14} className="text-muted" /> {activity.location}
+                      </span>
+                    </div>
+                    <div className="item-actions" style={{ marginTop: '1rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '0.75rem' }}>
                       <Link
                         className="secondary-link-button compact-link-button"
                         to={`/inspector/reports?activityId=${activity.id}`}
                       >
                         Report
                       </Link>
-                      <button className="danger-btn" onClick={() => handleDelete(activity.id)}>
-                        Delete
+                      <button className="danger-btn" onClick={() => handleDelete(activity.id)} style={{ padding: '6px 10px' }}>
+                        <Trash2 size={14} />
                       </button>
                     </div>
                   </article>
-                );
-              })}
-            </div>
-          )}
-        </section>
+                ))}
+              </div>
+            )}
+          </section>
+        </div>
       </div>
 
-      <section className="card activity-list-card">
-        <div className="card-header">
-          <div>
-            <div className="card-title">Reports</div>
-            <div className="card-subtitle">
-              Write activity reports after inspections or training sessions.
+      {showModal && (
+        <div className="modal-overlay premium-overlay" onClick={() => !saving && setShowModal(false)}>
+          <div 
+            className={`premium-modal ${form.type ? form.type.toLowerCase() : ''}`} 
+            style={{ width: '90%', maxWidth: '640px' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={`modal-branding-bar branding-${form.type ? form.type.toLowerCase() : ''}`} />
+            
+            <header className="premium-modal-header">
+              <div>
+                <h2>{editingId ? "Update Activity" : "Secure New Schedule"}</h2>
+                <p className="muted" style={{ margin: 0, fontSize: '0.85rem' }}>
+                  {editingId ? "Modify your existing pedagogical plan" : "Establish a new professional session"}
+                </p>
+              </div>
+              <button 
+                type="button"
+                className="close-btn" 
+                onClick={() => !saving && setShowModal(false)}
+                style={{ background: '#f1f5f9', borderRadius: '50%', padding: '8px', border: 'none', cursor: 'pointer' }}
+              >
+                <X size={20} />
+              </button>
+            </header>
+
+            <div className="premium-modal-body">
+              <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '1.5rem' }}>
+                
+                <div className="form-group">
+                  <div className="group-header">
+                    <FileText size={14} /> Basic Information
+                  </div>
+                  <div className="input-with-icon">
+                    <Search className="input-icon" size={18} />
+                    <input
+                      type="text"
+                      placeholder="e.g. Visite de classe - 3ème Math"
+                      value={form.title}
+                      onChange={(event) => updateForm("title", event.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                  <div className="form-group">
+                    <div className="group-header">
+                      <LayoutGrid size={14} /> Category
+                    </div>
+                    <div className="input-with-icon">
+                      <LayoutGrid className="input-icon" size={18} />
+                      <select
+                        value={form.type}
+                        onChange={(event) => updateForm("type", event.target.value)}
+                        required
+                        style={{ appearance: 'none' }}
+                      >
+                        <option value="">Select Type</option>
+                        {Object.entries(TYPE_LABELS).map(([value, label]) => (
+                          <option key={value} value={value}>
+                            {label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <div className="group-header">
+                      <Clock size={14} /> Starts
+                    </div>
+                    <div className="input-with-icon">
+                      <Clock className="input-icon" size={18} />
+                      <input
+                        type="datetime-local"
+                        value={form.startDateTime}
+                        onChange={(event) => updateForm("startDateTime", event.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <div className="group-header">
+                    <Clock size={14} /> Ends
+                  </div>
+                  <div className="input-with-icon">
+                    <Clock className="input-icon" size={18} />
+                    <input
+                      type="datetime-local"
+                      value={form.endDateTime}
+                      onChange={(event) => updateForm("endDateTime", event.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <div className="group-header">
+                    <FileText size={14} /> Description
+                  </div>
+                  <div className="input-with-icon">
+                    <FileText className="input-icon" style={{ top: '15px' }} size={18} />
+                    <textarea
+                      value={form.description}
+                      onChange={(event) => updateForm("description", event.target.value)}
+                      rows="3"
+                      placeholder="Set the objectives for this session..."
+                      style={{ paddingTop: '12px' }}
+                    />
+                  </div>
+                </div>
+
+                    <div className="form-group" style={{ marginTop: '1.5rem' }}>
+                      <div className="group-header">
+                        <Video size={14} /> Meeting Type
+                      </div>
+                      <div style={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: '1fr 1fr', 
+                        gap: '12px',
+                        marginTop: '0.5rem'
+                      }}>
+                        <button 
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setForm(curr => ({ ...curr, isOnline: false, location: curr.location === "Online" ? "" : curr.location }));
+                          }}
+                          style={{
+                            padding: '1.25rem 1rem',
+                            borderRadius: '16px',
+                            border: '2px solid',
+                            borderColor: !form.isOnline ? 'var(--primary)' : 'var(--border-subtle)',
+                            background: !form.isOnline ? '#f0f9ff' : 'white',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '10px',
+                            transition: 'all 0.2s',
+                            boxShadow: !form.isOnline ? '0 4px 12px rgba(59, 130, 246, 0.15)' : 'none',
+                            outline: 'none'
+                          }}
+                        >
+                          <MapPin size={24} color={!form.isOnline ? 'var(--primary)' : '#94a3b8'} />
+                          <div style={{ fontWeight: 700, fontSize: '0.9rem', color: !form.isOnline ? '#0369a1' : '#64748b' }}>In-Person</div>
+                          <div style={{ fontSize: '0.75rem', color: '#94a3b8', textAlign: 'center' }}>At Location</div>
+                        </button>
+
+                        <button 
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setForm(curr => ({ ...curr, isOnline: true, location: "Online" }));
+                          }}
+                          style={{
+                            padding: '1.25rem 1rem',
+                            borderRadius: '16px',
+                            border: '2px solid',
+                            borderColor: form.isOnline ? 'var(--primary)' : 'var(--border-subtle)',
+                            background: form.isOnline ? '#f0f9ff' : 'white',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '10px',
+                            transition: 'all 0.2s',
+                            boxShadow: form.isOnline ? '0 4px 12px rgba(59, 130, 246, 0.15)' : 'none',
+                            outline: 'none'
+                          }}
+                        >
+                          <Video size={24} color={form.isOnline ? 'var(--primary)' : '#94a3b8'} />
+                          <div style={{ fontWeight: 700, fontSize: '0.9rem', color: form.isOnline ? '#0369a1' : '#64748b' }}>Online</div>
+                          <div style={{ fontSize: '0.75rem', color: '#94a3b8', textAlign: 'center' }}>Jitsi Video</div>
+                        </button>
+                      </div>
+                    </div>
+
+                    {form.isOnline && form.meetingUrl && (
+                      <div className="form-group" style={{ 
+                        marginTop: '1rem',
+                        padding: '1.25rem',
+                        background: '#f8fafc',
+                        borderRadius: '16px',
+                        border: '1px solid var(--border-subtle)'
+                      }}>
+                        <div className="group-header">
+                          <LinkIcon size={14} /> Jitsi Meeting Link
+                        </div>
+                        <div className="input-with-icon" style={{ marginTop: '0.5rem' }}>
+                          <LinkIcon className="input-icon" size={18} />
+                          <input
+                            type="text"
+                            value={form.meetingUrl}
+                            readOnly
+                            style={{ background: '#fff', cursor: 'default' }}
+                          />
+                        </div>
+                        <a 
+                          href={form.meetingUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="primary-link-button" 
+                          style={{ marginTop: '1rem', width: '100%', justifyContent: 'center' }}
+                        >
+                          Join Online Meeting Now
+                        </a>
+                      </div>
+                    )}
+
+                    <div className="form-group">
+                      <div className="group-header">
+                        <MapPin size={14} /> {form.isOnline ? "Virtual Location" : "Meeting Location"}
+                      </div>
+                      <div className="input-with-icon">
+                        <MapPin className="input-icon" size={18} />
+                        <input
+                          type="text"
+                          placeholder={form.isOnline ? "Online" : "Specify where to meet"}
+                          value={form.location}
+                          onChange={(e) => updateForm("location", e.target.value)}
+                          required
+                        />
+                      </div>
+                    </div>
+
+                <div className="form-group">
+                  <div className="group-header" style={{ justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Users size={14} /> Assign Teachers
+                      <span className={`selection-stats ${form.guestTeacherIds.length > 0 ? 'active' : ''}`}>
+                        {form.guestTeacherIds.length} of {teachers.length} Assigned
+                      </span>
+                    </div>
+                    {teachers.length > 0 && (
+                      <button 
+                        type="button" 
+                        className="text-link-button" 
+                        onClick={handleSelectAll}
+                        style={{ fontSize: '0.7rem', fontWeight: 800, textTransform: 'uppercase' }}
+                      >
+                        {form.guestTeacherIds.length === teachers.length ? "Clear All" : "Quick Select All"}
+                      </button>
+                    )}
+                  </div>
+
+                  {teachers.length === 0 ? (
+                    <p className="muted" style={{ padding: '1rem', textAlign: 'center', background: '#f8fafc', borderRadius: '12px' }}>
+                      No teachers found in your delegation.
+                    </p>
+                  ) : (
+                    <div className="teacher-selection-grid">
+                      {teachers.map((teacher) => {
+                        const isSelected = form.guestTeacherIds.includes(teacher.id);
+                        return (
+                          <div 
+                            key={teacher.id} 
+                            className={`teacher-card-premium ${isSelected ? 'selected' : ''}`}
+                            onClick={() => toggleTeacher(teacher.id)}
+                          >
+                            <div className="teacher-avatar">
+                              {isSelected ? <Check size={18} /> : (teacher.firstName?.[0] || teacher.lastName?.[0] || "?")}
+                            </div>
+                            <div className="teacher-info">
+                              <span className="teacher-name">{teacher.firstName} {teacher.lastName}</span>
+                              <span className="teacher-school">
+                                <Building2 size={10} /> {teacher.etablissement?.name || "Independent"}
+                              </span>
+                            </div>
+                            <div className="selection-check">
+                              {isSelected && <Check size={12} />}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                <div className="form-actions" style={{ 
+                  marginTop: '1rem', 
+                  display: 'flex', 
+                  gap: '1rem',
+                  borderTop: '1px solid var(--border-subtle)',
+                  paddingTop: '2rem'
+                }}>
+                  {editingId && (
+                    <button 
+                      type="button" 
+                      className="danger-btn" 
+                      onClick={() => handleDelete(editingId).then(() => setShowModal(false))}
+                      style={{ 
+                        height: '52px', 
+                        width: '52px', 
+                        padding: 0, 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center',
+                        borderRadius: '16px'
+                      }}
+                      title="Withdraw Activity"
+                    >
+                      <Trash2 size={24} />
+                    </button>
+                  )}
+                  <button 
+                    type="submit" 
+                    disabled={saving} 
+                    className="primary-btn"
+                    style={{ flex: 1, height: '52px', fontSize: '1rem', fontWeight: 700, borderRadius: '16px' }}
+                  >
+                    {saving ? "Processing..." : editingId ? "Update Schedule" : "Finalize Planning"}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
-          <Link className="primary-link-button compact-link-button" to="/inspector/reports">
-            Open reports
-          </Link>
         </div>
-      </section>
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 package com.inspector.platform.service;
 
 public interface PdfExportService {
-    byte[] exportReport(Long inspectorId, Long reportId);
+    byte[] exportReport(Long userId, Long reportId, boolean isTeacher);
     void importReportPdf(Long inspectorId, Long reportId, String fileName, byte[] content);
-    String getReportPdfFileName(Long inspectorId, Long reportId);
+    String getReportPdfFileName(Long userId, Long reportId, boolean isTeacher);
 }

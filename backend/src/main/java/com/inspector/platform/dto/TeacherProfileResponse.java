@@ -21,4 +21,7 @@ public class TeacherProfileResponse {
     private ReferenceDto delegation;
     private ReferenceDto dependency;
     private EtablissementDto etablissement;
+    
+    private String phone;
+    private String language;
 }

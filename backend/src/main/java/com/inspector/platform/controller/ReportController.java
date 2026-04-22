@@ -70,8 +70,8 @@ public class ReportController {
             Authentication authentication,
             @PathVariable Long id) {
         Long inspectorId = extractUserId(authentication);
-        byte[] pdf = pdfExportService.exportReport(inspectorId, id);
-        String fileName = pdfExportService.getReportPdfFileName(inspectorId, id);
+        byte[] pdf = pdfExportService.exportReport(inspectorId, id, false);
+        String fileName = pdfExportService.getReportPdfFileName(inspectorId, id, false);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
                 .contentType(MediaType.APPLICATION_PDF)

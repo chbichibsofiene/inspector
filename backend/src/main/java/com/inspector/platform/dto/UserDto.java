@@ -21,7 +21,7 @@ public class UserDto {
     private Role role;
     private boolean enabled;
     private LocalDateTime createdAt;
-    private LocalDateTime verifiedAt;
+    private boolean isMicrosoftConnected;
 
     
     public static UserDto from(User user) {
@@ -31,8 +31,8 @@ public class UserDto {
                 .serialCode(user.getSerialCode())
                 .role(user.getRole())
                 .enabled(user.isEnabled())
+                .isMicrosoftConnected(user.isMicrosoftConnected())
                 .createdAt(user.getCreatedAt())
-                .verifiedAt(user.getVerifiedAt())
                 .build();
     }
 }

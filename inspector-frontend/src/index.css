@@ -234,6 +234,10 @@ textarea {
   border: 1px solid rgba(148, 163, 184, 0.12);
 }
 
+.timetable-card {
+  margin-bottom: 2rem;
+}
+
 .card-header {
   display: flex;
   align-items: center;
@@ -829,4 +833,709 @@ textarea {
   .calendar-panel .fc {
     min-width: 720px;
   }
+}
+.timetable-container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  margin-top: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.timetable-day-column {
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.day-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 5px;
+  padding: 5px;
+  background: var(--primary-soft);
+  border-radius: 8px;
+}
+
+.day-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 200px;
+}
+
+.empty-day {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 20px 0;
+  border: 1px dashed var(--border-subtle);
+  border-radius: 12px;
+}
+
+.slot-item {
+  background: #f8fafc;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.2s;
+}
+
+.slot-item:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.slot-time {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.slot-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.slot-main strong {
+  font-size: 0.85rem;
+  color: var(--text-main);
+}
+
+.slot-main span {
+  font-size: 0.75rem;
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+.slot-footer {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.delete-slot-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 4px;
+  min-width: 0;
+  background: transparent;
+  color: #94a3b8;
+  box-shadow: none;
+  opacity: 0;
+  border-radius: 4px;
+}
+
+.slot-item:hover .delete-slot-btn {
+  opacity: 1;
+}
+
+.delete-slot-btn:hover {
+  color: var(--danger);
+  background: #fee2e2;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 550px;
+  animation: modalSlide 0.3s ease-out;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 40px 100px rgba(15, 23, 42, 0.4);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 1.5rem 2rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-body {
+  padding: 1rem 2rem 2rem;
+}
+
+@keyframes modalSlide {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Dashboard Specific Overrides */
+.dashboard-calendar-card {
+  grid-column: span 2;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-calendar-card {
+    grid-column: span 1;
+  }
+}
+
+.today-column .day-name {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.inspector-slot {
+  border-left: 4px solid var(--primary);
+}
+
+.inspector-slot.invitation_reunion { border-left-color: #4f46e5; } /* Indigo */
+.inspector-slot.visite_pedagogique { border-left-color: #9333ea; } /* Purple */
+.inspector-slot.inspection { border-left-color: #2563eb; } /* Blue */
+.inspector-slot.formation { border-left-color: #0f766e; } /* Teal */
+.inspector-slot.lecon_temoin { border-left-color: #d97706; } /* Amber */
+.inspector-slot.reunion_travail { border-left-color: #475569; } /* Slate */
+.inspector-slot.seminaire { border-left-color: #ea580c; } /* Orange */
+.inspector-slot.commission { border-left-color: #059669; } /* Emerald */
+
+.slot-type-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.invitation_reunion .slot-type-badge { color: #4f46e5; }
+.visite_pedagogique .slot-type-badge { color: #9333ea; }
+.inspection .slot-type-badge { color: #2563eb; }
+.formation .slot-type-badge { color: #0f766e; }
+.lecon_temoin .slot-type-badge { color: #d97706; }
+.reunion_travail .slot-type-badge { color: #475569; }
+.seminaire .slot-type-badge { color: #ea580c; }
+.commission .slot-type-badge { color: #059669; }
+
+.day-long { display: block; font-size: 0.85rem; }
+.day-short { display: none; font-size: 0.75rem; }
+
+@media (max-width: 1400px) {
+  .day-long { display: none; }
+  .day-short { display: block; }
+}
+
+/* Enhanced Calendar Page Layout */
+.calendar-layout {
+  display: block;
+}
+
+.calendar-main {
+  width: 100%;
+}
+
+.calendar-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: sticky;
+  top: 1.5rem;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.calendar-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+.calendar-sidebar::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 10px;
+}
+
+/* Premium FullCalendar Overrides */
+.calendar-panel .fc {
+  --fc-border-color: rgba(148, 163, 184, 0.12);
+  --fc-today-bg-color: rgba(37, 99, 235, 0.03);
+  background: white;
+  border-radius: var(--radius-lg);
+}
+
+.calendar-panel .fc .fc-toolbar-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.calendar-panel .fc .fc-col-header-cell {
+  padding: 12px 0;
+  background: #fcfdfe;
+}
+
+.calendar-panel .fc-col-header-cell-cushion {
+  font-weight: 700;
+  color: var(--text-muted) !important;
+  font-size: 0.85rem !important;
+}
+
+.calendar-panel .fc-timegrid-slot {
+  height: 2.2em !important;
+}
+
+.calendar-panel .fc-timegrid-slot-label-cushion {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.calendar-panel .fc-event {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.premium-event {
+  height: 100%;
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+  border-left: 4px solid rgba(255, 255, 255, 0.3);
+}
+
+.premium-event-invitation_reunion { background: linear-gradient(135deg, #6366f1, #4338ca); }
+.premium-event-visite_pedagogique { background: linear-gradient(135deg, #a855f7, #7e22ce); }
+.premium-event-inspection { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+.premium-event-formation { background: linear-gradient(135deg, #14b8a6, #0f766e); }
+.premium-event-lecon_temoin { background: linear-gradient(135deg, #f59e0b, #b45309); }
+.premium-event-reunion_travail { background: linear-gradient(135deg, #64748b, #334155); }
+.premium-event-seminaire { background: linear-gradient(135deg, #f97316, #c2410c); }
+.premium-event-commission { background: linear-gradient(135deg, #10b981, #047857); }
+
+.premium-event .event-time {
+  font-size: 0.65rem;
+  font-weight: 700;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.premium-event .event-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.premium-event .event-location {
+  font-size: 0.65rem;
+  font-weight: 600;
+  opacity: 0.8;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Sidebar Specific */
+.sidebar-section-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar-section-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+@media (max-width: 1100px) {
+  .calendar-layout {
+    grid-template-columns: 1fr;
+  }
+  .calendar-sidebar {
+    max-height: none;
+    position: static;
+  }
+}
+/* --- Premium Activity Planner Enhancements --- */
+
+.modal-overlay.premium-overlay {
+  backdrop-filter: blur(8px) saturate(180%);
+  background: rgba(15, 23, 42, 0.4);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.premium-modal {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  animation: modalSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+@keyframes modalSlide {
+  from { transform: scale(0.9) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* Dynamic Modal Branding Bar */
+.modal-branding-bar {
+  height: 6px;
+  width: 100%;
+}
+
+.branding-invitation_reunion { background: #6366f1; }
+.branding-visite_pedagogique { background: #a855f7; }
+.branding-inspection { background: #3b82f6; }
+.branding-formation { background: #14b8a6; }
+.branding-lecon_temoin { background: #f59e0b; }
+.branding-reunion_travail { background: #64748b; }
+.branding-seminaire { background: #f97316; }
+.branding-commission { background: #10b981; }
+
+.premium-modal-header {
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.premium-modal-header h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.premium-modal-body {
+  padding: 2rem;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon .input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.input-with-icon input, 
+.input-with-icon select, 
+.input-with-icon textarea {
+  padding-left: 42px !important;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.input-with-icon input:focus, 
+.input-with-icon select:focus, 
+.input-with-icon textarea:focus {
+  background: white;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Enhanced Teacher Cards */
+.teacher-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.teacher-card-premium {
+  position: relative;
+  padding: 1rem;
+  background: #f8fafc;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.teacher-card-premium:hover {
+  background: white;
+  border-color: #e2e8f0;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.teacher-card-premium.selected {
+  background: rgba(37, 99, 235, 0.04);
+  border-color: var(--primary);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1);
+}
+
+.teacher-avatar {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-weight: 700;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.selected .teacher-avatar {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.teacher-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.teacher-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.teacher-school {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selection-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.selected .selection-check {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+/* Selection Stat Bar */
+.selection-stats {
+  background: #f1f5f9;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.selection-stats.active {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--primary);
+}
+
+.text-link-button {
+  background: transparent;
+  color: var(--primary);
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.text-link-button:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
+/* Multi-selection styles */
+.multi-select-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.chip {
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  background: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip:hover {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.chip.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+}
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+input:checked + .toggle-slider {
+  background-color: #2563eb;
+}
+
+input:focus + .toggle-slider {
+  box-shadow: 0 0 1px #2563eb;
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(24px);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  background: #f1f5f9;
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.chip.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.multi-select-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
 }

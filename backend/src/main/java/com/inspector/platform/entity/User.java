@@ -44,6 +44,10 @@ public class User {
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean isMicrosoftConnected = false;
+
     @Column
     private LocalDateTime verifiedAt;
 

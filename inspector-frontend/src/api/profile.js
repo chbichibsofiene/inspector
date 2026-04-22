@@ -20,6 +20,12 @@ const profileApi = {
   getDepartments: (delegationId) => http.get(`/inspector/profile/departments?delegationId=${delegationId}`),
   getEtablissements: (dependencyId, schoolLevel = '') => 
     http.get(`/inspector/profile/etablissements?dependencyId=${dependencyId}&schoolLevel=${schoolLevel}`),
+
+  // Teacher Insights for Inspectors
+  getMyTeachers: () => http.get('/inspector/profile/my-teachers'),
+  getTeacherTimetable: (id) => http.get(`/inspector/profile/teachers/${id}/timetable`),
+  getTeacherReports: (id) => http.get(`/inspector/profile/teachers/${id}/reports`),
+  getTeacherQuizzes: (id) => http.get(`/inspector/profile/teachers/${id}/quizzes`)
 };
 
 export default profileApi;

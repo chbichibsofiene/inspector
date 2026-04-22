@@ -12,5 +12,6 @@ public interface ActivityService {
     void deleteActivity(Long inspectorId, Long activityId);
     ActivityResponse getActivity(Long inspectorId, Long activityId);
     List<ActivityResponse> getAllActivities(Long inspectorId);
+    List<ActivityResponse> getTeacherActivities(Long userId);
     List<TeacherDto> getAvailableTeachers();
 }

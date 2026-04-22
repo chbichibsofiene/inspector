@@ -21,7 +21,11 @@ public class InspectorDashboardDto {
     private LocalDateTime memberSince;
     private LocalDateTime verifiedAt;
 
+    private boolean profileCompleted;
     private String status;
     private String message;
+    
+    private String phone;
+    private String language;
 }
 

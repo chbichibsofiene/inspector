@@ -28,3 +28,10 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+
+# Project Logs and Debug
+*.log
+*.txt
+backend/uploads/
+inspector-frontend/node_modules/
+backend/target/

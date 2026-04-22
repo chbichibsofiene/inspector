@@ -1,5 +1,6 @@
 import { Navigate, Link } from "react-router-dom";
 import { getUser, clearSession } from "./session";
+import NotificationBell from "../components/NotificationBell";
 
 export default function ProtectedRoute({ allowRoles, children }) {
   const user = getUser();
@@ -44,7 +45,14 @@ export default function ProtectedRoute({ allowRoles, children }) {
         <div className="nav-brand">Inspector Platform</div>
         <div className="nav-actions">
           <Link to={getDashboardPath(user.role)} style={{ fontSize: '0.85rem', marginRight: '1rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>Go to Dashboard</Link>
-          <Link to="/profile/setup" style={{ fontSize: '0.85rem', marginRight: '0.5rem' }}>My Profile</Link>
+          <Link to="/profile/setup" style={{ fontSize: '0.85rem', marginRight: '1rem' }}>My Profile</Link>
+          {user.role === 'TEACHER' && (
+            <>
+              <Link to="/teacher/calendar" style={{ fontSize: '0.85rem', marginRight: '1rem' }}>My Schedule</Link>
+              <Link to="/reports" style={{ fontSize: '0.85rem', marginRight: '1rem' }}>My Reports</Link>
+            </>
+          )}
+          <NotificationBell />
           <span className="user-email">{user.email}</span>
           <button onClick={handleLogout} className="logout-btn">Logout</button>
         </div>

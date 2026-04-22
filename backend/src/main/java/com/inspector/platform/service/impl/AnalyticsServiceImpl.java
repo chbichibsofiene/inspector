@@ -56,7 +56,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         return InspectorAnalyticsDto.builder()
                 .totalActivities(activities.size())
                 .inspections(countActivities(activities, ActivityType.INSPECTION))
-                .trainings(countActivities(activities, ActivityType.TRAINING))
+                .trainings(countActivities(activities, ActivityType.FORMATION))
                 .totalReports(reports.size())
                 .draftReports(countReports(reports, ReportStatus.DRAFT))
                 .finalReports(countReports(reports, ReportStatus.FINAL))

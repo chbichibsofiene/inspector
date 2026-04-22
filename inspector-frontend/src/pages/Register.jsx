@@ -7,6 +7,7 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [serialCode, setSerialCode] = useState("");
+  const [cin, setCin] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -17,10 +18,10 @@ export default function Register() {
     setSuccess("");
     setLoading(true);
     try {
-      const res = await register({ email, password, serialCode });
+      const res = await register({ email, password, serialCode, cin });
       const msg =
         res.data?.message ||
-        "Registration successful. Please wait for admin verification.";
+        "Registration successful! Your account is automatically enabled.";
       setSuccess(msg);
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
@@ -74,6 +75,17 @@ export default function Register() {
               type="text"
               value={serialCode}
               onChange={(e) => setSerialCode(e.target.value)}
+              required
+            />
+          </label>
+
+          <label>
+            National Identity Number (CIN)
+            <input
+              type="text"
+              value={cin}
+              onChange={(e) => setCin(e.target.value)}
+              placeholder="8 digits"
               required
             />
           </label>

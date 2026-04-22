@@ -47,17 +47,32 @@ public class InspectorProfile {
     @Column(nullable = false, length = 10)
     private String language;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "delegation_id", nullable = false)
-    private Delegation delegation;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "profile_delegations",
+            joinColumns = @JoinColumn(name = "profile_id"),
+            inverseJoinColumns = @JoinColumn(name = "delegation_id")
+    )
+    @Builder.Default
+    private List<Delegation> delegations = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "dependency_id", nullable = false)
-    private Dependency dependency;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "profile_dependencies",
+            joinColumns = @JoinColumn(name = "profile_id"),
+            inverseJoinColumns = @JoinColumn(name = "dependency_id")
+    )
+    @Builder.Default
+    private List<Dependency> dependencies = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "department_id", nullable = false)
-    private Department department;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "profile_departments",
+            joinColumns = @JoinColumn(name = "profile_id"),
+            inverseJoinColumns = @JoinColumn(name = "department_id")
+    )
+    @Builder.Default
+    private List<Department> departments = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

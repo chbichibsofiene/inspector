@@ -22,6 +22,12 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ex.getMessage()));
     }
 
+    @ExceptionHandler(PersonnelNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handlePersonnelNotFound(PersonnelNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ApiResponse.error(ex.getMessage()));
+    }
+
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ApiResponse<Void>> handleEmailExists(EmailAlreadyExistsException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)

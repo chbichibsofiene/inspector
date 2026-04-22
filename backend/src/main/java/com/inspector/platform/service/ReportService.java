@@ -10,4 +10,5 @@ public interface ReportService {
     ReportResponse updateReport(Long inspectorId, Long reportId, ReportRequest request);
     void deleteReport(Long inspectorId, Long reportId);
     List<ReportResponse> getReports(Long inspectorId, Long activityId);
+    List<ReportResponse> getTeacherReports(Long teacherUserId);
 }

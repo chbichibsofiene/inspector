@@ -1,8 +1,8 @@
 package com.inspector.platform.dto;
 
 import com.inspector.platform.entity.ActivityType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -26,9 +26,11 @@ public class ActivityRequest {
     @NotNull(message = "Activity type is required")
     private ActivityType type;
 
-    @NotBlank(message = "Location/Place is required")
     private String location;
 
-    @NotEmpty(message = "At least one guest (teacher) is required")
     private List<Long> guestTeacherIds;
+
+    @com.fasterxml.jackson.annotation.JsonProperty("isOnline")
+    private boolean isOnline;
+
 }

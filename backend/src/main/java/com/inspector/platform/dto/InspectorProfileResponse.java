@@ -25,8 +25,8 @@ public class InspectorProfileResponse {
     private String phone;
     private String language;
 
-    private ReferenceDto delegation;
-    private ReferenceDto dependency;
-    private ReferenceDto department;
+    private List<ReferenceDto> delegations;
+    private List<ReferenceDto> dependencies;
+    private List<ReferenceDto> departments;
     private List<EtablissementDto> etablissements;
 }

@@ -8,6 +8,8 @@ import com.inspector.platform.dto.dashboard.TeacherDashboardDto;
 import com.inspector.platform.entity.Role;
 import com.inspector.platform.entity.User;
 import com.inspector.platform.exception.UserNotFoundException;
+import com.inspector.platform.repository.InspectorProfileRepository;
+import com.inspector.platform.repository.TeacherProfileRepository;
 import com.inspector.platform.repository.UserRepository;
 import com.inspector.platform.service.DashboardService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
 public class DashboardServiceImpl implements DashboardService {
 
     private final UserRepository userRepository;
+    private final TeacherProfileRepository teacherProfileRepository;
+    private final InspectorProfileRepository inspectorProfileRepository;
 
     @Override
     public AdminDashboardDto getAdminDashboard() {
@@ -65,32 +69,54 @@ public class DashboardServiceImpl implements DashboardService {
     public InspectorDashboardDto getInspectorDashboard(String email) {
         User user = findByEmailOrThrow(email);
 
-        return InspectorDashboardDto.builder()
+        InspectorDashboardDto.InspectorDashboardDtoBuilder builder = InspectorDashboardDto.builder()
                 .userId(user.getId())
                 .email(user.getEmail())
                 .serialCode(user.getSerialCode())
                 .role(user.getRole())
                 .memberSince(user.getCreatedAt())
                 .verifiedAt(user.getVerifiedAt())
+                .profileCompleted(user.isProfileCompleted())
                 .status("ACTIVE")
-                .message("Welcome back, Inspector! Your platform is ready.")
-                .build();
+                .message("Welcome back, Inspector! Your platform is ready.");
+
+        if (user.isProfileCompleted()) {
+            inspectorProfileRepository.findByUserId(user.getId()).ifPresent(profile -> {
+                builder.phone(profile.getPhone())
+                       .language(profile.getLanguage());
+            });
+        }
+
+        return builder.build();
     }
 
     @Override
     public TeacherDashboardDto getTeacherDashboard(String email) {
         User user = findByEmailOrThrow(email);
-
-        return TeacherDashboardDto.builder()
+        
+        TeacherDashboardDto.TeacherDashboardDtoBuilder builder = TeacherDashboardDto.builder()
                 .userId(user.getId())
                 .email(user.getEmail())
                 .serialCode(user.getSerialCode())
                 .role(user.getRole())
                 .memberSince(user.getCreatedAt())
                 .verifiedAt(user.getVerifiedAt())
-                .status("ACTIVE")
-                .message("Welcome back, Teacher! Your dashboard is ready.")
-                .build();
+                .profileCompleted(user.isProfileCompleted())
+                .status(user.isEnabled() ? "ACTIVE" : "PENDING")
+                .message(user.isEnabled() ? "Welcome back, Teacher! Your dashboard is ready." : "Your account is pending verification.");
+
+        if (user.isProfileCompleted()) {
+            teacherProfileRepository.findByUserId(user.getId()).ifPresent(profile -> {
+                builder.firstName(profile.getFirstName())
+                       .lastName(profile.getLastName())
+                       .subject(profile.getSubject() != null ? profile.getSubject().name() : null)
+                       .schoolName(profile.getEtablissement() != null ? profile.getEtablissement().getName() : null)
+                       .phone(profile.getPhone())
+                       .language(profile.getLanguage());
+            });
+        }
+
+        return builder.build();
     }
 
     @Override

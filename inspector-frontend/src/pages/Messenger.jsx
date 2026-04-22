@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import messagesApi from "../api/messages";
 import { Link } from "react-router-dom";
+import { MessageCircle, Search, Paperclip, Send, ThumbsUp, Users, ChevronLeft, Image as ImageIcon, FileText, Info, User } from "lucide-react";
 
 export default function Messenger() {
   const [conversations, setConversations] = useState([]);
@@ -141,13 +142,29 @@ export default function Messenger() {
           <div className="header-top">
             <h1>Chats</h1>
             <div className="header-actions">
-              <button className="circle-btn" onClick={() => setActiveTab(activeTab === "chats" ? "contacts" : "chats")}>
-                {activeTab === "chats" ? "👥" : "💬"}
-              </button>
+              <Link to="/" className="circle-btn" title="Back to Dashboard">
+                <ChevronLeft size={20} />
+              </Link>
             </div>
           </div>
-          <div className="search-container">
-            <span className="search-icon">🔍</span>
+          
+          <div className="messenger-tabs">
+            <button 
+              className={`msg-tab ${activeTab === "chats" ? "active" : ""}`} 
+              onClick={() => setActiveTab("chats")}
+            >
+              <MessageCircle size={16} /> Chats
+            </button>
+            <button 
+              className={`msg-tab ${activeTab === "contacts" ? "active" : ""}`} 
+              onClick={() => setActiveTab("contacts")}
+            >
+              <Users size={16} /> Contacts
+            </button>
+          </div>
+
+          <div className="search-container" style={{ marginTop: '12px' }}>
+            <Search size={16} className="search-icon" />
             <input 
               type="text" 
               placeholder="Search Messenger" 
@@ -191,10 +208,10 @@ export default function Messenger() {
           ) : (
             contacts.map(contact => (
               <div key={contact.id} className="inbox-item contact" onClick={() => selectContact(contact)}>
-                <div className="avatar large grey">{contact.name.charAt(0)}</div>
+                <div className="avatar large contact-avatar">{contact.name.charAt(0)}</div>
                 <div className="inbox-info">
                   <span className="name">{contact.name}</span>
-                  <span className="role-snippet">{contact.role} • {contact.details}</span>
+                  <span className="role-snippet"><User size={12} /> {contact.role} • {contact.details}</span>
                 </div>
               </div>
             ))
@@ -248,7 +265,7 @@ export default function Messenger() {
                             </div>
                           ) : (
                             <div className="file-box">
-                              <div className="file-icon">📄</div>
+                              <div className="file-icon"><FileText size={24} /></div>
                               <div className="file-details">
                                 <span className="filename">{m.fileName}</span>
                                 <a href={`http://localhost:8081${m.fileUrl}`} target="_blank" rel="noreferrer">Download</a>
@@ -263,35 +280,39 @@ export default function Messenger() {
               <div ref={messagesEndRef} />
             </div>
 
-            <footer className="chat-footer">
+            <footer className="chat-footer glass-effect">
               <div className="footer-actions">
                 <button 
-                  className="circle-btn primary-action" 
+                  type="button"
+                  className="attach-file-btn" 
                   onClick={() => fileInputRef.current.click()}
                   title="Attach file"
                 >
-                  ➕
+                  <Paperclip size={18} />
+                  <span className="attach-text">Attach</span>
                 </button>
                 <input type="file" hidden ref={fileInputRef} onChange={handleFileUpload} />
               </div>
-              <form className="input-pills" onSubmit={handleSend}>
+              <form className="input-pills hover-ring" onSubmit={handleSend}>
                 <input 
                   type="text" 
-                  placeholder="Aa" 
+                  placeholder="Type a message..." 
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                 />
-                <button type="submit" className="send-icon" disabled={!newMessage.trim()}>
-                  {newMessage.trim() ? "🚀" : "👍"}
+                <button type="submit" className={`send-icon ${newMessage.trim() ? 'active' : ''}`} disabled={!newMessage.trim()}>
+                  {newMessage.trim() ? <Send size={20} /> : <ThumbsUp size={20} />}
                 </button>
               </form>
             </footer>
           </>
         ) : (
           <div className="fb-placeholder">
-            <div className="avatar xlarge">?</div>
+            <div className="placeholder-icon-wrapper">
+               <MessageCircle size={64} className="placeholder-icon" />
+            </div>
             <h2>Welcome to Messenger</h2>
-            <p>Select a chat or find a contact to start messaging.</p>
+            <p className="muted">Select a chat or find a contact to start messaging.</p>
           </div>
         )}
       </main>
@@ -332,57 +353,122 @@ export default function Messenger() {
 
       <style>{`
         :root {
-          --fb-blue: #0084ff;
-          --fb-grey: #f0f2f5;
-          --fb-border: #e5e7eb;
-          --text-main: #050505;
-          --text-muted: #65676b;
+          --fb-blue: #3b82f6;
+          --fb-blue-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+          --fb-grey: #f8fafc;
+          --fb-hover: #f1f5f9;
+          --fb-border: #e2e8f0;
+          --text-main: #0f172a;
+          --text-muted: #64748b;
+          --glass-bg: rgba(255, 255, 255, 0.85);
+          --glass-border: rgba(255, 255, 255, 0.4);
         }
 
         .fb-messenger {
           display: flex;
           height: 100vh;
-          background: white;
+          background: #fdfdfd;
           color: var(--text-main);
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        /* Animations */
+        @keyframes messagePop {
+          0% { opacity: 0; transform: translateY(10px) scale(0.98); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes pulseSoft {
+          0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+          70% { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
         }
 
         /* Sidebar */
         .fb-sidebar {
-          width: 360px;
+          width: 380px;
           border-right: 1px solid var(--fb-border);
           display: flex;
           flex-direction: column;
           background: white;
+          box-shadow: 4px 0 24px rgba(0,0,0,0.02);
+          z-index: 10;
         }
 
         .sidebar-header {
-          padding: 16px;
+          padding: 24px 20px 16px;
+          border-bottom: 1px solid transparent;
         }
 
         .header-top {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 12px;
+          margin-bottom: 20px;
         }
 
         .header-top h1 {
           font-size: 24px;
           font-weight: 800;
+          letter-spacing: -0.5px;
           margin: 0;
+          color: #1e293b;
+        }
+
+        .messenger-tabs {
+          display: flex;
+          gap: 8px;
+          background: var(--fb-grey);
+          padding: 6px;
+          border-radius: 12px;
+          margin-bottom: 8px;
+        }
+        
+        .msg-tab {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 8px;
+          border: none;
+          background: transparent;
+          border-radius: 8px;
+          font-weight: 700;
+          color: var(--text-muted);
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .msg-tab.active {
+          background: white;
+          color: var(--fb-blue);
+          box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .header-actions {
+          display: flex;
+          gap: 12px;
         }
 
         .search-container {
           background: var(--fb-grey);
-          border-radius: 20px;
-          padding: 8px 12px;
+          border-radius: 16px;
+          padding: 12px 16px;
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 12px;
+          border: 1px solid var(--fb-border);
+          transition: all 0.3s ease;
         }
 
-        .search-icon { color: var(--text-muted); font-size: 14px; }
+        .search-container:focus-within {
+          background: white;
+          border-color: var(--fb-blue);
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-icon { color: var(--text-muted); }
 
         .search-container input {
           background: transparent;
@@ -390,63 +476,78 @@ export default function Messenger() {
           outline: none;
           flex: 1;
           font-size: 15px;
+          color: var(--text-main);
         }
 
         .inbox-list {
           flex: 1;
           overflow-y: auto;
-          padding: 8px;
+          padding: 12px;
         }
 
         .inbox-item {
           display: flex;
           align-items: center;
-          gap: 12px;
-          padding: 8px;
-          border-radius: 10px;
+          gap: 16px;
+          padding: 12px;
+          border-radius: 16px;
           cursor: pointer;
-          transition: background 0.2s;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
+          margin-bottom: 4px;
+          border: 1px solid transparent;
         }
 
-        .inbox-item:hover { background: var(--fb-grey); }
-        .inbox-item.selected { background: #e7f3ff; }
+        .inbox-item:hover { 
+          background: var(--fb-hover); 
+          border-color: #f1f5f9;
+        }
+        
+        .inbox-item.selected { 
+          background: #eff6ff; 
+          border-color: #bfdbfe;
+        }
 
         .avatar-wrapper { position: relative; }
         .avatar {
-          border-radius: 50%;
-          background: var(--fb-blue);
+          border-radius: 16px;
+          background: var(--fb-blue-gradient);
           color: white;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-weight: bold;
+          font-weight: 800;
           flex-shrink: 0;
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .avatar.contact-avatar {
+          background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+          box-shadow: 0 4px 12px rgba(100, 116, 139, 0.2);
         }
 
         .avatar.large { width: 56px; height: 56px; font-size: 20px; }
-        .avatar.medium { width: 40px; height: 40px; font-size: 16px; }
-        .avatar.small { width: 28px; height: 28px; font-size: 12px; }
-        .avatar.xlarge { width: 100px; height: 100px; font-size: 36px; margin-bottom: 16px; }
-        .avatar.grey { background: #bcc0c4; }
+        .avatar.medium { width: 44px; height: 44px; font-size: 16px; border-radius: 12px; }
+        .avatar.small { width: 32px; height: 32px; font-size: 12px; border-radius: 10px; }
+        .avatar.xlarge { width: 88px; height: 88px; font-size: 32px; margin-bottom: 16px; border-radius: 24px; }
 
         .status-dot {
           position: absolute;
-          bottom: 2px;
-          right: 2px;
-          width: 14px;
-          height: 14px;
-          background: #31a24c;
-          border: 2px solid white;
+          bottom: -2px;
+          right: -2px;
+          width: 16px;
+          height: 16px;
+          background: #10b981;
+          border: 3px solid white;
           border-radius: 50%;
         }
 
         .inbox-info { flex: 1; min-width: 0; }
         .name-time { display: flex; justify-content: space-between; align-items: baseline; }
-        .name { font-weight: 500; font-size: 15px; }
-        .time { font-size: 12px; color: var(--text-muted); }
+        .name { font-weight: 600; font-size: 15px; letter-spacing: -0.2px; }
+        .time { font-size: 12px; color: var(--text-muted); font-weight: 600; }
 
-        .snippet { display: flex; justify-content: space-between; align-items: center; margin-top: 2px; }
+        .snippet { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
         .snippet .text {
           font-size: 13px;
           color: var(--text-muted);
@@ -455,14 +556,15 @@ export default function Messenger() {
           text-overflow: ellipsis;
         }
 
-        .unread .name { font-weight: 700; }
-        .unread .text { color: var(--text-main) !important; font-weight: 600; }
+        .unread .name { font-weight: 800; color: #0f172a; }
+        .unread .text { color: #1e293b !important; font-weight: 700; }
         .unread-dot {
-          width: 12px;
-          height: 12px;
+          width: 10px;
+          height: 10px;
           background: var(--fb-blue);
           border-radius: 50%;
           flex-shrink: 0;
+          box-shadow: 0 0 0 4px #eff6ff;
         }
 
         /* Main Chat Area */
@@ -470,28 +572,39 @@ export default function Messenger() {
           flex: 1;
           display: flex;
           flex-direction: column;
-          background: white;
+          background: #f8fafc;
+          position: relative;
+        }
+
+        .glass-effect {
+          background: var(--glass-bg);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
         }
 
         .chat-header {
-          padding: 10px 16px;
+          padding: 16px 24px;
           border-bottom: 1px solid var(--fb-border);
           display: flex;
           justify-content: space-between;
           align-items: center;
-          box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          z-index: 20;
         }
 
-        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info { display: flex; align-items: center; gap: 16px; }
         .chat-details { display: flex; flex-direction: column; }
-        .chat-details .status { font-size: 12px; color: var(--text-muted); }
+        .chat-details .name { font-weight: 700; font-size: 1.1rem; }
+        .chat-details .status { font-size: 13px; color: #10b981; font-weight: 600; }
 
         .messages-flow {
           flex: 1;
           overflow-y: auto;
-          padding: 16px;
+          padding: 100px 24px 24px;
           display: flex;
           flex-direction: column;
+          background: #f8fafc;
         }
 
         .user-profile-center {
@@ -500,90 +613,143 @@ export default function Messenger() {
           align-items: center;
           padding: 40px 0;
           text-align: center;
+          margin-bottom: 2rem;
         }
 
+        .user-profile-center h2 { margin: 0 0 8px; font-weight: 800; }
         .view-profile-btn {
-          margin-top: 12px;
-          background: var(--fb-grey);
-          border: none;
-          padding: 8px 16px;
-          border-radius: 6px;
-          font-weight: 600;
+          margin-top: 16px;
+          background: white;
+          border: 1px solid var(--fb-border);
+          padding: 8px 20px;
+          border-radius: 20px;
+          font-weight: 700;
+          font-size: 0.9rem;
+          color: var(--text-main);
           cursor: pointer;
+          transition: all 0.2s;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .view-profile-btn:hover {
+          border-color: #cbd5e1;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
         .msg-row {
           display: flex;
-          margin-bottom: 2px;
-          max-width: 70%;
+          margin-bottom: 4px;
+          max-width: 75%;
+          animation: messagePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
         }
 
-        .msg-row.group-start { margin-top: 12px; }
+        .msg-row.group-start { margin-top: 16px; }
         .msg-row.own { align-self: flex-end; flex-direction: row-reverse; }
         .msg-row.other { align-self: flex-start; }
 
-        .avatar-spacer { width: 28px; flex-shrink: 0; margin-right: 8px; }
-        .msg-row.other .avatar { margin-right: 8px; }
+        .avatar-spacer { width: 32px; flex-shrink: 0; margin-right: 12px; }
+        .msg-row.other .avatar { margin-right: 12px; }
 
         .bubble {
-          padding: 8px 12px;
-          border-radius: 18px;
+          padding: 12px 18px;
+          border-radius: 24px;
           font-size: 15px;
-          line-height: 1.4;
+          line-height: 1.5;
           position: relative;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
         .msg-row.other .bubble {
-          background: var(--fb-grey);
-          border-top-left-radius: 4px;
+          background: white;
+          border: 1px solid var(--fb-border);
+          border-top-left-radius: 6px;
+          color: #1e293b;
         }
-        .msg-row.other.group-start .bubble { border-top-left-radius: 18px; }
+        .msg-row.other.group-start .bubble { border-top-left-radius: 24px; }
 
         .msg-row.own .bubble {
-          background: var(--fb-blue);
+          background: var(--fb-blue-gradient);
           color: white;
-          border-top-right-radius: 4px;
+          border-top-right-radius: 6px;
+          box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
-        .msg-row.own.group-start .bubble { border-top-right-radius: 18px; }
+        .msg-row.own.group-start .bubble { border-top-right-radius: 24px; }
 
         .file-box {
           display: flex;
-          gap: 10px;
+          gap: 12px;
           background: rgba(0,0,0,0.05);
-          padding: 8px;
-          border-radius: 8px;
+          padding: 12px;
+          border-radius: 12px;
           align-items: center;
         }
 
-        .file-box a { color: inherit; font-size: 12px; text-decoration: underline; }
+        .msg-row.other .file-box { background: #f1f5f9; }
 
-        .image-container {
-          margin-top: 4px;
-        }
+        .file-icon { color: inherit; opacity: 0.8; }
+        .file-details { display: flex; flex-direction: column; gap: 4px; }
+        .file-details .filename { font-weight: 600; font-size: 0.9rem; }
+        .file-details a { color: inherit; font-size: 0.8rem; font-weight: 700; text-decoration: none; opacity: 0.8; }
+        .file-details a:hover { opacity: 1; text-decoration: underline; }
 
+        .image-container { margin-top: 4px; }
         .chat-image {
           max-width: 100%;
-          max-height: 250px;
-          border-radius: 12px;
+          max-height: 280px;
+          border-radius: 16px;
           display: block;
           object-fit: cover;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .chat-footer {
-          padding: 12px 16px;
+          padding: 20px 24px;
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 16px;
+          border-top: 1px solid rgba(255,255,255,0.5);
+          position: absolute;
+          bottom: 0; left: 0; right: 0;
         }
 
         .footer-actions { display: flex; gap: 8px; }
-        .input-pills {
-          flex: 1;
-          background: var(--fb-grey);
-          border-radius: 20px;
-          padding: 4px 12px;
+        
+        .attach-file-btn {
           display: flex;
           align-items: center;
+          gap: 6px;
+          background: transparent;
+          border: 1px solid var(--fb-border);
+          padding: 8px 16px;
+          border-radius: 20px;
+          color: var(--text-muted);
+          font-weight: 600;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.2s;
+          background: white;
+        }
+
+        .attach-file-btn:hover {
+          background: var(--fb-hover);
+          color: var(--fb-blue);
+          border-color: #cbd5e1;
+        }
+
+        .input-pills {
+          flex: 1;
+          background: white;
+          border-radius: 24px;
+          padding: 8px 16px;
+          display: flex;
+          align-items: center;
+          border: 1px solid var(--fb-border);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+          transition: all 0.3s ease;
+        }
+
+        .input-pills.hover-ring:focus-within {
+          border-color: #93c5fd;
+          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
 
         .input-pills input {
@@ -593,11 +759,12 @@ export default function Messenger() {
           outline: none;
           padding: 8px 0;
           font-size: 15px;
+          color: var(--text-main);
         }
 
         .circle-btn {
-          width: 32px;
-          height: 32px;
+          width: 40px;
+          height: 40px;
           border-radius: 50%;
           border: none;
           background: var(--fb-grey);
@@ -605,35 +772,43 @@ export default function Messenger() {
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          font-size: 18px;
-          transition: all 0.2s ease;
+          color: #64748b;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .circle-btn:hover { background: #e4e6eb; }
+        .circle-btn:hover { 
+          background: #e2e8f0; 
+          color: #1e293b;
+        }
         
         .circle-btn.primary-action {
-          color: var(--fb-blue);
-          font-weight: bold;
-          font-size: 20px;
+          color: white;
+          background: var(--fb-blue-gradient);
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
         
         .circle-btn.primary-action:hover {
-          background: #e7f3ff;
-          transform: scale(1.05);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
         }
 
         .send-icon {
             background: transparent;
             border: none;
-            font-size: 20px;
+            color: #94a3b8;
             cursor: pointer;
             margin-left: 8px;
-            transition: transform 0.2s;
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .send-icon:hover {
-          transform: scale(1.1);
-        }
+        .send-icon.active { color: var(--fb-blue); }
+        .send-icon:hover { background: #f1f5f9; }
+        .send-icon.active:hover { background: #eff6ff; transform: scale(1.1) rotate(-10deg); }
 
         .fb-placeholder {
           flex: 1;
@@ -642,89 +817,92 @@ export default function Messenger() {
           align-items: center;
           justify-content: center;
           text-align: center;
-          color: var(--text-muted);
         }
 
-        .role-snippet { font-size: 12px; color: var(--text-muted); }
+        .placeholder-icon-wrapper {
+          width: 120px;
+          height: 120px;
+          background: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+          margin-bottom: 2rem;
+          color: #cbd5e1;
+          animation: messagePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+        }
+
+        .fb-placeholder h2 { font-weight: 800; font-size: 1.75rem; margin-bottom: 0.5rem; }
+        .muted { color: #64748b; }
+
+        .role-snippet { font-size: 12px; color: #94a3b8; font-weight: 500; }
 
         /* Image Inspection Overlay */
         .chat-image.selectable {
           cursor: pointer;
-          transition: filter 0.2s;
+          transition: transform 0.3s;
         }
-        .chat-image.selectable:hover {
-          filter: brightness(0.9);
-        }
+        .chat-image.selectable:hover { transform: scale(0.98); }
 
         .image-overlay {
           position: fixed;
           top: 0; left: 0; right: 0; bottom: 0;
-          background: rgba(0, 0, 0, 0.85);
+          background: rgba(15, 23, 42, 0.9);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
           z-index: 1000;
           display: flex;
           flex-direction: column;
-          backdrop-filter: blur(5px);
+          animation: messagePop 0.2s ease-out;
         }
 
         .overlay-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 16px 24px;
-          background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
+          padding: 20px 32px;
           color: white;
         }
 
-        .overlay-filename {
-          font-weight: 500;
-          font-size: 16px;
-        }
+        .overlay-filename { font-weight: 600; font-size: 1.1rem; }
 
-        .overlay-actions {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-        }
+        .overlay-actions { display: flex; align-items: center; gap: 20px; }
 
         .overlay-download-btn {
           color: white;
           text-decoration: none;
-          background: rgba(255, 255, 255, 0.2);
-          padding: 6px 16px;
-          border-radius: 20px;
-          font-weight: 600;
-          font-size: 14px;
-          transition: background 0.2s;
+          background: rgba(255, 255, 255, 0.1);
+          padding: 8px 24px;
+          border-radius: 30px;
+          font-weight: 700;
+          font-size: 0.9rem;
+          transition: all 0.2s;
+          border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .overlay-download-btn:hover {
-          background: rgba(255, 255, 255, 0.3);
-        }
+        .overlay-download-btn:hover { background: white; color: black; }
 
         .overlay-close-btn {
-          background: transparent;
+          background: rgba(255,255,255,0.1);
           border: none;
           color: white;
-          font-size: 24px;
+          width: 40px; height: 40px;
+          border-radius: 50%;
           cursor: pointer;
-          padding: 0 8px;
+          display: flex; align-items: center; justify-content: center;
+          transition: all 0.2s;
         }
+        .overlay-close-btn:hover { background: #ef4444; }
 
         .overlay-content-wrapper {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 24px;
-          overflow: hidden;
+          flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px;
         }
 
         .overlay-image {
-          max-width: 100%;
-          max-height: 100%;
-          object-fit: contain;
-          border-radius: 8px;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+          max-width: 100%; max-height: 100%; object-fit: contain;
+          border-radius: 12px;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
       `}</style>
     </div>

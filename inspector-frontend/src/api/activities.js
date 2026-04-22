@@ -6,3 +6,6 @@ export const createActivity = (payload) => http.post("/inspector/activities", pa
 export const updateActivity = (activityId, payload) =>
   http.put(`/inspector/activities/${activityId}`, payload);
 export const deleteActivity = (activityId) => http.delete(`/inspector/activities/${activityId}`);
+
+// Teacher specific activities
+export const getTeacherActivities = () => http.get("/teacher/activities");

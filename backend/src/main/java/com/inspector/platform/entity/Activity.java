@@ -51,4 +51,15 @@ public class Activity {
     )
     @Builder.Default
     private List<TeacherProfile> guests = new ArrayList<>();
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean isOnline = false;
+
+    @Column(length = 1000)
+    private String meetingUrl;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean isReminderSent = false;
 }

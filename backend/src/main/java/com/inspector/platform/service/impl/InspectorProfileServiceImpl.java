@@ -1,10 +1,6 @@
 package com.inspector.platform.service.impl;
 
-import com.inspector.platform.dto.EtablissementDto;
-import com.inspector.platform.dto.InspectorProfileRequest;
-import com.inspector.platform.dto.InspectorProfileResponse;
-import com.inspector.platform.dto.ReferenceDto;
-import com.inspector.platform.dto.TeacherDto;
+import com.inspector.platform.dto.*;
 import com.inspector.platform.entity.*;
 import com.inspector.platform.repository.*;
 import com.inspector.platform.service.InspectorProfileService;
@@ -14,8 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,14 +44,20 @@ public class InspectorProfileServiceImpl implements InspectorProfileService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Profile already exists");
         }
 
-        Delegation delegation = delegationRepository.findById(request.getDelegationId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid delegation ID"));
+        List<Delegation> delegations = delegationRepository.findAllById(request.getDelegationIds());
+        if (delegations.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid delegation IDs");
+        }
 
-        Dependency dependency = dependencyRepository.findById(request.getDependencyId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid dependency ID"));
+        List<Dependency> dependencies = dependencyRepository.findAllById(request.getDependencyIds());
+        if (dependencies.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid dependency IDs");
+        }
 
-        Department department = departmentRepository.findById(request.getDepartmentId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid department ID"));
+        List<Department> departments = departmentRepository.findAllById(request.getDepartmentIds());
+        if (departments.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid department IDs");
+        }
 
         List<Etablissement> etablissements = etablissementRepository.findAllById(request.getEtablissementIds());
         if (etablissements.isEmpty()) {
@@ -71,9 +73,9 @@ public class InspectorProfileServiceImpl implements InspectorProfileService {
                 .schoolLevel(request.getSchoolLevel())
                 .phone(request.getPhone())
                 .language(request.getLanguage())
-                .delegation(delegation)
-                .dependency(dependency)
-                .department(department)
+                .delegations(delegations)
+                .dependencies(dependencies)
+                .departments(departments)
                 .etablissements(etablissements)
                 .build();
 
@@ -88,6 +90,7 @@ public class InspectorProfileServiceImpl implements InspectorProfileService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public InspectorProfileResponse getProfile(Long userId) {
         InspectorProfile profile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found"));
@@ -100,14 +103,9 @@ public class InspectorProfileServiceImpl implements InspectorProfileService {
         InspectorProfile profile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found"));
 
-        Delegation delegation = delegationRepository.findById(request.getDelegationId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid delegation ID"));
-
-        Dependency dependency = dependencyRepository.findById(request.getDependencyId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid dependency ID"));
-
-        Department department = departmentRepository.findById(request.getDepartmentId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid department ID"));
+        List<Delegation> delegations = delegationRepository.findAllById(request.getDelegationIds());
+        List<Dependency> dependencies = dependencyRepository.findAllById(request.getDependencyIds());
+        List<Department> departments = departmentRepository.findAllById(request.getDepartmentIds());
 
         List<Etablissement> etablissements = etablissementRepository.findAllById(request.getEtablissementIds());
 
@@ -118,9 +116,9 @@ public class InspectorProfileServiceImpl implements InspectorProfileService {
         profile.setSchoolLevel(request.getSchoolLevel());
         profile.setPhone(request.getPhone());
         profile.setLanguage(request.getLanguage());
-        profile.setDelegation(delegation);
-        profile.setDependency(dependency);
-        profile.setDepartment(department);
+        profile.setDelegations(delegations);
+        profile.setDependencies(dependencies);
+        profile.setDepartments(departments);
         profile.setEtablissements(etablissements);
 
         InspectorProfile updatedProfile = profileRepository.save(profile);
@@ -128,15 +126,30 @@ public class InspectorProfileServiceImpl implements InspectorProfileService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TeacherDto> getMyTeachers(Long inspectorUserId) {
         InspectorProfile inspector = profileRepository.findByUserId(inspectorUserId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inspector profile not found"));
                 
-        List<TeacherProfile> teachers = teacherProfileRepository.findByDelegationIdAndDependencyIdAndSubject(
-                inspector.getDelegation().getId(),
-                inspector.getDependency().getId(),
+        List<Long> delegationIds = inspector.getDelegations().stream().map(Delegation::getId).collect(Collectors.toList());
+        List<Long> dependencyIds = inspector.getDependencies().stream().map(Dependency::getId).collect(Collectors.toList());
+        
+        log.info("Filtering teachers for Inspector {}: Delegations={}, Dependencies={}, Subject={}", 
+                inspectorUserId, delegationIds, dependencyIds, inspector.getSubject());
+
+        // Safety check: Avoid invalid SQL "IN ()" queries if jurisdiction is not defined
+        if (delegationIds.isEmpty() || dependencyIds.isEmpty()) {
+            log.warn("Inspector {} has an incomplete jurisdiction profile (empty delegations/dependencies). Returning empty teacher list.", inspectorUserId);
+            return Collections.emptyList();
+        }
+        
+        List<TeacherProfile> teachers = teacherProfileRepository.findByDelegationIdInAndDependencyIdInAndSubject(
+                delegationIds,
+                dependencyIds,
                 inspector.getSubject()
         );
+        
+        log.info("Found {} teachers matching criteria", teachers.size());
         
         return teachers.stream().map(t -> TeacherDto.builder()
                 .id(t.getId())
@@ -209,6 +222,100 @@ public class InspectorProfileServiceImpl implements InspectorProfileService {
         }
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<TimetableDto> getTeacherTimetable(Long inspectorUserId, Long teacherProfileId) {
+        TeacherProfile teacher = verifyTeacherLinkAndGet(inspectorUserId, teacherProfileId);
+        
+        return timetableRepository.findByTeacherId(teacher.getId())
+                .stream()
+                .map(TimetableDto::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReportResponse> getTeacherReports(Long inspectorUserId, Long teacherProfileId) {
+        TeacherProfile teacher = verifyTeacherLinkAndGet(inspectorUserId, teacherProfileId);
+        
+        // Fetch all reports for this teacher. 
+        // Note: Repository uses teacher's User ID
+        return reportRepository.findByTeacherUserIdAndStatusOrderByUpdatedAtDesc(teacher.getUser().getId(), ReportStatus.FINAL)
+                .stream()
+                .map(this::mapReportToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<QuizSubmissionResponse> getTeacherQuizzes(Long inspectorUserId, Long teacherProfileId) {
+        TeacherProfile teacher = verifyTeacherLinkAndGet(inspectorUserId, teacherProfileId);
+
+        return quizSubmissionRepository.findByTeacherUserId(teacher.getUser().getId())
+                .stream()
+                .map(this::mapQuizSubmissionToResponse)
+                .collect(Collectors.toList());
+    }
+
+    private QuizSubmissionResponse mapQuizSubmissionToResponse(QuizSubmission submission) {
+        return QuizSubmissionResponse.builder()
+                .id(submission.getId())
+                .quizTitle(submission.getQuiz().getTitle())
+                .quizTopic(submission.getQuiz().getTopic())
+                .score(submission.getScore())
+                .evaluationText(submission.getEvaluationText())
+                .trainingSuggestion(submission.getTrainingSuggestion())
+                .submittedAt(submission.getSubmittedAt().toString())
+                .build();
+    }
+
+    private TeacherProfile verifyTeacherLinkAndGet(Long inspectorUserId, Long teacherProfileId) {
+        InspectorProfile inspector = profileRepository.findByUserId(inspectorUserId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inspector profile not found"));
+                
+        TeacherProfile teacher = teacherProfileRepository.findById(teacherProfileId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Teacher profile not found"));
+
+        // Verify Delegation, Dependency, and Subject
+        boolean delegationMatch = inspector.getDelegations().stream()
+                .anyMatch(d -> d.getId().equals(teacher.getDelegation().getId()));
+        
+        boolean dependencyMatch = inspector.getDependencies().stream()
+                .anyMatch(d -> d.getId().equals(teacher.getDependency().getId()));
+                
+        boolean subjectMatch = inspector.getSubject() == teacher.getSubject();
+
+        if (!delegationMatch || !dependencyMatch || !subjectMatch) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Teacher is outside of your jurisdiction");
+        }
+
+        return teacher;
+    }
+
+    private ReportResponse mapReportToResponse(ActivityReport report) {
+        Activity activity = report.getActivity();
+        return ReportResponse.builder()
+                .id(report.getId())
+                .activityId(activity.getId())
+                .activityTitle(activity.getTitle())
+                .activityType(activity.getType())
+                .activityStartDateTime(activity.getStartDateTime())
+                .title(report.getTitle())
+                .observations(report.getObservations())
+                .recommendations(report.getRecommendations())
+                .score(report.getScore())
+                .hasImportedPdf(report.getImportedPdf() != null && report.getImportedPdf().length > 0)
+                .importedPdfFileName(report.getImportedPdfFileName())
+                .status(report.getStatus())
+                .createdAt(report.getCreatedAt())
+                .updatedAt(report.getUpdatedAt())
+                .build();
+    }
+
+    private final TimetableRepository timetableRepository;
+    private final ActivityReportRepository reportRepository;
+    private final QuizSubmissionRepository quizSubmissionRepository;
+
     private InspectorProfileResponse mapToResponse(InspectorProfile profile) {
         return InspectorProfileResponse.builder()
                 .id(profile.getId())
@@ -219,9 +326,15 @@ public class InspectorProfileServiceImpl implements InspectorProfileService {
                 .schoolLevel(profile.getSchoolLevel())
                 .phone(profile.getPhone())
                 .language(profile.getLanguage())
-                .delegation(new ReferenceDto(profile.getDelegation().getId(), profile.getDelegation().getName()))
-                .dependency(new ReferenceDto(profile.getDependency().getId(), profile.getDependency().getName()))
-                .department(new ReferenceDto(profile.getDepartment().getId(), profile.getDepartment().getName()))
+                .delegations(profile.getDelegations().stream()
+                        .map(d -> new ReferenceDto(d.getId(), d.getName()))
+                        .collect(Collectors.toList()))
+                .dependencies(profile.getDependencies().stream()
+                        .map(d -> new ReferenceDto(d.getId(), d.getName()))
+                        .collect(Collectors.toList()))
+                .departments(profile.getDepartments().stream()
+                        .map(d -> new ReferenceDto(d.getId(), d.getName()))
+                        .collect(Collectors.toList()))
                 .etablissements(profile.getEtablissements().stream()
                         .map(e -> new EtablissementDto(e.getId(), e.getName(), e.getSchoolLevel()))
                         .collect(Collectors.toList()))

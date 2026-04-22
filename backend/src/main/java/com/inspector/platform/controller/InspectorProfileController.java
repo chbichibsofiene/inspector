@@ -1,11 +1,6 @@
 package com.inspector.platform.controller;
 
-import com.inspector.platform.dto.ApiResponse;
-import com.inspector.platform.dto.EtablissementDto;
-import com.inspector.platform.dto.InspectorProfileRequest;
-import com.inspector.platform.dto.InspectorProfileResponse;
-import com.inspector.platform.dto.ReferenceDto;
-import com.inspector.platform.dto.TeacherDto;
+import com.inspector.platform.dto.*;
 import com.inspector.platform.service.InspectorProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -112,6 +107,30 @@ public class InspectorProfileController {
         }
         
         return ResponseEntity.ok(ApiResponse.ok("Etablissements retrieved", result));
+    }
+
+    @GetMapping("/teachers/{teacherId}/timetable")
+    public ResponseEntity<ApiResponse<List<TimetableDto>>> getTeacherTimetable(
+            Authentication authentication,
+            @PathVariable Long teacherId) {
+        Long userId = extractUserId(authentication);
+        return ResponseEntity.ok(ApiResponse.ok("Teacher timetable retrieved", profileService.getTeacherTimetable(userId, teacherId)));
+    }
+
+    @GetMapping("/teachers/{teacherId}/reports")
+    public ResponseEntity<ApiResponse<List<ReportResponse>>> getTeacherReports(
+            Authentication authentication,
+            @PathVariable Long teacherId) {
+        Long userId = extractUserId(authentication);
+        return ResponseEntity.ok(ApiResponse.ok("Teacher reports retrieved", profileService.getTeacherReports(userId, teacherId)));
+    }
+
+    @GetMapping("/teachers/{teacherId}/quizzes")
+    public ResponseEntity<ApiResponse<List<QuizSubmissionResponse>>> getTeacherQuizzes(
+            Authentication authentication,
+            @PathVariable Long teacherId) {
+        Long userId = extractUserId(authentication);
+        return ResponseEntity.ok(ApiResponse.ok("Teacher quizzes retrieved", profileService.getTeacherQuizzes(userId, teacherId)));
     }
     
     // Helper to safely extract user ID from the JWT principal

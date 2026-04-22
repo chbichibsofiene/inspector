@@ -34,14 +34,14 @@ public class InspectorProfileRequest {
     @NotBlank(message = "Language is required")
     private String language;
 
-    @NotNull(message = "Delegation is required")
-    private Long delegationId;
+    @NotEmpty(message = "At least one delegation is required")
+    private List<Long> delegationIds;
 
-    @NotNull(message = "Dependency is required")
-    private Long dependencyId;
+    @NotEmpty(message = "At least one dependency is required")
+    private List<Long> dependencyIds;
 
-    @NotNull(message = "Department is required")
-    private Long departmentId;
+    @NotEmpty(message = "At least one department is required")
+    private List<Long> departmentIds;
 
     @NotEmpty(message = "At least one etablissement is required")
     private List<Long> etablissementIds;

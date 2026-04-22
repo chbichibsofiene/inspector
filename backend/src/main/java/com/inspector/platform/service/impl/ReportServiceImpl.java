@@ -6,6 +6,7 @@ import com.inspector.platform.dto.ReportResponse;
 import com.inspector.platform.dto.TeacherDto;
 import com.inspector.platform.entity.Activity;
 import com.inspector.platform.entity.ActivityReport;
+import com.inspector.platform.entity.ReportStatus;
 import com.inspector.platform.entity.TeacherProfile;
 import com.inspector.platform.entity.User;
 import com.inspector.platform.repository.ActivityReportRepository;
@@ -13,6 +14,7 @@ import com.inspector.platform.repository.ActivityRepository;
 import com.inspector.platform.repository.TeacherProfileRepository;
 import com.inspector.platform.repository.UserRepository;
 import com.inspector.platform.service.ReportService;
+import com.inspector.platform.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class ReportServiceImpl implements ReportService {
     private final ActivityRepository activityRepository;
     private final TeacherProfileRepository teacherProfileRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
@@ -50,7 +53,19 @@ public class ReportServiceImpl implements ReportService {
                 .status(request.getStatus())
                 .build();
 
-        return mapToResponse(reportRepository.save(report));
+        ActivityReport saved = reportRepository.save(report);
+
+        if (saved.getStatus() == ReportStatus.FINAL && teacher != null) {
+            notificationService.sendNotification(
+                teacher.getUser().getId(),
+                "New Report Available",
+                "Inspector " + inspector.getSerialCode() + " has finalized a pedagogical report for you.",
+                "REPORT_FINALIZED",
+                "/reports"
+            );
+        }
+
+        return mapToResponse(saved);
     }
 
     @Override
@@ -68,7 +83,19 @@ public class ReportServiceImpl implements ReportService {
         report.setScore(request.getScore());
         report.setStatus(request.getStatus());
 
-        return mapToResponse(reportRepository.save(report));
+        ActivityReport saved = reportRepository.save(report);
+
+        if (saved.getStatus() == ReportStatus.FINAL && teacher != null) {
+            notificationService.sendNotification(
+                teacher.getUser().getId(),
+                "New Report Available",
+                "Inspector " + inspector.getSerialCode() + " has finalized a pedagogical report for you.",
+                "REPORT_FINALIZED",
+                "/reports"
+            );
+        }
+
+        return mapToResponse(saved);
     }
 
     @Override
@@ -87,6 +114,17 @@ public class ReportServiceImpl implements ReportService {
 
         return reports.stream()
                 .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReportResponse> getTeacherReports(Long teacherUserId) {
+        List<ActivityReport> reports = reportRepository.findByTeacherUserIdAndStatusOrderByUpdatedAtDesc(
+                teacherUserId, ReportStatus.FINAL);
+
+        return reports.stream()
+                .map(this::mapToTeacherResponse)
                 .collect(Collectors.toList());
     }
 
@@ -152,16 +190,29 @@ public class ReportServiceImpl implements ReportService {
     }
 
     private TeacherDto mapTeacherToDto(TeacherProfile teacher) {
+        EtablissementDto etablissementDto = null;
+        if (teacher.getEtablissement() != null) {
+            etablissementDto = new EtablissementDto(
+                    teacher.getEtablissement().getId(),
+                    teacher.getEtablissement().getName(),
+                    teacher.getEtablissement().getSchoolLevel()
+            );
+        }
+
         return TeacherDto.builder()
                 .id(teacher.getId())
                 .firstName(teacher.getFirstName())
                 .lastName(teacher.getLastName())
-                .email(teacher.getUser().getEmail())
-                .serialCode(teacher.getUser().getSerialCode())
-                .etablissement(new EtablissementDto(
-                        teacher.getEtablissement().getId(),
-                        teacher.getEtablissement().getName(),
-                        teacher.getEtablissement().getSchoolLevel()))
+                .email(teacher.getUser() != null ? teacher.getUser().getEmail() : null)
+                .serialCode(teacher.getUser() != null ? teacher.getUser().getSerialCode() : null)
+                .etablissement(etablissementDto)
                 .build();
+    }
+
+    private ReportResponse mapToTeacherResponse(ActivityReport report) {
+        ReportResponse response = mapToResponse(report);
+        // Requirement: Teachers cannot see the score
+        response.setScore(null);
+        return response;
     }
 }

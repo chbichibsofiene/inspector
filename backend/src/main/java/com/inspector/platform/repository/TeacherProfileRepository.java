@@ -14,4 +14,6 @@ public interface TeacherProfileRepository extends JpaRepository<TeacherProfile, 
     boolean existsByUserId(Long userId);
     Optional<TeacherProfile> findByUserSerialCode(String serialCode);
     List<TeacherProfile> findByDelegationIdAndDependencyIdAndSubject(Long delegationId, Long dependencyId, Subject subject);
+    List<TeacherProfile> findByDelegationIdInAndDependencyIdInAndSubject(List<Long> delegationIds, List<Long> dependencyIds, Subject subject);
+    List<TeacherProfile> findBySubject(Subject subject);
 }

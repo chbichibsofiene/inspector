@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getTeacherDashboard } from "../api/dashboard";
+import TimetableSection from "../components/TimetableSection";
+import InspectorActivitiesTimetable from "../components/InspectorActivitiesTimetable";
 
 export default function TeacherHome() {
   const [data, setData] = useState(null);
@@ -37,34 +39,11 @@ export default function TeacherHome() {
 
       {error && <div className="auth-error">{error}</div>}
 
+      <TimetableSection />
+      
+      <InspectorActivitiesTimetable />
+
       <div className="dashboard-grid">
-        <section className="card">
-          <div className="card-header">
-            <div>
-              <div className="card-title">Account status</div>
-              <div className="card-subtitle">
-                {data?.message || "Your teacher workspace is ready."}
-              </div>
-            </div>
-            <span className="tag">{data?.status || "ACTIVE"}</span>
-          </div>
-
-          <div className="metric-list">
-            <div>
-              <span>Email</span>
-              <strong>{data?.email || "N/A"}</strong>
-            </div>
-            <div>
-              <span>Serial code</span>
-              <strong>{data?.serialCode || "N/A"}</strong>
-            </div>
-            <div>
-              <span>Profile</span>
-              <strong>{data?.profileCompleted ? "Completed" : "Pending"}</strong>
-            </div>
-          </div>
-        </section>
-
         <section className="card">
           <div className="card-header">
             <div>
@@ -84,22 +63,27 @@ export default function TeacherHome() {
             Go to Messenger
           </Link>
         </section>
-      </div>
 
-      <section className="card activity-list-card">
-        <div className="card-header">
-          <div>
-            <div className="card-title">Technical payload</div>
-            <div className="card-subtitle">
-              Useful during the demo to show the backend response.
+        <section className="card highlight-card">
+          <div className="card-header">
+            <div>
+              <div className="card-title">Pedagogical Quizzes</div>
+              <div className="card-subtitle">
+                Test your knowledge and get AI feedback.
+              </div>
             </div>
+            <span className="tag">Action Required</span>
           </div>
-          <span className="tag">JSON payload</span>
-        </div>
-        <div className="json-preview">
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-        </div>
-      </section>
+
+          <p className="muted">
+            Complete quizzes assigned by your inspector and view your automated training suggestions.
+          </p>
+
+          <Link className="primary-link-button" to="/teacher/quizzes">
+            View My Quizzes
+          </Link>
+        </section>
+      </div>
     </div>
   );
 }

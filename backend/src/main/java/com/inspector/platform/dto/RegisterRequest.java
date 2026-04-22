@@ -20,5 +20,9 @@ public class RegisterRequest {
     @NotBlank(message = "Serial code is required")
     @Size(max = 100, message = "Serial code is too long")
     private String serialCode;
+
+    @NotBlank(message = "CIN is required")
+    @Size(min = 8, max = 8, message = "CIN must be exactly 8 characters")
+    private String cin;
 }
 

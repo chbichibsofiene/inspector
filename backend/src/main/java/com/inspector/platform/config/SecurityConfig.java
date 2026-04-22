@@ -46,7 +46,6 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-
                         .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
 
@@ -65,6 +64,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/inspector/reports/**").hasRole("INSPECTOR")
                         .requestMatchers("/api/inspector/analytics/**").hasRole("INSPECTOR")
                         .requestMatchers("/api/teacher/profile").hasRole("TEACHER")
+                        .requestMatchers("/api/teacher/activities/**").hasRole("TEACHER")
                         .requestMatchers("/api/dashboard/inspector").hasRole("INSPECTOR")
                         .requestMatchers("/api/dashboard/teacher").hasRole("TEACHER")
                         .requestMatchers("/api/dashboard/responsible").hasRole("PEDAGOGICAL_RESPONSIBLE")
