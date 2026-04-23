@@ -58,7 +58,7 @@ public class ReportServiceImpl implements ReportService {
         if (saved.getStatus() == ReportStatus.FINAL && teacher != null) {
             notificationService.sendNotification(
                 teacher.getUser().getId(),
-                "New Report Available",
+                "New Report Available!" ,
                 "Inspector " + inspector.getSerialCode() + " has finalized a pedagogical report for you.",
                 "REPORT_FINALIZED",
                 "/reports"
@@ -71,6 +71,8 @@ public class ReportServiceImpl implements ReportService {
     @Override
     @Transactional
     public ReportResponse updateReport(Long inspectorId, Long reportId, ReportRequest request) {
+        User inspector = userRepository.findById(inspectorId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inspector not found"));
         ActivityReport report = getReportAndVerifyOwner(inspectorId, reportId);
         Activity activity = getActivityAndVerifyOwner(inspectorId, request.getActivityId());
         TeacherProfile teacher = getTeacherIfPresent(activity, request.getTeacherId());

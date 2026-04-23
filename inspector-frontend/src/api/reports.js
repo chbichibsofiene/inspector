@@ -50,7 +50,9 @@ export const importReportPdf = async (reportId, file) => {
 const reportsApi = {
     getMyReports: async () => {
         const response = await http.get('/teacher/reports');
-        return response.data;
+        // Backend returns ApiResponse<List<ReportResponse>> => { success, data: [...] }
+        // Return the whole axios response so the component can do response.data
+        return response;
     },
 
     downloadReportPdf: async (reportId, filename) => {

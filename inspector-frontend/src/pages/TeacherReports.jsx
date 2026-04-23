@@ -12,7 +12,8 @@ export default function TeacherReports() {
     setLoading(true);
     try {
       const response = await reportsApi.getMyReports();
-      setReports(response.data || []);
+      // Backend wraps in ApiResponse: { success, message, data: [...] }
+      setReports(response.data?.data || []);
       setError(null);
     } catch (err) {
       setError('Failed to load your reports. Please try again later.');
