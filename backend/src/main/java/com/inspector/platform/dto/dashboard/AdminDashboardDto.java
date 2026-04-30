@@ -16,16 +16,5 @@ import java.util.Map;
 public class AdminDashboardDto {
 
     private long totalUsers;
-    private long pendingVerifications;
-    private long verifiedUsers;
-
-    
     private Map<String, Long> usersByRole;
-
-    
-    private List<UserDto> latestPendingAccounts;
-
-    
-    private List<UserDto> recentlyVerified;
 }
-

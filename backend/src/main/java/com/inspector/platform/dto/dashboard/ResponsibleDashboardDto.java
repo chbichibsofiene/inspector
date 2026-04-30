@@ -21,7 +21,7 @@ public class ResponsibleDashboardDto {
     private String serialCode;
     private Role role;
     private LocalDateTime memberSince;
-    private LocalDateTime verifiedAt;
+
 
     
     private long totalTeachers;
@@ -37,5 +37,6 @@ public class ResponsibleDashboardDto {
 
     
     private List<UserDto> inspectors;
+    private String profileImageUrl;
 }
 

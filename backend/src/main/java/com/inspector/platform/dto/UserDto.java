@@ -17,21 +17,27 @@ public class UserDto {
 
     private Long id;
     private String email;
+    private String firstName;
+    private String lastName;
+    private String cin;
     private String serialCode;
     private Role role;
     private boolean enabled;
     private LocalDateTime createdAt;
     private boolean isMicrosoftConnected;
+    private String profileImageUrl;
 
     
     public static UserDto from(User user) {
         return UserDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
+                // firstName, lastName, cin are enriched from Personnel by the service layer
                 .serialCode(user.getSerialCode())
                 .role(user.getRole())
                 .enabled(user.isEnabled())
                 .isMicrosoftConnected(user.isMicrosoftConnected())
+                .profileImageUrl(user.getProfileImageUrl())
                 .createdAt(user.getCreatedAt())
                 .build();
     }

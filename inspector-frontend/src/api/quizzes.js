@@ -12,5 +12,8 @@ export const getInspectorQuizzes = () =>
 export const getTeacherQuizzes = () => 
   http.get("/teacher/quizzes");
 
+export const getQuizDetail = (quizId) =>
+  http.get(`/teacher/quizzes/${quizId}`);
+
 export const submitQuiz = (quizId, answers) => 
   http.post(`/teacher/quizzes/${quizId}/submit`, answers);

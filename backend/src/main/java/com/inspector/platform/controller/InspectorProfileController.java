@@ -100,8 +100,8 @@ public class InspectorProfileController {
             @RequestParam(required = false) String schoolLevel) {
         
         List<EtablissementDto> result;
-        if (schoolLevel != null && !schoolLevel.isBlank()) {
-            result = profileService.getEtablissementsByDependencyAndSchoolLevel(dependencyId, schoolLevel);
+        if (schoolLevel != null && !schoolLevel.trim().isEmpty() && !schoolLevel.equalsIgnoreCase("null") && !schoolLevel.equalsIgnoreCase("undefined")) {
+            result = profileService.getEtablissementsByDependencyAndSchoolLevel(dependencyId, schoolLevel.trim().toUpperCase());
         } else {
             result = profileService.getEtablissementsByDependency(dependencyId);
         }

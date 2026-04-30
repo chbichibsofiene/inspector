@@ -19,4 +19,5 @@ public class LoginResponse {
     private Role role;
     private Long userId;
     private boolean profileCompleted;
+    private String profileImageUrl;
 }

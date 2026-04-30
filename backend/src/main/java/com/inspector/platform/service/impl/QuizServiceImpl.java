@@ -113,6 +113,14 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public QuizResponse getQuizDetail(Long quizId) {
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Quiz not found"));
+        return mapToResponse(quiz, false);
+    }
+
+    @Override
     @Transactional
     public Map<String, Object> submitQuiz(Long teacherUserId, Long quizId, Map<Long, String> answers) {
         TeacherProfile teacher = teacherRepository.findByUserId(teacherUserId)

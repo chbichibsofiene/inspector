@@ -71,7 +71,13 @@ export default function InspectorTeachers() {
             <div key={teacher.id} className="teacher-insight-card card" onClick={() => setSelectedTeacher(teacher)}>
               <div className="card-top">
                 <div className="profile-avatar">
-                  <User size={24} />
+                  {teacher.profileImageUrl ? (
+                    <img src={teacher.profileImageUrl} alt={`${teacher.firstName} ${teacher.lastName}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <span style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.5px' }}>
+                      {(teacher.firstName?.[0] || '?').toUpperCase()}{(teacher.lastName?.[0] || '').toUpperCase()}
+                    </span>
+                  )}
                 </div>
                 <div className="teacher-main-info">
                   <h3>{teacher.firstName} {teacher.lastName}</h3>
@@ -197,12 +203,14 @@ export default function InspectorTeachers() {
         .profile-avatar {
           width: 54px;
           height: 54px;
-          background: #3b82f6;
+          background: linear-gradient(135deg, var(--primary), #818cf8);
           color: white;
           border-radius: 14px;
           display: flex;
           align-items: center;
           justify-content: center;
+          overflow: hidden;
+          box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
         }
 
         .teacher-main-info h3 {

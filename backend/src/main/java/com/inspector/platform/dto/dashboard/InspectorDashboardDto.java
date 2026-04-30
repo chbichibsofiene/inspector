@@ -19,7 +19,7 @@ public class InspectorDashboardDto {
     private String serialCode;
     private Role role;
     private LocalDateTime memberSince;
-    private LocalDateTime verifiedAt;
+
 
     private boolean profileCompleted;
     private String status;
@@ -27,5 +27,6 @@ public class InspectorDashboardDto {
     
     private String phone;
     private String language;
+    private String profileImageUrl;
 }
 

@@ -19,7 +19,7 @@ public class TeacherDashboardDto {
     private String serialCode;
     private Role role;
     private LocalDateTime memberSince;
-    private LocalDateTime verifiedAt;
+
 
     private boolean profileCompleted;
     private String firstName;
@@ -31,5 +31,6 @@ public class TeacherDashboardDto {
     
     private String phone;
     private String language;
+    private String profileImageUrl;
 }
 

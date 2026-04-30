@@ -18,4 +18,8 @@ public class Delegation {
 
     @Column(nullable = false, unique = true, length = 200)
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id")
+    private Region region;
 }

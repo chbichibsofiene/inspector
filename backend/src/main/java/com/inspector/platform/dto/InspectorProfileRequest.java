@@ -45,4 +45,6 @@ public class InspectorProfileRequest {
 
     @NotEmpty(message = "At least one etablissement is required")
     private List<Long> etablissementIds;
+
+    private String profileImageUrl;
 }

@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TeacherDto {
     private Long id;
+    private Long userId;
     private String firstName;
     private String lastName;
     private String email;
     private String serialCode;
     private EtablissementDto etablissement;
+    private String profileImageUrl;
 }

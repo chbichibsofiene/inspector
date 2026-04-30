@@ -4,7 +4,6 @@ import com.inspector.platform.dto.LoginRequest;
 import com.inspector.platform.dto.LoginResponse;
 import com.inspector.platform.dto.RegisterRequest;
 import com.inspector.platform.dto.UserDto;
-import com.inspector.platform.entity.Role;
 import com.inspector.platform.entity.User;
 import com.inspector.platform.exception.AccountNotVerifiedException;
 import com.inspector.platform.exception.EmailAlreadyExistsException;
@@ -14,6 +13,13 @@ import com.inspector.platform.repository.PersonnelRepository;
 import com.inspector.platform.repository.UserRepository;
 import com.inspector.platform.security.JwtUtil;
 import com.inspector.platform.service.AuthService;
+import com.inspector.platform.service.NotificationService;
+import com.inspector.platform.service.EmailService;
+import com.inspector.platform.service.LogService;
+import com.inspector.platform.entity.ActionType;
+import com.inspector.platform.repository.InspectorProfileRepository;
+import com.inspector.platform.repository.TeacherProfileRepository;
+import com.inspector.platform.entity.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +41,11 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final LogService logService;
+    private final NotificationService notificationService;
+    private final EmailService emailService;
+    private final InspectorProfileRepository inspectorProfileRepository;
+    private final TeacherProfileRepository teacherProfileRepository;
 
     @Override
     @Transactional
@@ -64,7 +75,17 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         User saved = userRepository.save(user);
+        logService.log(saved, ActionType.CREATE, "User", saved.getId().toString(), "User registered", null);
         log.info("New user registered and auto-enabled: {} as {}", saved.getEmail(), saved.getRole());
+
+        // Send notification (In-app + Email via NotificationService)
+        notificationService.sendNotification(
+            saved.getId(),
+            personnel.getFirstName() + " " + personnel.getLastName(),
+            "Welcome to the Inspector Platform! Your registration was successful.",
+            "REGISTRATION_SUCCESS",
+            "/profile"
+        );
 
         return UserDto.from(saved);
     }
@@ -83,6 +104,7 @@ public class AuthServiceImpl implements AuthService {
             User user = userRepository.findByEmail(request.getEmail())
                     .orElseThrow();
 
+            logService.log(user, ActionType.LOGIN, "User", user.getId().toString(), "User logged in", null);
             log.info("User logged in: {} [{}]", user.getEmail(), user.getRole());
 
             return LoginResponse.builder()
@@ -92,12 +114,65 @@ public class AuthServiceImpl implements AuthService {
                     .role(user.getRole())
                     .userId(user.getId())
                     .profileCompleted(user.isProfileCompleted())
+                    .profileImageUrl(user.getProfileImageUrl())
                     .build();
 
         } catch (DisabledException e) {
 
             throw new AccountNotVerifiedException(
                     "Your account has not been verified yet. Please contact the administrator.");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void forgotPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+        // Generate 6-digit code
+        String code = String.format("%06d", new java.util.Random().nextInt(1000000));
+        user.setResetCode(code);
+        user.setResetCodeExpiresAt(java.time.LocalDateTime.now().plusMinutes(15));
+        userRepository.save(user);
+
+        String fullName = getFullName(user);
+        emailService.sendPasswordResetEmail(email, fullName, code);
+        log.info("Password reset code sent to {}", email);
+    }
+
+    @Override
+    @Transactional
+    public void resetPassword(String email, String code, String newPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+        if (user.getResetCode() == null || !user.getResetCode().equals(code)) {
+            throw new RuntimeException("Invalid reset code");
+        }
+
+        if (user.getResetCodeExpiresAt().isBefore(java.time.LocalDateTime.now())) {
+            throw new RuntimeException("Reset code has expired");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setResetCode(null);
+        user.setResetCodeExpiresAt(null);
+        userRepository.save(user);
+
+        logService.log(user, com.inspector.platform.entity.ActionType.UPDATE, "User", user.getId().toString(), "Password reset successfully", null);
+        log.info("Password reset successfully for user: {}", email);
+    }
+
+    private String getFullName(User user) {
+        if (user.getRole() == Role.INSPECTOR) {
+            return inspectorProfileRepository.findByUserId(user.getId())
+                    .map(p -> p.getFirstName() + " " + p.getLastName())
+                    .orElse(user.getEmail());
+        } else {
+            return teacherProfileRepository.findByUserId(user.getId())
+                    .map(p -> p.getFirstName() + " " + p.getLastName())
+                    .orElse(user.getEmail());
         }
     }
 }

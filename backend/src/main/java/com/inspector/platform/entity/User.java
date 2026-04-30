@@ -48,8 +48,15 @@ public class User {
     @Builder.Default
     private boolean isMicrosoftConnected = false;
 
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String profileImageUrl;
+
+    @Column(length = 6)
+    private String resetCode;
+
     @Column
-    private LocalDateTime verifiedAt;
+    private LocalDateTime resetCodeExpiresAt;
 
     @PrePersist
     protected void onCreate() {

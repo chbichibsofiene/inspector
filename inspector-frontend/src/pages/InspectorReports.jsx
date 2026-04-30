@@ -9,6 +9,7 @@ import {
   importReportPdf,
   updateReport,
 } from "../api/reports";
+import { useTranslation } from "react-i18next";
 
 const emptyForm = {
   activityId: "",
@@ -32,6 +33,7 @@ function formatDate(value) {
 }
 
 export default function InspectorReports() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const [activities, setActivities] = useState([]);
   const [reports, setReports] = useState([]);
@@ -200,13 +202,13 @@ export default function InspectorReports() {
     <div>
       <header className="page-header">
         <div>
-          <div className="page-title">Activity reports</div>
+          <div className="page-title">{t("pedagogicalReports")}</div>
           <div className="page-subtitle">
-            Write observations, recommendations and evaluation notes after an activity.
+            {t("pedagogicalReportsDesc")}
           </div>
         </div>
         <Link className="secondary-link-button" to="/inspector/calendar">
-          Back to calendar
+          {t("backToDashboard")}
         </Link>
       </header>
 
@@ -217,23 +219,23 @@ export default function InspectorReports() {
         <section className="card">
           <div className="card-header">
             <div>
-              <div className="card-title">{editingId ? "Edit report" : "New report"}</div>
+              <div className="card-title">{editingId ? t("edit") : t("newReport")}</div>
               <div className="card-subtitle">
-                {loading ? "Loading activities..." : "Link the report to a planned activity."}
+                {loading ? "Loading..." : t("newReportDesc")}
               </div>
             </div>
-            <span className="tag">{editingId ? "Editing" : "Report"}</span>
+            <span className="tag">{editingId ? t("edit") : t("reportBtn")}</span>
           </div>
 
           <form className="activity-form" onSubmit={handleSubmit}>
             <label>
-              Activity
+              {t("activity")}
               <select
                 value={form.activityId}
                 onChange={(event) => updateForm("activityId", event.target.value)}
                 required
               >
-                <option value="">Select an activity</option>
+                <option value="">{t("activity")}</option>
                 {activities.map((activity) => (
                   <option key={activity.id} value={activity.id}>
                     {activity.title} - {formatDate(activity.startDateTime)}
@@ -243,12 +245,12 @@ export default function InspectorReports() {
             </label>
 
             <label>
-              Teacher
+              {t("teacher")}
               <select
                 value={form.teacherId}
                 onChange={(event) => updateForm("teacherId", event.target.value)}
               >
-                <option value="">General activity report</option>
+                <option value="">{t("teacher")}</option>
                 {(selectedActivity?.guests || []).map((teacher) => (
                   <option key={teacher.id} value={teacher.id}>
                     {teacher.firstName} {teacher.lastName}
@@ -258,7 +260,7 @@ export default function InspectorReports() {
             </label>
 
             <label>
-              Title
+              {t("title")}
               <input
                 value={form.title}
                 onChange={(event) => updateForm("title", event.target.value)}
@@ -267,7 +269,7 @@ export default function InspectorReports() {
             </label>
 
             <label>
-              Observations
+              {t("observations")}
               <textarea
                 value={form.observations}
                 onChange={(event) => updateForm("observations", event.target.value)}
@@ -277,7 +279,7 @@ export default function InspectorReports() {
             </label>
 
             <label>
-              Recommendations
+              {t("recommendations")}
               <textarea
                 value={form.recommendations}
                 onChange={(event) => updateForm("recommendations", event.target.value)}
@@ -287,7 +289,7 @@ export default function InspectorReports() {
 
             <div className="form-row">
               <label>
-                Score /20
+                {t("score")}
                 <input
                   type="number"
                   min="0"
@@ -298,25 +300,25 @@ export default function InspectorReports() {
               </label>
 
               <label>
-                Status
+                {t("status")}
                 <select
                   value={form.status}
                   onChange={(event) => updateForm("status", event.target.value)}
                   required
                 >
-                  <option value="DRAFT">Draft</option>
-                  <option value="FINAL">Final</option>
+                  <option value="DRAFT">{t("draft")}</option>
+                  <option value="FINAL">{t("final")}</option>
                 </select>
               </label>
             </div>
 
             <div className="form-actions">
               <button type="submit" disabled={saving || !form.activityId}>
-                {saving ? "Saving..." : editingId ? "Update report" : "Create report"}
+                {saving ? "Saving..." : editingId ? t("edit") : t("createReport")}
               </button>
               {editingId && (
                 <button type="button" className="secondary-action-btn" onClick={resetForm}>
-                  Cancel edit
+                  {t("reset")}
                 </button>
               )}
             </div>
@@ -326,12 +328,12 @@ export default function InspectorReports() {
         <section className="card">
           <div className="card-header">
             <div>
-              <div className="card-title">Report history</div>
+              <div className="card-title">{t("reportHistory")}</div>
               <div className="card-subtitle">
-                Saved reports for your inspector activities.
+                {t("reportHistoryDesc")}
               </div>
             </div>
-            <span className="badge">{reports.length} reports</span>
+            <span className="badge">{reports.length}</span>
           </div>
 
           {reports.length === 0 ? (
@@ -354,10 +356,10 @@ export default function InspectorReports() {
                   </div>
                   <div className="item-actions">
                     <button type="button" className="secondary-action-btn" onClick={() => handleDownloadPdf(report)}>
-                      {report.hasImportedPdf ? "Download imported PDF" : "Download PDF"}
+                      {t("downloadPdf")}
                     </button>
                     <label className="secondary-link-button compact-link-button file-import-button">
-                      Import PDF
+                      {t("importPdf")}
                       <input
                         type="file"
                         accept="application/pdf"
@@ -365,10 +367,10 @@ export default function InspectorReports() {
                       />
                     </label>
                     <button type="button" className="secondary-action-btn" onClick={() => editReport(report)}>
-                      Edit
+                      {t("edit")}
                     </button>
                     <button type="button" className="danger-btn" onClick={() => handleDelete(report.id)}>
-                      Delete
+                      {t("delete")}
                     </button>
                   </div>
                 </article>

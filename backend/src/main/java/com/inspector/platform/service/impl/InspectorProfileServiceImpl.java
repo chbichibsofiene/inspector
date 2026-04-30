@@ -82,6 +82,7 @@ public class InspectorProfileServiceImpl implements InspectorProfileService {
         InspectorProfile savedProfile = profileRepository.save(profile);
 
         user.setProfileCompleted(true);
+        user.setProfileImageUrl(request.getProfileImageUrl());
         userRepository.save(user);
 
         log.info("Inspector profile completed for user {}", user.getEmail());
@@ -121,6 +122,10 @@ public class InspectorProfileServiceImpl implements InspectorProfileService {
         profile.setDepartments(departments);
         profile.setEtablissements(etablissements);
 
+        User user = profile.getUser();
+        user.setProfileImageUrl(request.getProfileImageUrl());
+        userRepository.save(user);
+
         InspectorProfile updatedProfile = profileRepository.save(profile);
         return mapToResponse(updatedProfile);
     }
@@ -153,10 +158,12 @@ public class InspectorProfileServiceImpl implements InspectorProfileService {
         
         return teachers.stream().map(t -> TeacherDto.builder()
                 .id(t.getId())
+                .userId(t.getUser().getId())
                 .firstName(t.getFirstName())
                 .lastName(t.getLastName())
                 .email(t.getUser().getEmail())
                 .serialCode(t.getUser().getSerialCode())
+                .profileImageUrl(t.getUser().getProfileImageUrl())
                 .etablissement(new EtablissementDto(t.getEtablissement().getId(), t.getEtablissement().getName(), t.getEtablissement().getSchoolLevel()))
                 .build()).collect(Collectors.toList());
     }

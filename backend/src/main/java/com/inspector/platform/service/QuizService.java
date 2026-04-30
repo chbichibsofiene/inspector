@@ -10,5 +10,6 @@ public interface QuizService {
     QuizResponse saveQuiz(Long inspectorUserId, String title, String topic, String subject, List<Map<String, Object>> questionData);
     List<QuizResponse> getAvailableQuizzes(Long teacherUserId);
     List<QuizResponse> getInspectorQuizzes(Long inspectorUserId);
+    QuizResponse getQuizDetail(Long quizId);
     Map<String, Object> submitQuiz(Long teacherUserId, Long quizId, Map<Long, String> answers);
 }

@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { generateQuiz, saveQuiz, getInspectorQuizzes } from "../api/quizzes";
 import profileApi from "../api/profile";
 import { Brain, Plus, Loader2, CheckCircle, AlertCircle, Save, X, BookOpen, Trash } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function InspectorQuizzes() {
+  const { t } = useTranslation();
   const [topic, setTopic] = useState("");
   const [subject, setSubject] = useState("");
   const [subjects, setSubjects] = useState([]);
@@ -71,8 +73,8 @@ export default function InspectorQuizzes() {
     <div className="inspector-quizzes-page">
       <header className="page-header">
         <div>
-          <h1 className="page-title">AI Quiz Center</h1>
-          <p className="page-subtitle">Generate subject-specific quizzes and evaluate teacher performance automatically.</p>
+          <h1 className="page-title">{t("quizCenter")}</h1>
+          <p className="page-subtitle">{t("quizCenterDesc")}</p>
         </div>
         <div className="pill secondary">
           <Brain size={16} /> <strong>Gemini Pro Powered</strong>
@@ -84,23 +86,23 @@ export default function InspectorQuizzes() {
 
       <div className="quiz-generator-section card">
         <div className="card-header">
-          <div className="card-title">New AI Quiz</div>
+          <div className="card-title">{t("newQuiz")}</div>
         </div>
         
         <form onSubmit={handleGenerate} className="activity-form">
           <div className="form-row">
             <label>
-              Subject Context
+              {t("subject")}
               <select value={subject} onChange={e => setSubject(e.target.value)} required>
-                <option value="">Select Subject</option>
+                <option value="">{t("selectSubject")}</option>
                 {subjects.map(s => <option key={s.name} value={s.name}>{s.label}</option>)}
               </select>
             </label>
             <label>
-              Topic / Theme
+              {t("title")}
               <input 
                 type="text" 
-                placeholder="e.g. Modern Physics, French Grammar, etc." 
+                placeholder={t("titlePlaceholder")} 
                 value={topic} 
                 onChange={e => setTopic(e.target.value)} 
                 required 

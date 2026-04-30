@@ -44,7 +44,7 @@ public class ActivityReport {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(name = "imported_pdf")
+    @Column(name = "imported_pdf", columnDefinition = "LONGBLOB")
     private byte[] importedPdf;
 
     @Column(name = "imported_pdf_file_name", length = 255)

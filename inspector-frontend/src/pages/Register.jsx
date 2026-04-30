@@ -48,7 +48,10 @@ export default function Register() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1>Inspector Platform</h1>
+        <div className="login-logo-container">
+          <img src="/logo.png" alt="Logo" className="login-logo" />
+          <h1>Pedagogical Center</h1>
+        </div>
         <h2>Request an account</h2>
 
         {error && <div className="auth-error">{error}</div>}

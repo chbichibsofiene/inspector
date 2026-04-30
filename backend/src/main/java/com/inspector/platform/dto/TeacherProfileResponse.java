@@ -24,4 +24,5 @@ public class TeacherProfileResponse {
     
     private String phone;
     private String language;
+    private String profileImageUrl;
 }

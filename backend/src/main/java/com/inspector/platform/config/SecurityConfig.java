@@ -48,6 +48,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/reset-password").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/inspector/profile/ranks").hasAnyRole("INSPECTOR", "ADMIN", "TEACHER")
                         .requestMatchers(HttpMethod.GET, "/api/inspector/profile/subjects").hasAnyRole("INSPECTOR", "ADMIN", "TEACHER")
@@ -63,8 +65,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/inspector/activities/**").hasRole("INSPECTOR")
                         .requestMatchers("/api/inspector/reports/**").hasRole("INSPECTOR")
                         .requestMatchers("/api/inspector/analytics/**").hasRole("INSPECTOR")
+                        .requestMatchers("/api/inspector/courses/**").hasRole("INSPECTOR")
                         .requestMatchers("/api/teacher/profile").hasRole("TEACHER")
                         .requestMatchers("/api/teacher/activities/**").hasRole("TEACHER")
+                        .requestMatchers("/api/teacher/courses/**").hasRole("TEACHER")
                         .requestMatchers("/api/dashboard/inspector").hasRole("INSPECTOR")
                         .requestMatchers("/api/dashboard/teacher").hasRole("TEACHER")
                         .requestMatchers("/api/dashboard/responsible").hasRole("PEDAGOGICAL_RESPONSIBLE")

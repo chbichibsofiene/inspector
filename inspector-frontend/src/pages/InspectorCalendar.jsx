@@ -22,6 +22,7 @@ import {
   Video,
   Link as LinkIcon
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   createActivity,
   deleteActivity,
@@ -84,6 +85,7 @@ const TYPE_LABELS = {
 };
 
 export default function InspectorCalendar() {
+  const { t } = useTranslation();
   const [activities, setActivities] = useState([]);
   const [reports, setReports] = useState([]);
   const [teachers, setTeachers] = useState([]);
@@ -345,13 +347,13 @@ export default function InspectorCalendar() {
     <div>
       <header className="page-header">
         <div>
-          <div className="page-title">Activity Calendar</div>
+          <div className="page-title">{t("activityCalendar")}</div>
           <div className="page-subtitle">
-            Your centralized planning workspace for pedagogical activities.
+            {t("calendarDesc")}
           </div>
         </div>
         <Link className="secondary-link-button" to="/inspector">
-          Back to Dashboard
+          {t("backToDashboard")}
         </Link>
       </header>
 
@@ -371,10 +373,10 @@ export default function InspectorCalendar() {
                   right: "dayGridMonth,timeGridWeek,timeGridDay",
                 }}
                 buttonText={{
-                  today: "Today",
-                  month: "Month",
-                  week: "Week",
-                  day: "Day",
+                  today: t("today"),
+                  month: t("month"),
+                  week: t("week"),
+                  day: t("day"),
                 }}
                 events={calendarEvents}
                 editable
@@ -399,13 +401,13 @@ export default function InspectorCalendar() {
           <section className="card" style={{ marginTop: "1.5rem" }}>
             <div className="card-header">
               <div>
-                <div className="card-title">Upcoming Activities</div>
+                <div className="card-title">{t("upcomingActivities")}</div>
                 <div className="card-subtitle">
-                  Review your next scheduled pedagogical sessions.
+                  {t("upcomingActivitiesDesc")}
                 </div>
               </div>
               <Link className="primary-link-button compact-link-button" to="/inspector">
-                Workspace Indicators
+                {t("workspaceIndicators")}
               </Link>
             </div>
 
@@ -441,7 +443,7 @@ export default function InspectorCalendar() {
                         className="secondary-link-button compact-link-button"
                         to={`/inspector/reports?activityId=${activity.id}`}
                       >
-                        Report
+                        {t("reportBtn")}
                       </Link>
                       <button className="danger-btn" onClick={() => handleDelete(activity.id)} style={{ padding: '6px 10px' }}>
                         <Trash2 size={14} />
@@ -556,7 +558,7 @@ export default function InspectorCalendar() {
 
                 <div className="form-group">
                   <div className="group-header">
-                    <FileText size={14} /> Description
+                    <FileText size={14} /> {t("description")}
                   </div>
                   <div className="input-with-icon">
                     <FileText className="input-icon" style={{ top: '15px' }} size={18} />
@@ -572,7 +574,7 @@ export default function InspectorCalendar() {
 
                     <div className="form-group" style={{ marginTop: '1.5rem' }}>
                       <div className="group-header">
-                        <Video size={14} /> Meeting Type
+                        <Video size={14} /> {t("meetingType")}
                       </div>
                       <div style={{ 
                         display: 'grid', 
@@ -604,8 +606,8 @@ export default function InspectorCalendar() {
                           }}
                         >
                           <MapPin size={24} color={!form.isOnline ? 'var(--primary)' : '#94a3b8'} />
-                          <div style={{ fontWeight: 700, fontSize: '0.9rem', color: !form.isOnline ? '#0369a1' : '#64748b' }}>In-Person</div>
-                          <div style={{ fontSize: '0.75rem', color: '#94a3b8', textAlign: 'center' }}>At Location</div>
+                          <div style={{ fontWeight: 700, fontSize: '0.9rem', color: !form.isOnline ? '#0369a1' : '#64748b' }}>{t("inPerson")}</div>
+                          <div style={{ fontSize: '0.75rem', color: '#94a3b8', textAlign: 'center' }}>{t("atLocation")}</div>
                         </button>
 
                         <button 
@@ -632,8 +634,8 @@ export default function InspectorCalendar() {
                           }}
                         >
                           <Video size={24} color={form.isOnline ? 'var(--primary)' : '#94a3b8'} />
-                          <div style={{ fontWeight: 700, fontSize: '0.9rem', color: form.isOnline ? '#0369a1' : '#64748b' }}>Online</div>
-                          <div style={{ fontSize: '0.75rem', color: '#94a3b8', textAlign: 'center' }}>Jitsi Video</div>
+                          <div style={{ fontWeight: 700, fontSize: '0.9rem', color: form.isOnline ? '#0369a1' : '#64748b' }}>{t("online")}</div>
+                          <div style={{ fontSize: '0.75rem', color: '#94a3b8', textAlign: 'center' }}>{t("jitsiVideo")}</div>
                         </button>
                       </div>
                     </div>
@@ -672,13 +674,13 @@ export default function InspectorCalendar() {
 
                     <div className="form-group">
                       <div className="group-header">
-                        <MapPin size={14} /> {form.isOnline ? "Virtual Location" : "Meeting Location"}
+                        <MapPin size={14} /> {form.isOnline ? t("virtualLocation") : t("meetingLocation")}
                       </div>
                       <div className="input-with-icon">
                         <MapPin className="input-icon" size={18} />
                         <input
                           type="text"
-                          placeholder={form.isOnline ? "Online" : "Specify where to meet"}
+                          placeholder={form.isOnline ? t("online") : t("specifyLocation")}
                           value={form.location}
                           onChange={(e) => updateForm("location", e.target.value)}
                           required

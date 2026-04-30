@@ -31,4 +31,6 @@ public class TeacherProfileRequest {
 
     @NotBlank(message = "Language is required")
     private String language;
+
+    private String profileImageUrl;
 }

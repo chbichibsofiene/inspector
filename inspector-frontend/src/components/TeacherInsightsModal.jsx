@@ -58,17 +58,24 @@ export default function TeacherInsightsModal({ teacher, onClose }) {
   };
 
   return (
-    <div className="modal-overlay insight-modal-overlay">
-      <div className="modal-content teacher-insight-modal card">
-        <button className="close-modal-btn" onClick={onClose}>
-          <X size={20} />
-        </button>
+    <div className="modal-overlay insight-modal-overlay" onClick={onClose}>
+      <div className="modal-content teacher-insight-modal card" onClick={e => e.stopPropagation()}>
+        <button className="close-btn" onClick={onClose}></button>
 
         <div className="modal-header-premium">
           <div className="teacher-profile-summary">
-            <div className="profile-avatar-large">
-              <User size={32} />
-            </div>
+            {teacher.profileImageUrl ? (
+              <img 
+                src={teacher.profileImageUrl} 
+                alt={`${teacher.firstName} ${teacher.lastName}`} 
+                className="profile-avatar-large" 
+                style={{ objectFit: 'cover', border: '3px solid white', outline: '2px solid #3b82f6' }} 
+              />
+            ) : (
+              <div className="profile-avatar-large">
+                <User size={32} />
+              </div>
+            )}
             <div className="profile-text">
               <h2>{teacher.firstName} {teacher.lastName}</h2>
               <div className="meta-info">
@@ -275,27 +282,42 @@ export default function TeacherInsightsModal({ teacher, onClose }) {
             overflow: hidden;
           }
 
-          .close-modal-btn {
+          .close-btn {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #f1f5f9;
+            top: 24px;
+            right: 24px;
+            width: 30px;
+            height: 30px;
+            background: transparent;
             border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             cursor: pointer;
-            color: #64748b;
-            z-index: 10;
-            transition: all 0.2s;
+            z-index: 9999;
           }
 
-          .close-modal-btn:hover {
-            background: #e2e8f0;
-            color: #1e293b;
+          .close-btn::before,
+          .close-btn::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 2px;
+            background: #333;
+            transform-origin: center;
+            transition: background 0.2s;
+          }
+
+          .close-btn::before {
+            transform: translate(-50%, -50%) rotate(45deg);
+          }
+
+          .close-btn::after {
+            transform: translate(-50%, -50%) rotate(-45deg);
+          }
+
+          .close-btn:hover::before,
+          .close-btn:hover::after {
+            background: red;
           }
 
           .modal-header-premium {
@@ -621,6 +643,65 @@ export default function TeacherInsightsModal({ teacher, onClose }) {
               grid-template-columns: 1fr;
             }
             .timetable-col { margin-bottom: 2rem; }
+          }
+
+          .insight-slot-item {
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+          }
+
+          .insight-slot-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #3b82f6;
+            border-radius: 4px 0 0 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+          }
+
+          .insight-slot-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -4px rgba(59, 130, 246, 0.1);
+            border-color: #bfdbfe;
+          }
+
+          .insight-slot-item:hover::before {
+            opacity: 1;
+          }
+
+          .tab-btn {
+            padding: 0.85rem 1.5rem;
+            border-radius: 14px 14px 0 0;
+            font-size: 0.95rem;
+            background: transparent;
+          }
+          
+          .tab-btn:hover {
+            background: rgba(241, 245, 249, 0.5);
+            color: #3b82f6;
+          }
+
+          .report-history-item {
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 8px;
+          }
+
+          .report-history-item:hover {
+            transform: scale(1.01);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            z-index: 10;
           }
         `}} />
       </div>

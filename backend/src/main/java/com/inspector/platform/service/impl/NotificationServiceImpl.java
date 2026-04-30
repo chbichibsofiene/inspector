@@ -2,10 +2,14 @@ package com.inspector.platform.service.impl;
 
 import com.inspector.platform.dto.NotificationDto;
 import com.inspector.platform.entity.Notification;
+import com.inspector.platform.entity.Role;
 import com.inspector.platform.entity.User;
+import com.inspector.platform.repository.InspectorProfileRepository;
 import com.inspector.platform.repository.NotificationRepository;
+import com.inspector.platform.repository.TeacherProfileRepository;
 import com.inspector.platform.repository.UserRepository;
 import com.inspector.platform.service.NotificationService;
+import com.inspector.platform.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +27,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
+    private final EmailService emailService;
+    private final InspectorProfileRepository inspectorProfileRepository;
+    private final TeacherProfileRepository teacherProfileRepository;
 
     @Override
     @Transactional
@@ -41,6 +48,33 @@ public class NotificationServiceImpl implements NotificationService {
 
         notificationRepository.save(notification);
         log.info("Sent notification to user {}: {}", recipientId, title);
+
+        // Also send an email notification based on type
+        try {
+            String fullName = getFullName(recipient);
+            if ("ACCOUNT_VERIFIED".equals(type)) {
+                emailService.sendAccountVerificationEmail(recipient.getEmail(), fullName);
+            } else if ("REGISTRATION_SUCCESS".equals(type)) {
+                emailService.sendRegistrationEmail(recipient.getEmail(), fullName);
+            } else {
+                emailService.sendGenericNotificationEmail(recipient.getEmail(), fullName, title, message, targetUrl);
+            }
+        } catch (Exception e) {
+            log.error("Failed to send email for notification type {}: {}", type, e.getMessage());
+        }
+    }
+
+    private String getFullName(User user) {
+        if (user.getRole() == Role.INSPECTOR) {
+            return inspectorProfileRepository.findByUserId(user.getId())
+                    .map(p -> p.getFirstName() + " " + p.getLastName())
+                    .orElse(user.getEmail());
+        } else if (user.getRole() == Role.TEACHER) {
+            return teacherProfileRepository.findByUserId(user.getId())
+                    .map(p -> p.getFirstName() + " " + p.getLastName())
+                    .orElse(user.getEmail());
+        }
+        return user.getEmail();
     }
 
     @Override

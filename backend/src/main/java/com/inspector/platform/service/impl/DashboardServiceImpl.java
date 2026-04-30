@@ -33,35 +33,15 @@ public class DashboardServiceImpl implements DashboardService {
         List<User> allUsers = userRepository.findAll();
 
         long totalUsers = allUsers.size();
-        long pendingCount = allUsers.stream().filter(u -> !u.isEnabled()).count();
-        long verifiedCount = allUsers.stream().filter(User::isEnabled).count();
 
         Map<String, Long> byRole = allUsers.stream()
                 .collect(Collectors.groupingBy(
                         u -> u.getRole().name(),
                         Collectors.counting()));
 
-        List<UserDto> latestPending = allUsers.stream()
-                .filter(u -> !u.isEnabled())
-                .sorted(Comparator.comparing(User::getCreatedAt).reversed())
-                .limit(10)
-                .map(UserDto::from)
-                .collect(Collectors.toList());
-
-        List<UserDto> recentlyVerified = allUsers.stream()
-                .filter(u -> u.isEnabled() && u.getVerifiedAt() != null)
-                .sorted(Comparator.comparing(User::getVerifiedAt).reversed())
-                .limit(5)
-                .map(UserDto::from)
-                .collect(Collectors.toList());
-
         return AdminDashboardDto.builder()
                 .totalUsers(totalUsers)
-                .pendingVerifications(pendingCount)
-                .verifiedUsers(verifiedCount)
                 .usersByRole(byRole)
-                .latestPendingAccounts(latestPending)
-                .recentlyVerified(recentlyVerified)
                 .build();
     }
 
@@ -75,8 +55,8 @@ public class DashboardServiceImpl implements DashboardService {
                 .serialCode(user.getSerialCode())
                 .role(user.getRole())
                 .memberSince(user.getCreatedAt())
-                .verifiedAt(user.getVerifiedAt())
                 .profileCompleted(user.isProfileCompleted())
+                .profileImageUrl(user.getProfileImageUrl())
                 .status("ACTIVE")
                 .message("Welcome back, Inspector! Your platform is ready.");
 
@@ -100,10 +80,10 @@ public class DashboardServiceImpl implements DashboardService {
                 .serialCode(user.getSerialCode())
                 .role(user.getRole())
                 .memberSince(user.getCreatedAt())
-                .verifiedAt(user.getVerifiedAt())
                 .profileCompleted(user.isProfileCompleted())
-                .status(user.isEnabled() ? "ACTIVE" : "PENDING")
-                .message(user.isEnabled() ? "Welcome back, Teacher! Your dashboard is ready." : "Your account is pending verification.");
+                .profileImageUrl(user.getProfileImageUrl())
+                .status("ACTIVE")
+                .message("Welcome back, Teacher! Your dashboard is ready.");
 
         if (user.isProfileCompleted()) {
             teacherProfileRepository.findByUserId(user.getId()).ifPresent(profile -> {
@@ -141,11 +121,11 @@ public class DashboardServiceImpl implements DashboardService {
                 .serialCode(user.getSerialCode())
                 .role(user.getRole())
                 .memberSince(user.getCreatedAt())
-                .verifiedAt(user.getVerifiedAt())
                 .totalTeachers(teachers.size())
                 .totalInspectors(inspectors.size())
                 .teachers(teachers)
                 .inspectors(inspectors)
+                .profileImageUrl(user.getProfileImageUrl())
                 .status("ACTIVE")
                 .message("Welcome, Pedagogical Responsible! Here is your supervisory overview.")
                 .build();
@@ -156,4 +136,3 @@ public class DashboardServiceImpl implements DashboardService {
                 .orElseThrow(() -> new UserNotFoundException("User not found: " + email));
     }
 }
-

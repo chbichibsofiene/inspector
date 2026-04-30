@@ -1,6 +1,10 @@
 import { Navigate, Link } from "react-router-dom";
 import { getUser, clearSession } from "./session";
 import NotificationBell from "../components/NotificationBell";
+import { 
+  LayoutDashboard, User, Calendar, FileText, LogOut, 
+  ShieldCheck, GraduationCap, School, Menu, X, Bell
+} from "lucide-react";
 
 export default function ProtectedRoute({ allowRoles, children }) {
   const user = getUser();
@@ -41,20 +45,55 @@ export default function ProtectedRoute({ allowRoles, children }) {
 
   return (
     <div className="layout-container">
-      <nav className="main-nav">
-        <div className="nav-brand">Inspector Platform</div>
-        <div className="nav-actions">
-          <Link to={getDashboardPath(user.role)} style={{ fontSize: '0.85rem', marginRight: '1rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>Go to Dashboard</Link>
-          <Link to="/profile/setup" style={{ fontSize: '0.85rem', marginRight: '1rem' }}>My Profile</Link>
-          {user.role === 'TEACHER' && (
-            <>
-              <Link to="/teacher/calendar" style={{ fontSize: '0.85rem', marginRight: '1rem' }}>My Schedule</Link>
-              <Link to="/reports" style={{ fontSize: '0.85rem', marginRight: '1rem' }}>My Reports</Link>
-            </>
-          )}
-          <NotificationBell />
-          <span className="user-email">{user.email}</span>
-          <button onClick={handleLogout} className="logout-btn">Logout</button>
+      <nav className="main-navbar-premium">
+        <div className="navbar-left">
+          <div className="navbar-logo">
+            <div className="logo-icon-wrapper-img">
+              <img src="/logo.png" alt="Logo" className="platform-logo-img" />
+            </div>
+            <div className="logo-text">
+              <span className="brand-name">Pedagogical</span>
+              <span className="brand-suffix">Center</span>
+            </div>
+          </div>
+          
+          <div className="navbar-divider"></div>
+          
+          <div className="navbar-links">
+            <Link to={getDashboardPath(user.role)} className={`nav-item-premium ${window.location.pathname === getDashboardPath(user.role) ? 'active' : ''}`}>
+              <LayoutDashboard size={18} />
+              <span>Dashboard</span>
+            </Link>
+            
+            <Link to="/profile/setup" className={`nav-item-premium ${window.location.pathname === '/profile/setup' ? 'active' : ''}`}>
+              <User size={18} />
+              <span>My Profile</span>
+            </Link>
+          </div>
+        </div>
+
+        <div className="navbar-right">
+          <div className="navbar-actions-group">
+            <NotificationBell />
+            
+            <div className="user-profile-widget">
+              <div className="user-info-text">
+                <span className="user-email-label">{user.email}</span>
+                <span className="user-role-badge">{user.role}</span>
+              </div>
+              <div className="user-avatar-mini">
+                {user.profileImageUrl ? (
+                  <img src={user.profileImageUrl} alt="Profile" className="navbar-avatar-img" />
+                ) : (
+                  user.email.charAt(0).toUpperCase()
+                )}
+              </div>
+            </div>
+
+            <button onClick={handleLogout} className="logout-action-btn" title="Logout">
+              <LogOut size={18} />
+            </button>
+          </div>
         </div>
       </nav>
       <main className="main-content">

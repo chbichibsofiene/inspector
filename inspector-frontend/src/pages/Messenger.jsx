@@ -2,8 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import messagesApi from "../api/messages";
 import { Link } from "react-router-dom";
 import { MessageCircle, Search, Paperclip, Send, ThumbsUp, Users, ChevronLeft, Image as ImageIcon, FileText, Info, User } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function Messenger() {
+  const { t } = useTranslation();
   const [conversations, setConversations] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [activeTab, setActiveTab] = useState("chats"); // "chats" or "contacts"
@@ -140,7 +142,7 @@ export default function Messenger() {
       <aside className="fb-sidebar">
         <header className="sidebar-header">
           <div className="header-top">
-            <h1>Chats</h1>
+            <h1>{t("chats")}</h1>
             <div className="header-actions">
               <Link to="/" className="circle-btn" title="Back to Dashboard">
                 <ChevronLeft size={20} />
@@ -153,13 +155,13 @@ export default function Messenger() {
               className={`msg-tab ${activeTab === "chats" ? "active" : ""}`} 
               onClick={() => setActiveTab("chats")}
             >
-              <MessageCircle size={16} /> Chats
+              <MessageCircle size={16} /> {t("chats")}
             </button>
             <button 
               className={`msg-tab ${activeTab === "contacts" ? "active" : ""}`} 
               onClick={() => setActiveTab("contacts")}
             >
-              <Users size={16} /> Contacts
+              <Users size={16} /> {t("contacts")}
             </button>
           </div>
 
@@ -167,7 +169,7 @@ export default function Messenger() {
             <Search size={16} className="search-icon" />
             <input 
               type="text" 
-              placeholder="Search Messenger" 
+              placeholder={t("typeMessage")} 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -237,7 +239,7 @@ export default function Messenger() {
               <div className="user-profile-center">
                  <div className="avatar xlarge">{selectedConversation.otherUserName.charAt(0)}</div>
                  <h2>{selectedConversation.otherUserName}</h2>
-                 <p className="muted">{selectedConversation.otherUserRole} on Inspector Platform</p>
+                 <p className="muted">{selectedConversation.otherUserRole} on Pedagogical Center</p>
                  <button className="view-profile-btn">View Profile</button>
               </div>
 
@@ -296,7 +298,7 @@ export default function Messenger() {
               <form className="input-pills hover-ring" onSubmit={handleSend}>
                 <input 
                   type="text" 
-                  placeholder="Type a message..." 
+                  placeholder={t("typeMessage")} 
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                 />
@@ -311,8 +313,8 @@ export default function Messenger() {
             <div className="placeholder-icon-wrapper">
                <MessageCircle size={64} className="placeholder-icon" />
             </div>
-            <h2>Welcome to Messenger</h2>
-            <p className="muted">Select a chat or find a contact to start messaging.</p>
+            <h2>{t("professionalMessenger")}</h2>
+            <p className="muted">{t("messengerDesc")}</p>
           </div>
         )}
       </main>

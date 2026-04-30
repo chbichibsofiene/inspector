@@ -29,6 +29,11 @@ public class TeacherQuizController {
         return ResponseEntity.ok(ApiResponse.ok("Quizzes retrieved", quizService.getAvailableQuizzes(userId)));
     }
 
+    @GetMapping("/{quizId}")
+    public ResponseEntity<ApiResponse<QuizResponse>> getQuiz(@PathVariable Long quizId) {
+        return ResponseEntity.ok(ApiResponse.ok("Quiz retrieved", quizService.getQuizDetail(quizId)));
+    }
+
     @PostMapping("/{quizId}/submit")
     public ResponseEntity<ApiResponse<Map<String, Object>>> submitQuiz(
             Authentication authentication,

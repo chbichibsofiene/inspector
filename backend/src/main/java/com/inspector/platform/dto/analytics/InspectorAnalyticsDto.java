@@ -23,4 +23,10 @@ public class InspectorAnalyticsDto {
     private Map<String, Long> activitiesByType;
     private Map<String, Long> reportsByStatus;
     private List<TeacherPerformanceDto> teacherPerformance;
+    private Map<String, Map<String, Long>> activitiesOverTimeWeekly;
+    private Map<String, Map<String, Long>> activitiesOverTimeMonthly;
+    private Map<String, Map<String, Long>> activitiesOverTimeYearly;
+    private Map<String, Long> activitiesByEtablissement;
+    private Map<String, Long> teachersByEtablissement;
+    private Map<String, Double> averageScoresOverTime;
 }

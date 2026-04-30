@@ -64,6 +64,7 @@ public class TeacherProfileServiceImpl implements TeacherProfileService {
         TeacherProfile savedProfile = profileRepository.save(profile);
 
         user.setProfileCompleted(true);
+        user.setProfileImageUrl(request.getProfileImageUrl());
         userRepository.save(user);
 
         log.info("Teacher profile completed for user {}", user.getEmail());
@@ -103,6 +104,10 @@ public class TeacherProfileServiceImpl implements TeacherProfileService {
         profile.setPhone(request.getPhone());
         profile.setLanguage(request.getLanguage());
 
+        User user = profile.getUser();
+        user.setProfileImageUrl(request.getProfileImageUrl());
+        userRepository.save(user);
+
         TeacherProfile updatedProfile = profileRepository.save(profile);
         return mapToResponse(updatedProfile);
     }
@@ -122,6 +127,7 @@ public class TeacherProfileServiceImpl implements TeacherProfileService {
                         profile.getEtablissement().getSchoolLevel()))
                 .phone(profile.getPhone())
                 .language(profile.getLanguage())
+                .profileImageUrl(profile.getUser().getProfileImageUrl())
                 .build();
     }
 }
