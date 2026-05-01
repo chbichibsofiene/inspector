@@ -22,6 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,6 +55,8 @@ public class ActivityServiceImpl implements ActivityService {
         if (request.getStartDateTime().isAfter(request.getEndDateTime())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Start time must be before end time");
         }
+
+        validateActivityTimeAndDay(request.getStartDateTime(), request.getEndDateTime());
 
         Activity activity = Activity.builder()
                 .title(request.getTitle())
@@ -105,6 +110,8 @@ public class ActivityServiceImpl implements ActivityService {
         if (request.getStartDateTime().isAfter(request.getEndDateTime())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Start time must be before end time");
         }
+
+        validateActivityTimeAndDay(request.getStartDateTime(), request.getEndDateTime());
 
         List<TeacherProfile> guests = (request.getGuestTeacherIds() != null && !request.getGuestTeacherIds().isEmpty())
                 ? teacherProfileRepository.findAllById(request.getGuestTeacherIds())
@@ -270,5 +277,22 @@ public class ActivityServiceImpl implements ActivityService {
         }
 
         return builder.build();
+    }
+
+    private void validateActivityTimeAndDay(LocalDateTime start, LocalDateTime end) {
+        if (start.getDayOfWeek() == DayOfWeek.SUNDAY || end.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Activities cannot be planned on Sundays");
+        }
+
+        LocalTime startTime = start.toLocalTime();
+        LocalTime endTime = end.toLocalTime();
+
+        if (startTime.isBefore(LocalTime.of(8, 0))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Activities cannot start before 8:00 AM");
+        }
+
+        if (endTime.isAfter(LocalTime.of(17, 0))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Activities cannot end after 5:00 PM");
+        }
     }
 }

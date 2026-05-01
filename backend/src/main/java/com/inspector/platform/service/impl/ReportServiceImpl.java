@@ -74,6 +74,11 @@ public class ReportServiceImpl implements ReportService {
         User inspector = userRepository.findById(inspectorId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inspector not found"));
         ActivityReport report = getReportAndVerifyOwner(inspectorId, reportId);
+
+        if (report.getStatus() == ReportStatus.FINAL && request.getStatus() == ReportStatus.DRAFT) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot revert a finalized report to draft status");
+        }
+
         Activity activity = getActivityAndVerifyOwner(inspectorId, request.getActivityId());
         TeacherProfile teacher = getTeacherIfPresent(activity, request.getTeacherId());
 

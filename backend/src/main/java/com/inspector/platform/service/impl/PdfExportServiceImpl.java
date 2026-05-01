@@ -134,6 +134,8 @@ public class PdfExportServiceImpl implements PdfExportService {
         return output.toByteArray();
     }
 
+    private static final int MAX_LINE_CHARS = 90;
+
     private List<String> buildReportLines(ActivityReport report, boolean isTeacher) {
         Activity activity = report.getActivity();
         TeacherProfile teacher = report.getTeacher();
@@ -141,29 +143,58 @@ public class PdfExportServiceImpl implements PdfExportService {
                 ? "General activity report"
                 : teacher.getFirstName() + " " + teacher.getLastName();
 
-        String scoreDisplay = (report.getScore() == null || isTeacher) 
-                ? (isTeacher ? "Confidential" : "Not scored") 
+        String scoreDisplay = (report.getScore() == null || isTeacher)
+                ? (isTeacher ? "Confidential" : "Not scored")
                 : report.getScore() + "/20";
 
-        return List.of(
-                "Report title: " + report.getTitle(),
-                "Status: " + report.getStatus(),
-                "Score: " + scoreDisplay,
-                "Activity: " + activity.getTitle(),
-                "Activity type: " + activity.getType(),
-                "Activity date: " + activity.getStartDateTime().format(DATE_FORMAT),
-                "Location: " + activity.getLocation(),
-                "Teacher: " + teacherName,
-                "Inspector: " + report.getInspector().getEmail(),
-                "",
-                "Observations:",
-                report.getObservations(),
-                "",
-                "Recommendations:",
-                report.getRecommendations() == null || report.getRecommendations().isBlank()
-                        ? "No recommendations added."
-                        : report.getRecommendations()
-        );
+        List<String> lines = new ArrayList<>();
+        lines.add("Report title: " + report.getTitle());
+        lines.add("Status: " + report.getStatus());
+        lines.add("Score: " + scoreDisplay);
+        lines.add("Activity: " + activity.getTitle());
+        lines.add("Activity type: " + activity.getType());
+        lines.add("Activity date: " + activity.getStartDateTime().format(DATE_FORMAT));
+        lines.add("Location: " + (activity.getLocation() != null ? activity.getLocation() : "N/A"));
+        lines.add("Teacher: " + teacherName);
+        lines.add("Inspector: " + report.getInspector().getEmail());
+        lines.add("");
+        lines.add("Observations:");
+        lines.addAll(wrapText(report.getObservations() == null ? "" : report.getObservations()));
+        lines.add("");
+        lines.add("Recommendations:");
+        String reco = report.getRecommendations() == null || report.getRecommendations().isBlank()
+                ? "No recommendations added."
+                : report.getRecommendations();
+        lines.addAll(wrapText(reco));
+        return lines;
+    }
+
+    private List<String> wrapText(String text) {
+        List<String> result = new ArrayList<>();
+        if (text == null || text.isBlank()) {
+            result.add("");
+            return result;
+        }
+        String[] paragraphs = text.split("\\r?\\n");
+        for (String paragraph : paragraphs) {
+            if (paragraph.isBlank()) {
+                result.add("");
+                continue;
+            }
+            String[] words = paragraph.split(" ");
+            StringBuilder currentLine = new StringBuilder();
+            for (String word : words) {
+                if (currentLine.length() + word.length() + 1 > MAX_LINE_CHARS) {
+                    result.add(currentLine.toString().trim());
+                    currentLine = new StringBuilder();
+                }
+                currentLine.append(word).append(" ");
+            }
+            if (!currentLine.toString().isBlank()) {
+                result.add(currentLine.toString().trim());
+            }
+        }
+        return result;
     }
 
     private String escapePdf(String value) {

@@ -305,8 +305,11 @@ export default function InspectorReports() {
                   value={form.status}
                   onChange={(event) => updateForm("status", event.target.value)}
                   required
+                  disabled={editingId && reports.find(r => r.id === editingId)?.status === 'FINAL'}
                 >
-                  <option value="DRAFT">{t("draft")}</option>
+                  <option value="DRAFT" disabled={editingId && reports.find(r => r.id === editingId)?.status === 'FINAL'}>
+                    {t("draft")}
+                  </option>
                   <option value="FINAL">{t("final")}</option>
                 </select>
               </label>

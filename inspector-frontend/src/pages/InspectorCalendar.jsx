@@ -189,6 +189,31 @@ export default function InspectorCalendar() {
     setSuccess("");
     setSaving(true);
 
+    const start = new Date(form.startDateTime);
+    const end = new Date(form.endDateTime);
+
+    if (start.getDay() === 0 || end.getDay() === 0) {
+      setError("Activities cannot be planned on Sundays.");
+      setSaving(false);
+      return;
+    }
+
+    const startHour = start.getHours();
+    const endHour = end.getHours();
+    const endMinutes = end.getMinutes();
+
+    if (startHour < 8) {
+      setError("Activities cannot start before 8:00 AM.");
+      setSaving(false);
+      return;
+    }
+
+    if (endHour > 17 || (endHour === 17 && endMinutes > 0)) {
+      setError("Activities cannot end after 5:00 PM.");
+      setSaving(false);
+      return;
+    }
+
     try {
       const payload = {
         ...form,
@@ -394,6 +419,20 @@ export default function InspectorCalendar() {
                 eventDrop={handleDropOrResize}
                 eventResize={handleDropOrResize}
                 eventContent={renderEventContent}
+                selectAllow={(selectInfo) => {
+                  const start = selectInfo.start;
+                  const end = selectInfo.end;
+                  return start.getDay() !== 0 && 
+                         start.getHours() >= 8 && 
+                         (end.getHours() < 17 || (end.getHours() === 17 && end.getMinutes() === 0));
+                }}
+                eventAllow={(dropInfo) => {
+                  const start = dropInfo.start;
+                  const end = dropInfo.end;
+                  return start.getDay() !== 0 && 
+                         start.getHours() >= 8 && 
+                         (end.getHours() < 17 || (end.getHours() === 17 && end.getMinutes() === 0));
+                }}
               />
             </div>
           </section>
