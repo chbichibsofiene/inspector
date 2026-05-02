@@ -17,6 +17,8 @@ public class ConversationDto {
     private String otherUserName;
     private String otherUserRole;
     private String lastMessage;
+    private Long lastMessageSenderId;
     private LocalDateTime lastMessageTime;
     private long unreadCount;
+    private String otherUserProfileImageUrl;
 }

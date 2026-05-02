@@ -58,4 +58,12 @@ public class NotificationController {
         notificationService.markAllAsRead(userId);
         return ResponseEntity.ok(ApiResponse.ok("All notifications marked as read"));
     }
+
+    @PutMapping("/push-token")
+    public ResponseEntity<?> updatePushToken(@RequestBody Map<String, String> request, Authentication authentication) {
+        Long userId = extractUserId(authentication);
+        String token = request.get("token");
+        notificationService.updatePushToken(userId, token);
+        return ResponseEntity.ok(ApiResponse.ok("Push token updated successfully"));
+    }
 }

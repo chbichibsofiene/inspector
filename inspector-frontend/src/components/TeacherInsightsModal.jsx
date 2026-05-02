@@ -103,7 +103,7 @@ export default function TeacherInsightsModal({ teacher, onClose }) {
               className={`tab-btn ${activeTab === 'quizzes' ? 'active' : ''}`}
               onClick={() => setActiveTab('quizzes')}
             >
-              <Brain size={16} /> AI Assessments
+              <Brain size={16} /> Quiz assessment
             </button>
           </div>
         </div>

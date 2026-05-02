@@ -58,6 +58,9 @@ public class User {
     @Column
     private LocalDateTime resetCodeExpiresAt;
 
+    @Column(length = 255)
+    private String expoPushToken;
+
     @PrePersist
     protected void onCreate() {
         if (createdAt == null) {

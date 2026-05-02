@@ -5,7 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
+import io.netty.resolver.DefaultAddressResolverGroup;
 
 import java.util.List;
 import java.util.Map;
@@ -71,7 +74,10 @@ public class GeminiService {
     }
 
     private Mono<String> callGemini(String prompt) {
-        WebClient client = webClientBuilder.build();
+        HttpClient httpClient = HttpClient.create().resolver(DefaultAddressResolverGroup.INSTANCE);
+        WebClient client = webClientBuilder
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
 
         // Gemini API request structure
         Map<String, Object> body = Map.of(

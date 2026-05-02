@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { generateQuiz, saveQuiz, getInspectorQuizzes } from "../api/quizzes";
 import profileApi from "../api/profile";
-import { Brain, Plus, Loader2, CheckCircle, AlertCircle, Save, X, BookOpen, Trash } from "lucide-react";
+import { Brain, Plus, Loader2, CheckCircle, AlertCircle, Save, X, BookOpen, Trash, Building2, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export default function InspectorQuizzes() {
@@ -16,8 +16,13 @@ export default function InspectorQuizzes() {
   const [recentQuizzes, setRecentQuizzes] = useState([]);
   const [expandedQuizId, setExpandedQuizId] = useState(null);
 
+  const [editingQuestionIdx, setEditingQuestionIdx] = useState(null);
+  const [teachers, setTeachers] = useState([]);
+  const [selectedTeacherIds, setSelectedTeacherIds] = useState([]);
+
   useEffect(() => {
     profileApi.getSubjects().then(res => setSubjects(res.data?.data || []));
+    profileApi.getMyTeachers().then(res => setTeachers(res.data?.data || []));
     loadQuizzes();
   }, []);
 
@@ -30,6 +35,39 @@ export default function InspectorQuizzes() {
     }
   };
 
+  const handleUpdateQuestion = (idx, field, value) => {
+    const updated = [...generatedQuestions];
+    updated[idx] = { ...updated[idx], [field]: value };
+    setGeneratedQuestions(updated);
+  };
+
+  const handleUpdateOption = (idx, optIdx, value) => {
+    const updated = [...generatedQuestions];
+    const newOptions = [...updated[idx].options];
+    newOptions[optIdx] = value;
+    updated[idx] = { ...updated[idx], options: newOptions };
+    setGeneratedQuestions(updated);
+  };
+
+  const toggleTeacher = (teacherId) => {
+    setSelectedTeacherIds(prev => 
+      prev.includes(teacherId) 
+        ? prev.filter(id => id !== teacherId) 
+        : [...prev, teacherId]
+    );
+  };
+
+  const handleSelectAllTeachers = () => {
+    const filteredTeachers = teachers.filter(t => t.subject === subject);
+    const allSelected = selectedTeacherIds.length === filteredTeachers.length && filteredTeachers.length > 0;
+    
+    if (allSelected) {
+      setSelectedTeacherIds([]);
+    } else {
+      setSelectedTeacherIds(filteredTeachers.map(t => t.id));
+    }
+  };
+
   async function handleGenerate(e) {
     e.preventDefault();
     if (!topic || !subject) return;
@@ -37,6 +75,7 @@ export default function InspectorQuizzes() {
     setLoading(true);
     setError("");
     setGeneratedQuestions(null);
+    setEditingQuestionIdx(null);
     
     try {
       const res = await generateQuiz(topic, subject);
@@ -56,11 +95,13 @@ export default function InspectorQuizzes() {
         title: `${subject} Quiz: ${topic}`,
         topic,
         subject,
-        questions: generatedQuestions
+        questions: generatedQuestions,
+        targetTeacherIds: selectedTeacherIds
       });
-      setSuccess("Quiz published to all related teachers!");
+      setSuccess("Quiz published successfully!");
       setGeneratedQuestions(null);
       setTopic("");
+      setSelectedTeacherIds([]);
       loadQuizzes();
     } catch (err) {
       setError("Failed to publish quiz.");
@@ -93,7 +134,10 @@ export default function InspectorQuizzes() {
           <div className="form-row">
             <label>
               {t("subject")}
-              <select value={subject} onChange={e => setSubject(e.target.value)} required>
+              <select value={subject} onChange={e => {
+                setSubject(e.target.value);
+                setSelectedTeacherIds([]); // Reset selection when subject changes
+              }} required>
                 <option value="">{t("selectSubject")}</option>
                 {subjects.map(s => <option key={s.name} value={s.name}>{s.label}</option>)}
               </select>
@@ -126,23 +170,134 @@ export default function InspectorQuizzes() {
           <div className="questions-list" style={{ marginTop: '1.5rem' }}>
             {generatedQuestions.map((q, idx) => (
               <div key={idx} className="question-preview-item">
-                <div className="q-label">Question {idx + 1} <span>{q.type}</span></div>
-                <p><strong>{q.text}</strong></p>
-                {q.options && (
-                  <ul className="options-preview">
-                    {q.options.map((opt, i) => <li key={i}>{opt}</li>)}
-                  </ul>
-                )}
-                <div className="correct-answer-hint">
-                  <CheckCircle size={14} /> {q.correctAnswer}
+                <div className="q-label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span>Question {idx + 1}</span>
+                  <span style={{ background: '#e2e8f0', padding: '2px 8px', borderRadius: '4px' }}>{q.type}</span>
+                  {editingQuestionIdx !== idx && (
+                    <button 
+                      className="compact-btn" 
+                      onClick={() => setEditingQuestionIdx(idx)} 
+                      style={{ padding: '2px 10px', fontSize: '11px', background: '#3b82f6', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer', marginLeft: 'auto' }}
+                    >
+                      Edit
+                    </button>
+                  )}
                 </div>
+
+                {editingQuestionIdx === idx ? (
+                  <div className="edit-question-form" style={{ marginTop: '10px' }}>
+                    <label style={{ display: 'block', fontSize: '0.85rem', color: '#64748b', marginBottom: '4px' }}>Question Text:</label>
+                    <input 
+                      type="text" 
+                      value={q.text} 
+                      onChange={(e) => handleUpdateQuestion(idx, 'text', e.target.value)} 
+                      style={{ width: '100%', padding: '8px', marginBottom: '12px', borderRadius: '6px', border: '1px solid #cbd5e1' }}
+                    />
+                    
+                    {q.options && (
+                      <div className="options-edit">
+                        <label style={{ display: 'block', fontSize: '0.85rem', color: '#64748b', marginBottom: '4px' }}>Options:</label>
+                        {q.options.map((opt, i) => (
+                          <input 
+                            key={i} 
+                            type="text" 
+                            value={opt} 
+                            onChange={(e) => handleUpdateOption(idx, i, e.target.value)}
+                            style={{ display: 'block', width: '100%', padding: '6px 8px', marginBottom: '6px', borderRadius: '4px', border: '1px solid #e2e8f0', fontSize: '0.9rem' }}
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                    <label style={{ display: 'block', marginTop: '12px', fontSize: '0.85rem', color: '#64748b', marginBottom: '4px' }}>Correct Answer (must match an option above exactly):</label>
+                    <input 
+                      type="text" 
+                      value={q.correctAnswer} 
+                      onChange={(e) => handleUpdateQuestion(idx, 'correctAnswer', e.target.value)} 
+                      style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #10b981', color: '#10b981', fontWeight: 600 }}
+                    />
+                    
+                    <button 
+                      onClick={() => setEditingQuestionIdx(null)}
+                      style={{ marginTop: '16px', padding: '8px 16px', background: '#10b981', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}
+                    >
+                      Done Editing
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <p style={{ marginTop: '10px' }}><strong>{q.text}</strong></p>
+                    {q.options && (
+                      <ul className="options-preview">
+                        {q.options.map((opt, i) => <li key={i}>{opt}</li>)}
+                      </ul>
+                    )}
+                    <div className="correct-answer-hint">
+                      <CheckCircle size={14} /> {q.correctAnswer}
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>
 
-          <div className="form-actions" style={{ marginTop: '2rem' }}>
-            <button className="primary-link-button" onClick={handlePublish}>
-              <Save size={16} /> Publish to My Teachers
+          <div className="teacher-selection" style={{ marginTop: '2.5rem', borderTop: '1px solid #e2e8f0', paddingTop: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#1e293b' }}>Assign to Teachers</h3>
+                <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: '#64748b' }}>Select who should receive this quiz</p>
+              </div>
+              {teachers.filter(t => t.subject === subject).length > 0 && (
+                <button 
+                  type="button" 
+                  onClick={handleSelectAllTeachers}
+                  style={{ 
+                    background: 'none', border: 'none', color: '#3b82f6', fontWeight: 700, 
+                    fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' 
+                  }}
+                >
+                  {selectedTeacherIds.length === teachers.filter(t => t.subject === subject).length ? "Clear All" : "Select All"}
+                </button>
+              )}
+            </div>
+
+            {teachers.filter(t => t.subject === subject).length === 0 ? (
+              <div style={{ padding: '2rem', background: '#f8fafc', borderRadius: '16px', textAlign: 'center', border: '1px dashed #cbd5e1' }}>
+                <Users size={24} color="#94a3b8" style={{ marginBottom: '8px' }} />
+                <p style={{ margin: 0, color: '#64748b', fontSize: '0.9rem' }}>No teachers found for this subject.</p>
+              </div>
+            ) : (
+              <div className="teacher-selection-grid">
+                {teachers.filter(t => t.subject === subject).map((teacher) => {
+                  const isSelected = selectedTeacherIds.includes(teacher.id);
+                  return (
+                    <div 
+                      key={teacher.id} 
+                      className={`teacher-card-premium ${isSelected ? 'selected' : ''}`}
+                      onClick={() => toggleTeacher(teacher.id)}
+                    >
+                      <div className="teacher-avatar">
+                        {isSelected ? <Check size={18} /> : (teacher.firstName?.[0] || "?")}
+                      </div>
+                      <div className="teacher-info">
+                        <span className="teacher-name">{teacher.firstName} {teacher.lastName}</span>
+                        <span className="teacher-school">
+                          <Building2 size={10} /> {teacher.etablissement?.name || "Independent"}
+                        </span>
+                      </div>
+                      <div className="selection-check">
+                        {isSelected && <Check size={12} />}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <div className="form-actions" style={{ marginTop: '2.5rem', borderTop: '1px solid #e2e8f0', paddingTop: '2rem' }}>
+            <button className="primary-link-button" onClick={handlePublish} style={{ margin: 0 }}>
+              <Save size={16} /> Publish & Notify Teachers
             </button>
             <button className="secondary-action-btn" onClick={() => setGeneratedQuestions(null)}>
               Cancel

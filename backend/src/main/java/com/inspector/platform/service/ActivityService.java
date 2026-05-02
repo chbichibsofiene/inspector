@@ -13,5 +13,6 @@ public interface ActivityService {
     ActivityResponse getActivity(Long inspectorId, Long activityId);
     List<ActivityResponse> getAllActivities(Long inspectorId);
     List<ActivityResponse> getTeacherActivities(Long userId);
+    ActivityResponse getTeacherActivity(Long teacherId, Long activityId);
     List<TeacherDto> getAvailableTeachers();
 }

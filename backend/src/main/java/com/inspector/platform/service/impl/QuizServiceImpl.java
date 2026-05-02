@@ -45,7 +45,7 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     @Transactional
-    public QuizResponse saveQuiz(Long inspectorUserId, String title, String topic, String subject, List<Map<String, Object>> questionData) {
+    public QuizResponse saveQuiz(Long inspectorUserId, String title, String topic, String subject, List<Map<String, Object>> questionData, List<Long> targetTeacherIds) {
         InspectorProfile inspector = inspectorRepository.findByUserId(inspectorUserId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inspector profile not found"));
 
@@ -75,11 +75,18 @@ public class QuizServiceImpl implements QuizService {
         }).collect(Collectors.toList());
 
         quiz.setQuestions(questions);
+        List<TeacherProfile> targetTeachers;
+        if (targetTeacherIds != null && !targetTeacherIds.isEmpty()) {
+            targetTeachers = teacherRepository.findAllById(targetTeacherIds);
+        } else {
+            // Fallback to all matching subject teachers if none specified
+            targetTeachers = teacherRepository.findBySubject(Subject.valueOf(subject.toUpperCase()));
+        }
+        
+        quiz.setAssignedTeachers(targetTeachers);
         Quiz saved = quizRepository.save(quiz);
 
-        // Notify all teachers of the same subject
-        List<TeacherProfile> matchingTeachers = teacherRepository.findBySubject(Subject.valueOf(subject.toUpperCase()));
-        for (TeacherProfile t : matchingTeachers) {
+        for (TeacherProfile t : targetTeachers) {
             notificationService.sendNotification(
                 t.getUser().getId(),
                 "New Quiz Assigned",
@@ -98,8 +105,8 @@ public class QuizServiceImpl implements QuizService {
         TeacherProfile teacher = teacherRepository.findByUserId(teacherUserId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Teacher profile not found"));
 
-        // Only show quizzes matching the teacher's subject
         return quizRepository.findBySubject(teacher.getSubject()).stream()
+                .filter(q -> q.getAssignedTeachers() == null || q.getAssignedTeachers().isEmpty() || q.getAssignedTeachers().stream().anyMatch(t -> t.getId().equals(teacher.getId())))
                 .map(q -> mapToResponse(q, false))
                 .collect(Collectors.toList());
     }

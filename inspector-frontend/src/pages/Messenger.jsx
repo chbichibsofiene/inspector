@@ -136,6 +136,13 @@ export default function Messenger() {
     c.otherUserName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const getAvatarUrl = (url) => {
+    if (!url || url === "null") return null;
+    if (url.startsWith('http') || url.startsWith('data:image')) return url;
+    const baseUrl = api.defaults.baseURL || 'http://localhost:8081';
+    return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+  };
+
   return (
     <div className="fb-messenger">
       {/* Sidebar */}
@@ -186,8 +193,11 @@ export default function Messenger() {
                   onClick={() => selectConversation(c)}
                 >
                   <div className="avatar-wrapper">
-                    <div className="avatar large">{c.otherUserName.charAt(0)}</div>
-                    <div className="status-dot online"></div>
+                    {c.otherUserProfileImageUrl ? (
+                        <img src={getAvatarUrl(c.otherUserProfileImageUrl)} alt="" className="avatar large" style={{ objectFit: 'cover' }} />
+                    ) : (
+                        <div className="avatar large">{c.otherUserName.charAt(0)}</div>
+                    )}
                   </div>
                   <div className="inbox-info">
                     <div className="name-time">
@@ -210,7 +220,11 @@ export default function Messenger() {
           ) : (
             contacts.map(contact => (
               <div key={contact.id} className="inbox-item contact" onClick={() => selectContact(contact)}>
-                <div className="avatar large contact-avatar">{contact.name.charAt(0)}</div>
+                {contact.profileImageUrl ? (
+                    <img src={getAvatarUrl(contact.profileImageUrl)} alt="" className="avatar large contact-avatar" style={{ objectFit: 'cover' }} />
+                ) : (
+                    <div className="avatar large contact-avatar">{contact.name.charAt(0)}</div>
+                )}
                 <div className="inbox-info">
                   <span className="name">{contact.name}</span>
                   <span className="role-snippet"><User size={12} /> {contact.role} • {contact.details}</span>
@@ -227,7 +241,11 @@ export default function Messenger() {
           <>
             <header className="chat-header">
               <div className="user-info">
-                <div className="avatar medium">{selectedConversation.otherUserName.charAt(0)}</div>
+                {selectedConversation?.otherUserProfileImageUrl ? (
+                    <img src={getAvatarUrl(selectedConversation.otherUserProfileImageUrl)} alt="" className="avatar medium" style={{ objectFit: 'cover' }} />
+                ) : (
+                    <div className="avatar medium">{selectedConversation.otherUserName.charAt(0)}</div>
+                )}
                 <div className="chat-details">
                   <span className="name">{selectedConversation.otherUserName}</span>
                   <span className="status">Active now</span>
@@ -236,12 +254,6 @@ export default function Messenger() {
             </header>
 
             <div className="messages-flow">
-              <div className="user-profile-center">
-                 <div className="avatar xlarge">{selectedConversation.otherUserName.charAt(0)}</div>
-                 <h2>{selectedConversation.otherUserName}</h2>
-                 <p className="muted">{selectedConversation.otherUserRole} on Pedagogical Center</p>
-                 <button className="view-profile-btn">View Profile</button>
-              </div>
 
               {messages.map((m, index) => {
                 const isOwn = m.senderId !== selectedConversation.otherUserId;
@@ -250,7 +262,13 @@ export default function Messenger() {
                 
                 return (
                   <div key={m.id} className={`msg-row ${isOwn ? 'own' : 'other'} ${isGroupStart ? 'group-start' : ''}`}>
-                    {!isOwn && isGroupStart && <div className="avatar small">{selectedConversation.otherUserName.charAt(0)}</div>}
+                    {!isOwn && isGroupStart && (
+                        selectedConversation?.otherUserProfileImageUrl ? (
+                            <img src={getAvatarUrl(selectedConversation.otherUserProfileImageUrl)} alt="" className="avatar small" style={{ objectFit: 'cover' }} />
+                        ) : (
+                            <div className="avatar small">{selectedConversation.otherUserName.charAt(0)}</div>
+                        )
+                    )}
                     {!isOwn && !isGroupStart && <div className="avatar-spacer" />}
                     
                     <div className="bubble">
@@ -303,7 +321,7 @@ export default function Messenger() {
                   onChange={(e) => setNewMessage(e.target.value)}
                 />
                 <button type="submit" className={`send-icon ${newMessage.trim() ? 'active' : ''}`} disabled={!newMessage.trim()}>
-                  {newMessage.trim() ? <Send size={20} /> : <ThumbsUp size={20} />}
+                  <Send size={20} />
                 </button>
               </form>
             </footer>
@@ -355,75 +373,56 @@ export default function Messenger() {
 
       <style>{`
         :root {
-          --fb-blue: #3b82f6;
-          --fb-blue-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-          --fb-grey: #f8fafc;
-          --fb-hover: #f1f5f9;
-          --fb-border: #e2e8f0;
-          --text-main: #0f172a;
-          --text-muted: #64748b;
-          --glass-bg: rgba(255, 255, 255, 0.85);
-          --glass-border: rgba(255, 255, 255, 0.4);
+          --brand-primary: #1e3a8a;
+          --brand-accent: #2563eb;
+          --brand-cta: #2b4b9b;
+          --bg-main: #f8fafc;
+          --text-main: #111827;
+          --text-muted: #4b5563;
+          --text-light: #94a3b8;
+          --border-color: #e2e8f0;
+          --glass-surface: rgba(255, 255, 255, 0.7);
+          --radius-sm: 8px;
+          --radius-md: 16px;
+          --radius-lg: 24px;
         }
 
         .fb-messenger {
           display: flex;
           height: 100vh;
-          background: #fdfdfd;
+          background: #f8fafc;
           color: var(--text-main);
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        /* Animations */
-        @keyframes messagePop {
-          0% { opacity: 0; transform: translateY(10px) scale(0.98); }
-          100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes pulseSoft {
-          0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
-          70% { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+          font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         /* Sidebar */
         .fb-sidebar {
-          width: 380px;
-          border-right: 1px solid var(--fb-border);
+          width: 400px;
+          border-right: 1px solid var(--border-color);
           display: flex;
           flex-direction: column;
           background: white;
-          box-shadow: 4px 0 24px rgba(0,0,0,0.02);
           z-index: 10;
         }
 
         .sidebar-header {
-          padding: 24px 20px 16px;
-          border-bottom: 1px solid transparent;
-        }
-
-        .header-top {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 20px;
+          padding: 32px 24px 20px;
         }
 
         .header-top h1 {
-          font-size: 24px;
+          font-size: 28px;
           font-weight: 800;
+          color: var(--brand-primary);
           letter-spacing: -0.5px;
-          margin: 0;
-          color: #1e293b;
+          margin: 0 0 20px 0;
         }
 
         .messenger-tabs {
           display: flex;
-          gap: 8px;
-          background: var(--fb-grey);
-          padding: 6px;
-          border-radius: 12px;
-          margin-bottom: 8px;
+          background: #f1f5f9;
+          padding: 4px;
+          border-radius: var(--radius-sm);
+          margin-bottom: 20px;
         }
         
         .msg-tab {
@@ -432,45 +431,32 @@ export default function Messenger() {
           align-items: center;
           justify-content: center;
           gap: 8px;
-          padding: 8px;
+          padding: 10px;
           border: none;
           background: transparent;
-          border-radius: 8px;
-          font-weight: 700;
+          border-radius: 6px;
+          font-weight: 600;
+          font-size: 14px;
           color: var(--text-muted);
           cursor: pointer;
-          transition: all 0.2s;
+          transition: all 0.2s ease;
         }
 
         .msg-tab.active {
           background: white;
-          color: var(--fb-blue);
-          box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .header-actions {
-          display: flex;
-          gap: 12px;
+          color: var(--brand-primary);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .search-container {
-          background: var(--fb-grey);
-          border-radius: 16px;
+          background: #f1f5f9;
+          border-radius: var(--radius-sm);
           padding: 12px 16px;
           display: flex;
           align-items: center;
           gap: 12px;
-          border: 1px solid var(--fb-border);
-          transition: all 0.3s ease;
+          border: 1px solid var(--border-color);
         }
-
-        .search-container:focus-within {
-          background: white;
-          border-color: var(--fb-blue);
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .search-icon { color: var(--text-muted); }
 
         .search-container input {
           background: transparent;
@@ -478,339 +464,188 @@ export default function Messenger() {
           outline: none;
           flex: 1;
           font-size: 15px;
-          color: var(--text-main);
         }
 
         .inbox-list {
           flex: 1;
           overflow-y: auto;
-          padding: 12px;
+          padding: 0 12px 24px;
         }
 
         .inbox-item {
           display: flex;
           align-items: center;
           gap: 16px;
-          padding: 12px;
-          border-radius: 16px;
+          padding: 16px;
+          border-radius: var(--radius-md);
           cursor: pointer;
-          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-          position: relative;
+          transition: all 0.2s ease;
           margin-bottom: 4px;
-          border: 1px solid transparent;
         }
 
         .inbox-item:hover { 
-          background: var(--fb-hover); 
-          border-color: #f1f5f9;
+          background: #f1f5f9; 
         }
         
         .inbox-item.selected { 
-          background: #eff6ff; 
-          border-color: #bfdbfe;
+          background: rgba(30, 58, 138, 0.05); 
         }
 
-        .avatar-wrapper { position: relative; }
         .avatar {
-          border-radius: 16px;
-          background: var(--fb-blue-gradient);
+          border-radius: 12px;
+          background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
           color: white;
           display: flex;
           align-items: center;
           justify-content: center;
           font-weight: 800;
           flex-shrink: 0;
-          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
         }
 
-        .avatar.contact-avatar {
-          background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
-          box-shadow: 0 4px 12px rgba(100, 116, 139, 0.2);
-        }
-
-        .avatar.large { width: 56px; height: 56px; font-size: 20px; }
-        .avatar.medium { width: 44px; height: 44px; font-size: 16px; border-radius: 12px; }
-        .avatar.small { width: 32px; height: 32px; font-size: 12px; border-radius: 10px; }
-        .avatar.xlarge { width: 88px; height: 88px; font-size: 32px; margin-bottom: 16px; border-radius: 24px; }
-
+        .avatar.large { width: 52px; height: 52px; font-size: 20px; }
+        .avatar.medium { width: 44px; height: 44px; font-size: 16px; border-radius: 10px; }
+        .avatar.small { width: 32px; height: 32px; font-size: 12px; border-radius: 8px; }
+        
         .status-dot {
           position: absolute;
           bottom: -2px;
           right: -2px;
-          width: 16px;
-          height: 16px;
+          width: 14px;
+          height: 14px;
           background: #10b981;
           border: 3px solid white;
           border-radius: 50%;
         }
 
-        .inbox-info { flex: 1; min-width: 0; }
         .name-time { display: flex; justify-content: space-between; align-items: baseline; }
-        .name { font-weight: 600; font-size: 15px; letter-spacing: -0.2px; }
-        .time { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+        .name { font-weight: 700; font-size: 15px; color: var(--text-main); }
+        .time { font-size: 12px; color: var(--text-light); font-weight: 600; }
 
-        .snippet { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
         .snippet .text {
           font-size: 13px;
           color: var(--text-muted);
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          margin-top: 4px;
         }
 
-        .unread .name { font-weight: 800; color: #0f172a; }
-        .unread .text { color: #1e293b !important; font-weight: 700; }
-        .unread-dot {
-          width: 10px;
-          height: 10px;
-          background: var(--fb-blue);
-          border-radius: 50%;
-          flex-shrink: 0;
-          box-shadow: 0 0 0 4px #eff6ff;
-        }
-
-        /* Main Chat Area */
+        /* Main Chat */
         .fb-main {
           flex: 1;
           display: flex;
           flex-direction: column;
           background: #f8fafc;
-          position: relative;
-        }
-
-        .glass-effect {
-          background: var(--glass-bg);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
         }
 
         .chat-header {
-          padding: 16px 24px;
-          border-bottom: 1px solid var(--fb-border);
+          padding: 20px 32px;
+          background: var(--glass-surface);
+          backdrop-filter: blur(12px);
+          border-bottom: 1px solid var(--border-color);
           display: flex;
-          justify-content: space-between;
           align-items: center;
-          position: absolute;
-          top: 0; left: 0; right: 0;
           z-index: 20;
         }
 
-        .user-info { display: flex; align-items: center; gap: 16px; }
-        .chat-details { display: flex; flex-direction: column; }
-        .chat-details .name { font-weight: 700; font-size: 1.1rem; }
+        .chat-details .name { font-weight: 800; font-size: 18px; }
         .chat-details .status { font-size: 13px; color: #10b981; font-weight: 600; }
 
         .messages-flow {
           flex: 1;
           overflow-y: auto;
-          padding: 100px 24px 24px;
+          padding: 32px;
           display: flex;
           flex-direction: column;
-          background: #f8fafc;
-        }
-
-        .user-profile-center {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding: 40px 0;
-          text-align: center;
-          margin-bottom: 2rem;
-        }
-
-        .user-profile-center h2 { margin: 0 0 8px; font-weight: 800; }
-        .view-profile-btn {
-          margin-top: 16px;
-          background: white;
-          border: 1px solid var(--fb-border);
-          padding: 8px 20px;
-          border-radius: 20px;
-          font-weight: 700;
-          font-size: 0.9rem;
-          color: var(--text-main);
-          cursor: pointer;
-          transition: all 0.2s;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-        .view-profile-btn:hover {
-          border-color: #cbd5e1;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+          gap: 4px;
         }
 
         .msg-row {
           display: flex;
-          margin-bottom: 4px;
-          max-width: 75%;
-          animation: messagePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+          max-width: 80%;
+          margin-bottom: 2px;
         }
 
-        .msg-row.group-start { margin-top: 16px; }
         .msg-row.own { align-self: flex-end; flex-direction: row-reverse; }
         .msg-row.other { align-self: flex-start; }
 
-        .avatar-spacer { width: 32px; flex-shrink: 0; margin-right: 12px; }
-        .msg-row.other .avatar { margin-right: 12px; }
-
         .bubble {
           padding: 12px 18px;
-          border-radius: 24px;
           font-size: 15px;
           line-height: 1.5;
-          position: relative;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
         .msg-row.other .bubble {
           background: white;
-          border: 1px solid var(--fb-border);
-          border-top-left-radius: 6px;
-          color: #1e293b;
+          border: 1px solid var(--border-color);
+          color: var(--text-main);
+          border-radius: 18px;
+          border-top-left-radius: 4px;
         }
-        .msg-row.other.group-start .bubble { border-top-left-radius: 24px; }
+        .msg-row.other.group-start .bubble { border-top-left-radius: 18px; }
 
         .msg-row.own .bubble {
-          background: var(--fb-blue-gradient);
+          background: var(--brand-accent);
           color: white;
-          border-top-right-radius: 6px;
-          box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+          border-radius: 18px;
+          border-top-right-radius: 4px;
         }
-        .msg-row.own.group-start .bubble { border-top-right-radius: 24px; }
-
-        .file-box {
-          display: flex;
-          gap: 12px;
-          background: rgba(0,0,0,0.05);
-          padding: 12px;
-          border-radius: 12px;
-          align-items: center;
-        }
-
-        .msg-row.other .file-box { background: #f1f5f9; }
-
-        .file-icon { color: inherit; opacity: 0.8; }
-        .file-details { display: flex; flex-direction: column; gap: 4px; }
-        .file-details .filename { font-weight: 600; font-size: 0.9rem; }
-        .file-details a { color: inherit; font-size: 0.8rem; font-weight: 700; text-decoration: none; opacity: 0.8; }
-        .file-details a:hover { opacity: 1; text-decoration: underline; }
-
-        .image-container { margin-top: 4px; }
-        .chat-image {
-          max-width: 100%;
-          max-height: 280px;
-          border-radius: 16px;
-          display: block;
-          object-fit: cover;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
+        .msg-row.own.group-start .bubble { border-top-right-radius: 18px; }
 
         .chat-footer {
-          padding: 20px 24px;
+          padding: 24px 32px;
           display: flex;
           align-items: center;
           gap: 16px;
-          border-top: 1px solid rgba(255,255,255,0.5);
-          position: absolute;
-          bottom: 0; left: 0; right: 0;
+          background: var(--glass-surface);
+          backdrop-filter: blur(12px);
+          border-top: 1px solid var(--border-color);
         }
 
-        .footer-actions { display: flex; gap: 8px; }
-        
         .attach-file-btn {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          background: transparent;
-          border: 1px solid var(--fb-border);
-          padding: 8px 16px;
-          border-radius: 20px;
+          background: white;
+          border: 1px solid var(--border-color);
+          padding: 10px 18px;
+          border-radius: var(--radius-sm);
           color: var(--text-muted);
           font-weight: 600;
-          font-size: 14px;
           cursor: pointer;
-          transition: all 0.2s;
-          background: white;
-        }
-
-        .attach-file-btn:hover {
-          background: var(--fb-hover);
-          color: var(--fb-blue);
-          border-color: #cbd5e1;
         }
 
         .input-pills {
           flex: 1;
           background: white;
-          border-radius: 24px;
-          padding: 8px 16px;
+          border-radius: var(--radius-sm);
+          padding: 10px 18px;
           display: flex;
           align-items: center;
-          border: 1px solid var(--fb-border);
-          box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-          transition: all 0.3s ease;
-        }
-
-        .input-pills.hover-ring:focus-within {
-          border-color: #93c5fd;
-          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+          border: 1px solid var(--border-color);
         }
 
         .input-pills input {
           flex: 1;
-          background: transparent;
           border: none;
           outline: none;
-          padding: 8px 0;
           font-size: 15px;
-          color: var(--text-main);
         }
+
+        .send-icon {
+          background: transparent;
+          border: none;
+          color: var(--brand-accent);
+          cursor: pointer;
+          opacity: 0.5;
+          transition: opacity 0.2s;
+        }
+        .send-icon.active { opacity: 1; }
 
         .circle-btn {
           width: 40px;
           height: 40px;
-          border-radius: 50%;
-          border: none;
-          background: var(--fb-grey);
+          border-radius: 10px;
+          background: #f1f5f9;
           display: flex;
           align-items: center;
           justify-content: center;
-          cursor: pointer;
-          color: #64748b;
-          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          color: var(--text-muted);
         }
-
-        .circle-btn:hover { 
-          background: #e2e8f0; 
-          color: #1e293b;
-        }
-        
-        .circle-btn.primary-action {
-          color: white;
-          background: var(--fb-blue-gradient);
-          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-        
-        .circle-btn.primary-action:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
-        }
-
-        .send-icon {
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            cursor: pointer;
-            margin-left: 8px;
-            padding: 8px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .send-icon.active { color: var(--fb-blue); }
-        .send-icon:hover { background: #f1f5f9; }
-        .send-icon.active:hover { background: #eff6ff; transform: scale(1.1) rotate(-10deg); }
 
         .fb-placeholder {
           flex: 1;
@@ -844,6 +679,10 @@ export default function Messenger() {
         .chat-image.selectable {
           cursor: pointer;
           transition: transform 0.3s;
+          max-width: 100%;
+          max-height: 250px;
+          object-fit: cover;
+          border-radius: 12px;
         }
         .chat-image.selectable:hover { transform: scale(0.98); }
 
@@ -899,6 +738,8 @@ export default function Messenger() {
 
         .overlay-content-wrapper {
           flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px;
+          overflow: hidden;
+          min-height: 0;
         }
 
         .overlay-image {

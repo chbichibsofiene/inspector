@@ -193,6 +193,27 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional(readOnly = true)
+    public ActivityResponse getTeacherActivity(Long teacherId, Long activityId) {
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found"));
+
+        // Verify that the teacher is a guest of this activity
+        boolean isGuest = activity.getGuests().stream()
+                .anyMatch(guest -> guest.getUser().getId().equals(teacherId));
+
+        if (!isGuest) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not a guest of this activity");
+        }
+
+        ActivityResponse response = mapToResponse(activity);
+        activityReportRepository.findByActivityIdAndTeacherUserId(activityId, teacherId)
+                .ifPresent(report -> response.setPersonalReportId(report.getId()));
+        
+        return response;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<TeacherDto> getAvailableTeachers() {
         return teacherProfileRepository.findAll().stream()
                 .map(this::mapTeacherToDto)
@@ -257,7 +278,8 @@ public class ActivityServiceImpl implements ActivityService {
         TeacherDto.TeacherDtoBuilder builder = TeacherDto.builder()
                 .id(teacher.getId())
                 .firstName(teacher.getFirstName())
-                .lastName(teacher.getLastName());
+                .lastName(teacher.getLastName())
+                .subject(teacher.getSubject() != null ? teacher.getSubject().name() : null);
 
         try {
             if (teacher.getUser() != null) {

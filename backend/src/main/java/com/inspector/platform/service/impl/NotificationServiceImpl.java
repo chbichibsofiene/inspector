@@ -62,8 +62,12 @@ public class NotificationServiceImpl implements NotificationService {
         } catch (Exception e) {
             log.error("Failed to send email for notification type {}: {}", type, e.getMessage());
         }
-    }
 
+        // Send Push Notification if token exists
+        if (recipient.getExpoPushToken() != null && !recipient.getExpoPushToken().isEmpty()) {
+            sendExpoPushNotification(recipient.getExpoPushToken(), title, message, targetUrl);
+        }
+    }
     private String getFullName(User user) {
         if (user.getRole() == Role.INSPECTOR) {
             return inspectorProfileRepository.findByUserId(user.getId())
@@ -113,6 +117,16 @@ public class NotificationServiceImpl implements NotificationService {
         notificationRepository.saveAll(unread);
     }
 
+    @Override
+    @Transactional
+    public void updatePushToken(Long userId, String token) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        user.setExpoPushToken(token);
+        userRepository.save(user);
+        log.info("Updated push token for user {}: {}", userId, token);
+    }
+
     private NotificationDto mapToDto(Notification notif) {
         return NotificationDto.builder()
                 .id(notif.getId())
@@ -123,5 +137,37 @@ public class NotificationServiceImpl implements NotificationService {
                 .isRead(notif.isRead())
                 .createdAt(notif.getCreatedAt())
                 .build();
+    }
+
+    private void sendExpoPushNotification(String expoToken, String title, String body, String data) {
+        try {
+            java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient();
+            
+            java.util.Map<String, Object> payload = new java.util.HashMap<>();
+            payload.put("to", expoToken);
+            payload.put("title", title != null ? title : "Notification");
+            payload.put("body", body != null ? body : "");
+            payload.put("data", java.util.Map.of("targetUrl", data != null ? data : ""));
+            payload.put("sound", "default");
+
+            String json = new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(payload);
+
+            java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                .uri(java.net.URI.create("https://exp.host/--/api/v2/push/send"))
+                .header("Content-Type", "application/json")
+                .POST(java.net.http.HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+            client.sendAsync(request, java.net.http.HttpResponse.BodyHandlers.ofString())
+                .thenAccept(response -> {
+                    if (response.statusCode() == 200) {
+                        log.info("Expo push notification sent successfully to {}", expoToken);
+                    } else {
+                        log.error("Failed to send Expo push notification. Status: {}, Body: {}", response.statusCode(), response.body());
+                    }
+                });
+        } catch (Exception e) {
+            log.error("Error preparing Expo push notification: {}", e.getMessage());
+        }
     }
 }

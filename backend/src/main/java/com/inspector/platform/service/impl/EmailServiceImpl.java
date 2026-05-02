@@ -44,10 +44,9 @@ public class EmailServiceImpl implements EmailService {
             "    <tr>" +
             "      <td align='center' style='padding: 0;'>" +
             "        <table role='presentation' width='600' cellspacing='0' cellpadding='0' border='0' style='background-color: #ffffff; margin-top: 40px; margin-bottom: 40px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);'>" +
-            "          <!-- Header -->" +
             "          <tr>" +
-            "            <td align='center' style='background-color: #1a56db; padding: 40px 0;'>" +
-            "              <img src='cid:logo' alt='Inspector Platform' style='height: 50px; display: block;'>" +
+            "            <td align='center' style='background-color: #1e3a8a; padding: 40px 0;'>" +
+            "              <img src='cid:logo' alt='Pedagogy Center' style='height: 60px; display: block;'>" +
             "            </td>" +
             "          </tr>" +
             "          <!-- Body -->" +
@@ -64,13 +63,12 @@ public class EmailServiceImpl implements EmailService {
             "          <tr>" +
             "            <td align='center' style='padding: 40px; background-color: #f3f4f6; border-top: 1px solid #e5e7eb;'>" +
             "              <div style='margin-bottom: 20px;'>" +
-            "                <a href='#' style='margin: 0 10px;'><img src='https://cdn-icons-png.flaticon.com/512/733/733579.png' width='24' style='opacity: 0.6;'></a>" +
-            "                <a href='#' style='margin: 0 10px;'><img src='https://cdn-icons-png.flaticon.com/512/733/733547.png' width='24' style='opacity: 0.6;'></a>" +
+            "                <a href='https://www.facebook.com/cnteducation/?locale=fr_FR' style='margin: 0 10px;'><img src='https://cdn-icons-png.flaticon.com/512/733/733547.png' width='24' style='opacity: 0.6;'></a>" +
             "                <a href='#' style='margin: 0 10px;'><img src='https://cdn-icons-png.flaticon.com/512/733/733558.png' width='24' style='opacity: 0.6;'></a>" +
             "              </div>" +
-            "              <div style='font-size: 14px; color: #6b7280; font-weight: 500; margin-bottom: 8px;'>inspectorpfe.com</div>" +
-            "              <div style='font-size: 12px; color: #9ca3af; margin-bottom: 12px;'>Ministry of Education - Specialized Inspectorate Division</div>" +
-            "              <div style='font-size: 12px; color: #9ca3af;'>&copy; 2026 Inspector Platform. All Rights Reserved.</div>" +
+            "              <div href='https://www.cnte.tn/' style='font-size: 14px; color: #6b7280; font-weight: 500; margin-bottom: 8px;'>www.cnte.tn</div>" +
+            "              <div style='font-size: 12px; color: #9ca3af; margin-bottom: 12px;'>Specialized Inspectorate Division</div>" +
+            "              <div style='font-size: 12px; color: #9ca3af;'>&copy; 2026 Pedagogy Center. All Rights Reserved.</div>" +
             "            </td>" +
             "          </tr>" +
             "        </table>" +
@@ -91,9 +89,9 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setFrom(fromEmail, "Inspector Platform");
+            helper.setFrom(fromEmail, "Pedagogy Center");
             helper.setTo(to);
-            helper.setSubject("Account Verified - Inspector Platform");
+            helper.setSubject("Account Verified - Pedagogy Center");
             
             String body = String.format(
                 "Hello <strong>%s</strong>,<br><br>" +
@@ -125,7 +123,7 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setFrom(fromEmail, "Inspector Platform");
+            helper.setFrom(fromEmail, "Pedagogy Center");
             helper.setTo(to);
             helper.setSubject("Welcome to Inspector Platform - Registration Successful");
             
@@ -159,9 +157,9 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setFrom(fromEmail, "Inspector Platform");
+            helper.setFrom(fromEmail, "Pedagogy Center");
             helper.setTo(to);
-            helper.setSubject(title + " - Inspector Platform");
+            helper.setSubject(title + " - Pedagogy Center");
 
             String fullActionUrl = "http://localhost:5173" + (actionUrl.startsWith("/") ? actionUrl : "/" + actionUrl);
             
@@ -193,9 +191,9 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setFrom(fromEmail, "Inspector Platform");
+            helper.setFrom(fromEmail, "Pedagogy Center");
             helper.setTo(to);
-            helper.setSubject("Password Reset Request - Inspector Platform");
+            helper.setSubject("Password Reset Request - Pedagogy Center");
 
             String body = String.format(
                 "Hello <strong>%s</strong>,<br><br>" +
@@ -229,9 +227,9 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setFrom(fromEmail, "Inspector Platform");
+            helper.setFrom(fromEmail, "Pedagogy Center");
             helper.setTo(to);
-            helper.setSubject(subject + " - Inspector Platform");
+            helper.setSubject(subject + " - Pedagogy Center");
 
             String content = buildEmailTemplate(
                 subject,

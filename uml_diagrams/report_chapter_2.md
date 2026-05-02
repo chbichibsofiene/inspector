@@ -22,7 +22,7 @@ The system's functionalities are categorized into six core modules:
 
 ### 2.2.3 AI Training & Evaluation
 *   **Quiz Generation**: Using Gemini AI to create dynamic, subject-specific multiple-choice questions.
-*   **Automated Evaluation**: Instant scoring of teacher submissions with AI-generated pedagogical feedback.
+*   **Automated Evaluation**: Instant scoring and AI-generated feedback on teacher submissions for inspector review.
 
 ### 2.2.4 Professional Learning
 *   **Course Management**: Creation of modular training courses by inspectors.

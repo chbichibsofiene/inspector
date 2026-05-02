@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,9 +35,22 @@ public class TeacherActivityController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(java.util.Map.of(
                 "success", false,
-                "error", e.getMessage(),
-                "type", e.getClass().getName(),
-                "cause", e.getCause() != null ? e.getCause().getMessage() : "none"
+                "error", e.getMessage()
+            ));
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getActivityDetails(Authentication authentication, @PathVariable Long id) {
+        try {
+            Long userId = extractUserId(authentication);
+            // We'll add this method to ActivityService
+            ActivityResponse activity = activityService.getTeacherActivity(userId, id);
+            return ResponseEntity.ok(ApiResponse.ok("Activity details retrieved successfully", activity));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(java.util.Map.of(
+                "success", false,
+                "error", e.getMessage()
             ));
         }
     }

@@ -10,4 +10,5 @@ public class QuizSaveRequest {
     private String topic;
     private String subject;
     private List<Map<String, Object>> questions;
+    private List<Long> targetTeacherIds;
 }

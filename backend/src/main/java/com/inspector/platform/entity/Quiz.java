@@ -37,6 +37,15 @@ public class Quiz {
     @Builder.Default
     private List<QuizQuestion> questions = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+        name = "quiz_assignments",
+        joinColumns = @JoinColumn(name = "quiz_id"),
+        inverseJoinColumns = @JoinColumn(name = "teacher_id")
+    )
+    @Builder.Default
+    private List<TeacherProfile> assignedTeachers = new ArrayList<>();
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 

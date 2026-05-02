@@ -36,7 +36,7 @@ public class InspectorQuizController {
             @RequestBody QuizSaveRequest request) {
         Long userId = extractUserId(authentication);
         return ResponseEntity.ok(ApiResponse.ok("Quiz published successfully", 
-            quizService.saveQuiz(userId, request.getTitle(), request.getTopic(), request.getSubject(), request.getQuestions())));
+            quizService.saveQuiz(userId, request.getTitle(), request.getTopic(), request.getSubject(), request.getQuestions(), request.getTargetTeacherIds())));
     }
 
     @GetMapping

@@ -431,7 +431,7 @@ export default function InspectorHome() {
           display: flex; align-items: center; gap: 8px; font-weight: 600;
         }
 
-        .hero-content { display: flex; justify-content: space-between; align-items: center; }
+        .hero-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
 
         .main-dashboard-content { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
         

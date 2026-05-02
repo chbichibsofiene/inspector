@@ -19,7 +19,7 @@ sequenceDiagram
     Note over USER, DB: interaction : activity planning and guest notification
 
     USER->>FE: 1 : fill activity details (title, dates, type, guests)
-    FE->>AC: 2 : Post-api-inspector-activities
+    FE->>AC: 2 : createActivity(CreateActivityRequest)
     AC->>AS: 3 : createActivity(inspectorId, request)
     AS->>DB: 4 : findByUserId(inspectorId)
     AS->>DB: 5 : findAllById(guestTeacherIds)

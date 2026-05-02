@@ -17,5 +17,6 @@ public class TeacherDto {
     private String email;
     private String serialCode;
     private EtablissementDto etablissement;
+    private String subject;
     private String profileImageUrl;
 }

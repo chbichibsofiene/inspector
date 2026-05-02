@@ -225,8 +225,16 @@ export default function ProfileSetup() {
   const handleCropAndProceed = () => {
     if (!formData.profileImageUrl) return;
     
+    const getAvatarUrl = (url) => {
+      if (!url || url === "null") return null;
+      if (url.startsWith('http') || url.startsWith('data:image')) return url;
+      const baseUrl = profileApi.defaults?.baseURL || 'http://localhost:8081';
+      return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+    };
+
     const img = new Image();
-    img.src = formData.profileImageUrl;
+    img.crossOrigin = "anonymous";
+    img.src = getAvatarUrl(formData.profileImageUrl);
     img.onload = () => {
       const canvas = document.createElement('canvas');
       const cropSize = 300; // Final saved size
@@ -380,8 +388,9 @@ export default function ProfileSetup() {
                         style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
                       >
                         <img 
-                          src={formData.profileImageUrl} 
+                          src={formData.profileImageUrl.startsWith('data:') ? formData.profileImageUrl : (profileApi.defaults?.baseURL || 'http://localhost:8081') + (formData.profileImageUrl.startsWith('/') ? '' : '/') + formData.profileImageUrl} 
                           alt="Adjust" 
+                          crossOrigin="anonymous"
                           draggable={false}
                           style={{ 
                             transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
@@ -395,6 +404,11 @@ export default function ProfileSetup() {
                         <button type="button" onClick={() => setZoom(Math.min(3, zoom + 0.1))}>+</button>
                         <div className="v-divider"></div>
                         <button type="button" className="reset-btn" onClick={() => { setZoom(1); setPosition({x:0, y:0}); }}>{t("reset")}</button>
+                        <div className="v-divider"></div>
+                        <label style={{ cursor: 'pointer', margin: 0, display: 'flex', alignItems: 'center' }}>
+                          <input type="file" accept="image/*" onChange={handleImageChange} hidden />
+                          <span className="reset-btn" style={{ color: "var(--primary)" }}>Change</span>
+                        </label>
                       </div>
                     </>
                   ) : (

@@ -15,8 +15,8 @@ const Welcome = () => {
       {/* Navbar Area */}
       <nav className="welcome-nav">
         <div className="nav-logo">
-          <img src="/logo.png" alt="Inspector Platform Logo" className="welcome-logo" />
-          <h2>Inspector Platform</h2>
+          <img src="/logo.png" alt="Pedagogy Center Logo" className="welcome-logo" />
+          <h2>Pedagogy Center</h2>
         </div>
         <div className="nav-actions">
           <button className="nav-link" onClick={() => navigate('/login')}>Login</button>
@@ -28,7 +28,7 @@ const Welcome = () => {
         <div className="hero-content">
           <h1 className="hero-title">
             Supervise, train, and evaluate your teachers with <br />
-            <span className="brand-text">Inspector Platform</span>
+            <span className="brand-text">Pedagogy Center</span>
           </h1>
           <p className="hero-description">
             Transform pedagogical management into an efficient process with our comprehensive inspection and mentoring platform.
@@ -37,7 +37,7 @@ const Welcome = () => {
             Discover the platform &rarr;
           </button>
         </div>
-
+        
         {/* Image Showcase */}
         <div className="hero-visual">
           <div className="image-backdrop"></div>

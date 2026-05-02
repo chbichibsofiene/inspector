@@ -61,7 +61,7 @@ sequenceDiagram
     Note over INS, DB: interaction : draft pedagogical report
 
     INS->>FE: Enters Scores and Observations
-    FE->>RC: PUT /api/reports/{id} (Status=DRAFT)
+    FE->>RC: updateReport(updateReportRequest)
     RC->>RS: updateReport(id, request)
     
     RS->>DB: findById(id)
@@ -96,7 +96,7 @@ sequenceDiagram
     Note over INS, MAIL: interaction : finalize and lock report
 
     INS->>FE: Clicks "Finalize Report"
-    FE->>RC: PUT /api/reports/{id} (Status=FINAL)
+    FE->>RC: updateReport(updateReportRequest)
     RC->>RS: updateReport(id, request)
     
     RS->>DB: findById(id)
@@ -130,7 +130,7 @@ sequenceDiagram
     Note over TCH, DB: interaction : retrieve evaluation record
 
     TCH->>FE: Clicks "Download PDF"
-    FE->>RC: GET /api/reports/{id}/pdf
+    FE->>RC: downloadReportPdf(downloadReportPdfRequest)
     RC->>RS: downloadReportPdf(id)
     
     RS->>DB: findById(id)
@@ -161,7 +161,7 @@ sequenceDiagram
     participant OMS as OnlineMeetingService
     participant JS as Jitsi External Server
 
-    Note over ACTOR, JS: interaction : virtual pedagogical session
+    Note over ACTOR, JS:    OnlineSession: virtual pedagogical session
 
     ACTOR->>FE: Clicks "Join Online Session"
     FE->>OMS: getMeetingLink(activityId)

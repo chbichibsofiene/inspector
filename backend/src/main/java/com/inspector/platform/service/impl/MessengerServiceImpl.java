@@ -130,6 +130,7 @@ public class MessengerServiceImpl implements MessengerService {
                         contact.put("name", t.getFirstName() + " " + t.getLastName());
                         contact.put("role", "TEACHER");
                         contact.put("details", t.getEtablissement() != null ? t.getEtablissement().getName() : "");
+                        contact.put("profileImageUrl", t.getUser() != null ? t.getUser().getProfileImageUrl() : null);
                         return contact;
                     })
                     .filter(m -> m.get("id") != null)
@@ -152,6 +153,7 @@ public class MessengerServiceImpl implements MessengerService {
                         contact.put("name", i.getFirstName() + " " + i.getLastName());
                         contact.put("role", "INSPECTOR");
                         contact.put("details", i.getRank() != null ? i.getRank().name() : "");
+                        contact.put("profileImageUrl", i.getUser() != null ? i.getUser().getProfileImageUrl() : null);
                         return contact;
                     })
                     .filter(m -> m.get("id") != null)
@@ -165,11 +167,21 @@ public class MessengerServiceImpl implements MessengerService {
         User otherUser = c.getUser1().getId().equals(currentUserId) ? c.getUser2() : c.getUser1();
         String name = getFullName(otherUser);
         
-        // Get last message content
+        // Get last message info
         List<Message> messages = messageRepository.findByConversationIdOrderByTimestampAsc(c.getId());
-        String lastMsg = messages.isEmpty() ? "" : messages.get(messages.size() - 1).getContent();
-        if (lastMsg.isEmpty() && !messages.isEmpty() && messages.get(messages.size() - 1).getFileUrl() != null) {
-            lastMsg = "[File Attachment]";
+        String lastMsg = "";
+        Long lastSenderId = null;
+        
+        if (!messages.isEmpty()) {
+            Message last = messages.get(messages.size() - 1);
+            lastMsg = last.getContent();
+            lastSenderId = last.getSender().getId();
+            
+            if (lastMsg == null || lastMsg.isEmpty()) {
+                if (last.getFileUrl() != null) {
+                    lastMsg = "[File Attachment]";
+                }
+            }
         }
 
         long unreadCount = messageRepository.countByConversationAndSenderNotAndIsRead(c, userRepository.getReferenceById(currentUserId), false);
@@ -180,8 +192,10 @@ public class MessengerServiceImpl implements MessengerService {
                 .otherUserName(name)
                 .otherUserRole(otherUser.getRole().name())
                 .lastMessage(lastMsg)
+                .lastMessageSenderId(lastSenderId)
                 .lastMessageTime(c.getLastMessageTime())
                 .unreadCount(unreadCount)
+                .otherUserProfileImageUrl(otherUser.getProfileImageUrl())
                 .build();
     }
 

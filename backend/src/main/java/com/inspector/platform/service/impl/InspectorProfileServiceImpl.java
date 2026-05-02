@@ -163,6 +163,7 @@ public class InspectorProfileServiceImpl implements InspectorProfileService {
                 .lastName(t.getLastName())
                 .email(t.getUser().getEmail())
                 .serialCode(t.getUser().getSerialCode())
+                .subject(t.getSubject() != null ? t.getSubject().name() : null)
                 .profileImageUrl(t.getUser().getProfileImageUrl())
                 .etablissement(new EtablissementDto(t.getEtablissement().getId(), t.getEtablissement().getName(), t.getEtablissement().getSchoolLevel()))
                 .build()).collect(Collectors.toList());

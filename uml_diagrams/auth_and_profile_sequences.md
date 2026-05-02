@@ -19,7 +19,7 @@ sequenceDiagram
     Note over USER, NS: interaction : user registration validation
 
     USER->>FE: Inputs Email, Password, Serial Code, CIN
-    FE->>AC: POST /api/auth/register
+    FE->>AC: register(RegisterRequest)
     AC->>AS: register(request)
     
     AS->>DB: existsByEmail(email) / existsBySerialCode(code)
@@ -71,7 +71,7 @@ sequenceDiagram
     Note over USER, DB: interaction : authentication and token generation
 
     USER->>FE: Inputs Email and Password
-    FE->>AC: POST /api/auth/login
+    FE->>AC: login(LoginRequest)
     AC->>AS: login(request)
     
     AS->>AM: authenticate(token)
@@ -118,7 +118,7 @@ sequenceDiagram
     Note over USER, DB: interaction : complete teacher profile
 
     USER->>FE: Inputs Subject, Phone, Language, School/Delegation
-    FE->>PC: POST /api/teacher/profile/complete
+    FE->>PC: completeProfile(TeacherProfileRequest)
     PC->>TPS: completeProfile(userId, request)
     
     TPS->>DB: findById(userId)
@@ -154,7 +154,7 @@ sequenceDiagram
     Note over USER, DB: interaction : complete inspector profile
 
     USER->>FE: Inputs Rank, Subject, Multiple Delegations/Schools
-    FE->>PC: POST /api/inspector/profile/complete
+    FE->>PC: completeProfile(InspectorProfileRequest)
     PC->>IPS: completeProfile(userId, request)
     
     IPS->>DB: findById(userId)

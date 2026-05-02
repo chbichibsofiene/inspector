@@ -18,7 +18,7 @@ sequenceDiagram
     Note over USER, ES: interaction : password recovery and reset flow
 
     USER->>FE: 1 : type email
-    FE->>AC: 2 : Post-api-auth-forgot-password
+    FE->>AC: 2 : forgotPassword(ForgotPasswordRequest)
     AC->>AS: 3 : forgotPassword(email)
     AS->>DB: 4 : Find By email
     
@@ -43,7 +43,7 @@ sequenceDiagram
     Note over USER, ES: Step 2: Verification and Password Update
 
     USER->>FE: 17 : type code , email , new password
-    FE->>AC: 18 : Post-api-auth-reset-password
+    FE->>AC: 18 : resetPassword(ResetPasswordRequest)
     AC->>AS: 19 : resetPassword(email, code, newPassword)
     AS->>DB: 20 : Find by email
     DB-->>AS: 21 : UserObject
