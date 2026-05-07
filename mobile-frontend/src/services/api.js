@@ -99,6 +99,18 @@ export async function getCalendarForRole(role) {
   throw new Error("Unsupported role for calendar view.");
 }
 
+export async function getDashboardForRole(role) {
+  if (role === "INSPECTOR") {
+    const response = await api.get("/api/dashboard/inspector");
+    return unwrap(response);
+  }
+  if (role === "TEACHER") {
+    const response = await api.get("/api/dashboard/teacher");
+    return unwrap(response);
+  }
+  throw new Error("Unsupported role for dashboard.");
+}
+
 export async function createActivity(payload) {
   const response = await api.post("/api/inspector/activities", payload);
   return unwrap(response);

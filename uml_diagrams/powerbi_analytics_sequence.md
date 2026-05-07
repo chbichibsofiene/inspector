@@ -17,7 +17,7 @@ sequenceDiagram
     Note over USER, DB: interaction : high-performance data aggregation for BI
 
     USER->>FE: 1 : navigates to Analytics page
-    FE->>AC: 2 : Get-api-inspector-analytics-powerbi
+    FE->>AC: 2 : getAnalytics(getAnalyticsRequest)
     AC->>AS: 3 : getInspectorAnalytics(inspectorId)
     
     par parallel data retrieval

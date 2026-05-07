@@ -34,13 +34,20 @@ The platform follows a modern decoupled architecture:
 - **PDF Generation**: Native raw PDF builder (`PdfExportServiceImpl`) with word-wrap support
 - **Build Tool**: Maven 3.9.x
 
-### Frontend:
+### Frontend (Web):
 - **Library**: React 18
 - **Build Tool**: Vite
 - **Styling**: Vanilla CSS (Modern Glassmorphism / Gradient Design)
 - **API Client**: Axios
 - **Icons**: Lucide React
+- **Charts**: Recharts (for Admin Analytics)
 - **Calendar**: Custom weekly/monthly/daily view
+
+### Frontend (Mobile):
+- **Framework**: React Native (Expo)
+- **Navigation**: React Navigation
+- **State**: React Context API
+- **Features**: Real-time messaging, activity synchronization, and report viewing.
 
 ---
 
@@ -59,9 +66,12 @@ The platform follows a modern decoupled architecture:
 | **Activity Planner** | Interactive weekly/monthly calendar for scheduling inspections, trainings, and meetings (in-person or online). |
 | **Report System** | Draft/Final report lifecycle with score, observations, and recommendations. Supports PDF export (with text wrapping) and scanned PDF import. |
 | **Teacher Report View** | Teachers can view report cards and click **"View Details"** to open a modal showing full observations, recommendations, and score. |
+| **AI Quiz Module** | AI-powered quiz generation based on topic/subject. Teachers can take quizzes, and scores are automatically recorded. |
+| **Course Management** | Create pedagogical training courses, add modules/lessons, and assign them to teachers. |
+| **Messenger** | Real-time chat system with file attachment support for seamless communication between actors. |
 | **Notification System** | Real-time in-app alerts and automated HTML email notifications for new assignments and report finalization. |
 | **Jitsi Integration** | Auto-generated Jitsi Meet URLs for virtual activities, accessible directly from the activity details. |
-| **Admin Dashboard** | User management, account verification, and role assignment panel. |
+| **Admin Dashboard** | Advanced analytics "Command Center" with geographical drill-down (Region/Delegation), trend analysis, and user management. |
 
 ---
 
@@ -79,19 +89,28 @@ src/main/java/com/inspector/platform/
 └── security/          JWT filter, SecurityConfig, UserDetailsService
 ```
 
-### Frontend (`/inspector-frontend`)
+### Frontend (Web) (`/inspector-frontend`)
 ```
 src/
-├── api/               Axios instances and service functions (auth, reports, activities...)
+├── api/               Axios instances and service functions (auth, reports, activities, admin...)
 ├── components/        Reusable UI components (Modals, Navbars, TeacherInsightsModal...)
 ├── pages/             Main views
 │   ├── InspectorCalendar.jsx     Weekly/monthly activity calendar
 │   ├── InspectorReports.jsx      Report creation, editing, PDF export/import
 │   ├── TeacherReports.jsx        Teacher report cards with "View Details" modal
-│   ├── AdminAnalytics.jsx        Admin dashboard
+│   ├── AdminAnalytics.jsx        Admin dashboard (Command Center)
 │   └── ...
 ├── context/           React context for Auth and Notifications
 └── assets/            Images and global styles
+```
+
+### Frontend (Mobile) (`/mobile-frontend`)
+```
+src/
+├── screens/           Mobile screens (Login, Dashboard, Chat, Calendar...)
+├── navigation/        React Navigation configuration
+├── services/          API service layers
+└── components/        Mobile-specific UI components
 ```
 
 ---
@@ -113,28 +132,38 @@ The PDF export is built from scratch using raw PDF specification (no external li
 - Node.js 18+
 - MySQL Server 8.x
 
-### Database Setup:
-1. Create a database named `inspector_system_db`.
-2. Configure credentials in `backend/src/main/resources/application.properties`.
+### Running with Docker (Recommended):
+The easiest way to run the entire stack (Database, Backend, Frontend) is using Docker Compose:
+```bash
+docker-compose up -d --build
+```
+- **Frontend**: `http://localhost:80`
+- **Backend**: `http://localhost:8081`
 
-### Running the Backend:
+### Running the Backend (Manual):
+1. Create a database named `inspector_system_db` in MySQL.
+2. Configure credentials in `backend/src/main/resources/application.properties`.
+3. Run the following:
 ```bash
 cd backend
-# Using bundled Maven:
-apache-maven-3.9.6/bin/mvn.cmd spring-boot:run
-
-# Or if Maven is on PATH:
 mvn spring-boot:run
 ```
 Backend runs on: `http://localhost:8081`
 
-### Running the Frontend:
+### Running the Frontend (Manual):
 ```bash
 cd inspector-frontend
 npm install
 npm run dev
 ```
 Frontend runs on: `http://localhost:5173`
+
+### Running the Mobile App:
+```bash
+cd mobile-frontend
+npm install
+npx expo start
+```
 
 ---
 

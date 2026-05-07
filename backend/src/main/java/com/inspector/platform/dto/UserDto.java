@@ -24,7 +24,6 @@ public class UserDto {
     private Role role;
     private boolean enabled;
     private LocalDateTime createdAt;
-    private boolean isMicrosoftConnected;
     private String profileImageUrl;
 
     
@@ -36,7 +35,6 @@ public class UserDto {
                 .serialCode(user.getSerialCode())
                 .role(user.getRole())
                 .enabled(user.isEnabled())
-                .isMicrosoftConnected(user.isMicrosoftConnected())
                 .profileImageUrl(user.getProfileImageUrl())
                 .createdAt(user.getCreatedAt())
                 .build();

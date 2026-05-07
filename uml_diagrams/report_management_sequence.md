@@ -18,7 +18,7 @@ sequenceDiagram
     Note over USER, DB: interaction : report creation and finalization
 
     USER->>FE: 1 : enter observations & recommendations
-    FE->>RC: 2 : Post-api-inspector-reports
+    FE->>RC: 2 : createReport(reportRequest)
     RC->>RS: 3 : createReport(inspectorId, request)
     RS->>DB: 4 : findById(activityId) & verify owner
     
@@ -48,7 +48,7 @@ sequenceDiagram
     participant DB as Data Base
 
     USER->>FE: 1 : modify observations or change status
-    FE->>RC: 2 : Put-api-inspector-reports-{id}
+    FE->>RC: 2 : updateReport(id, reportRequest)
     RC->>RS: 3 : updateReport(inspectorId, reportId, request)
     RS->>DB: 4 : findById(reportId)
     
@@ -81,8 +81,8 @@ sequenceDiagram
     participant DB as Data Base
 
     USER->>FE: 1 : click delete report
-    FE->>RC: 2 : Delete-api-inspector-reports-{id}
-    RC->>RS: 3 : deleteReport(inspectorId, reportId)
+    FE->>RC: 2 : deleteReport(id)
+    AC->>RS: 3 : deleteReport(inspectorId, reportId)
     RS->>DB: 4 : findById(reportId) & verify owner
     
     RS->>DB: 5 : Delete(Report)
@@ -105,12 +105,33 @@ sequenceDiagram
     participant DB as Data Base
 
     USER->>FE: 1 : click "Download PDF"
-    FE->>RC: 2 : Get-api-inspector-reports-{id}-pdf
+    FE->>RC: 2 : exportReportPdf(id)
     RC->>PS: 3 : exportReport(inspectorId, reportId, ...)
     PS->>DB: 4 : findById(reportId)
     PS-->>RC: 5 : byte[] (PDF Content)
     RC-->>FE: 6 : File Transfer (application/pdf)
     FE-->>USER: 7 : triggers browser download
+```
+
+## 🔄 Sequence 5: PDF Import Flow
+
+```mermaid
+sequenceDiagram
+    title: PDF Import/Upload Flow
+    autonumber
+    participant USER as INSPECTOR
+    participant FE as FRONT END
+    participant RC as ReportController
+    participant PS as PdfExportService
+    participant DB as Data Base
+
+    USER->>FE: 1 : select local PDF file
+    FE->>RC: 2 : importReportPdf(id, file)
+    RC->>PS: 3 : importReportPdf(inspectorId, reportId, fileName, bytes)
+    PS->>DB: 4 : save imported file metadata
+    PS-->>RC: 5 : void
+    RC-->>FE: 6 : HTTP 200 (Import Success)
+    FE-->>USER: 7 : display imported report link
 ```
 
 ## 📋 Key Operations

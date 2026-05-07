@@ -13,11 +13,12 @@ import {
   Modal,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
-import { getMessages, sendMessage } from "../services/api";
+import { getMessages, sendMessage, API_BASE_URL } from "../services/api";
 import ScreenContainer from "../components/ScreenContainer";
 import { COLORS } from "../utils/constants";
 import { useAuth } from "../context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
+import { Client } from "@stomp/stompjs";
 
 export default function ChatScreen() {
   const route = useRoute();
@@ -32,6 +33,9 @@ export default function ChatScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
   
   const flatListRef = useRef();
+  const stompClientRef = useRef(null);
+  const subscriptionRef = useRef(null);
+  const convIdRef = useRef(conversationId);  // live ref for WS callback
 
   const fetchMessages = useCallback(async () => {
     try {
@@ -62,14 +66,49 @@ export default function ChatScreen() {
     }
   }, [recipientId, conversationId, navigation]);
 
+  // ---- Initial load + WebSocket setup ----
   useEffect(() => {
     navigation.setOptions({ title: recipientName });
     fetchMessages();
-    
-    // Polling for new messages (simple implementation)
-    const interval = setInterval(fetchMessages, 5000);
-    return () => clearInterval(interval);
   }, [fetchMessages, navigation, recipientName]);
+
+  // ---- Connect STOMP when we have a real conversationId ----
+  useEffect(() => {
+    // Wait until we have a real conversation ID (not a new/temp chat)
+    if (!conversationId) return;
+
+    convIdRef.current = conversationId;
+
+    const WS_URL = API_BASE_URL.replace('http', 'ws') + '/ws/websocket';
+    const token = session?.token;
+
+    const client = new Client({
+      brokerURL: WS_URL,
+      connectHeaders: { Authorization: `Bearer ${token}` },
+      reconnectDelay: 5000,
+      onConnect: () => {
+        subscriptionRef.current = client.subscribe(
+          `/topic/conversation.${conversationId}`,
+          (frame) => {
+            const msg = JSON.parse(frame.body);
+            setMessages((prev) => {
+              if (prev.some((m) => m.id === msg.id)) return prev;
+              return [...prev, msg];
+            });
+          }
+        );
+      },
+      onStompError: (frame) => console.error('[WS] STOMP error', frame),
+    });
+
+    client.activate();
+    stompClientRef.current = client;
+
+    return () => {
+      if (subscriptionRef.current) subscriptionRef.current.unsubscribe();
+      client.deactivate();
+    };
+  }, [conversationId]);
 
   const handleSend = async () => {
     if (!inputText.trim()) return;
@@ -79,8 +118,16 @@ export default function ChatScreen() {
     setSending(true);
 
     try {
-      await sendMessage(recipientId, text);
-      fetchMessages();
+      const result = await sendMessage(recipientId, text);
+      // If this was a new chat (no convId), now we have one — subscribe via WS
+      const newConvId = result?.conversationId;
+      if (newConvId && !conversationId) {
+        navigation.setParams({ conversationId: newConvId });
+      }
+      // Optimistically add message locally (WS will deduplicate if it echoes back)
+      if (result) {
+        setMessages((prev) => prev.some((m) => m.id === result.id) ? prev : [...prev, result]);
+      }
     } catch (error) {
       console.error("Error sending message:", error);
       alert("Failed to send message.");
@@ -178,8 +225,8 @@ export default function ChatScreen() {
       const Sharing = require("expo-sharing");
 
       let fileName = item.fileName || "document";
-      if (!fileName.toLowerCase().endsWith('.pdf') && 
-          (item.fileUrl.toLowerCase().endsWith('.pdf') || item.fileType === "application/pdf")) {
+      if (!(fileName || '').toLowerCase().endsWith('.pdf') && 
+          ((item.fileUrl || '').toLowerCase().endsWith('.pdf') || item.fileType === "application/pdf")) {
         fileName += ".pdf";
       }
       const localUri = `${FileSystem.documentDirectory}${fileName}`;
@@ -285,7 +332,7 @@ export default function ChatScreen() {
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={90}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
       >
         <FlatList
           ref={flatListRef}
@@ -298,7 +345,7 @@ export default function ChatScreen() {
 
         <View style={styles.inputContainer}>
           <TouchableOpacity style={styles.attachButton} onPress={handleAttachPress}>
-            <Text style={styles.attachIcon}>📎</Text>
+            <Ionicons name="attach" size={24} color={COLORS.primary} />
           </TouchableOpacity>
           <TextInput
             style={styles.input}
@@ -337,7 +384,7 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 100, // For headerTransparent
+    backgroundColor: "#f8fafc", // Light, clean background
   },
   center: {
     flex: 1,
@@ -345,11 +392,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   listContent: {
-    padding: 20,
+    padding: 16,
     paddingBottom: 20,
   },
   messageWrapper: {
-    marginBottom: 16,
+    marginBottom: 12,
     flexDirection: "row",
     width: "100%",
   },
@@ -362,35 +409,40 @@ const styles = StyleSheet.create({
   },
   chatAvatarContainer: {
     marginRight: 8,
-    marginBottom: 4,
+    marginBottom: 2,
     flexShrink: 0,
   },
   chatAvatar: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderColor: "#fff",
   },
   chatAvatarPlaceholder: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: COLORS.primary,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: COLORS.primarySoft,
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 1.5,
+    borderColor: "#fff",
   },
   chatAvatarText: {
-    color: "#fff",
-    fontSize: 12,
-    fontWeight: "bold",
+    color: COLORS.primary,
+    fontSize: 14,
+    fontWeight: "800",
   },
   messageBubble: {
     maxWidth: "80%",
-    padding: 16,
-    borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 22,
+    shadowColor: "#0f172a",
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
-    shadowRadius: 4,
+    shadowRadius: 10,
     elevation: 2,
   },
   myBubble: {
@@ -400,15 +452,17 @@ const styles = StyleSheet.create({
   otherBubble: {
     backgroundColor: "#ffffff",
     borderBottomLeftRadius: 4,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.03)",
   },
   messageText: {
-    fontSize: 15,
+    fontSize: 16,
     lineHeight: 22,
     fontWeight: "500",
+    letterSpacing: -0.2,
   },
   myText: {
     color: "#fff",
-    fontWeight: "600",
   },
   otherText: {
     color: COLORS.text,
@@ -417,79 +471,72 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginTop: 6,
     alignSelf: "flex-end",
-    fontWeight: "600",
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   myTime: {
-    color: "rgba(255,255,255,0.7)",
+    color: "rgba(255,255,255,0.6)",
   },
   otherTime: {
     color: COLORS.textMuted,
   },
   chatImage: {
-    width: 200,
-    height: 150,
-    borderRadius: 12,
+    width: 240,
+    height: 180,
+    borderRadius: 16,
     marginTop: 4,
     marginBottom: 4,
   },
   fileContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: "rgba(0,0,0,0.05)",
     padding: 12,
-    borderRadius: 12,
+    borderRadius: 14,
     marginTop: 6,
     marginBottom: 4,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.3)",
   },
   fileIcon: {
-    fontSize: 20,
-    marginRight: 8,
+    fontSize: 24,
+    marginRight: 10,
   },
   fileName: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "700",
     flex: 1,
   },
   inputContainer: {
     flexDirection: "row",
-    padding: 12,
-    paddingBottom: Platform.OS === "ios" ? 32 : 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     backgroundColor: "#ffffff",
     borderTopWidth: 1,
     borderTopColor: "rgba(0,0,0,0.05)",
-    alignItems: "flex-end",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -3 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 5,
+    alignItems: "center",
   },
   input: {
     flex: 1,
     backgroundColor: "#f1f5f9",
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    paddingTop: 12,
-    marginRight: 10,
-    fontSize: 15,
-    maxHeight: 120,
+    borderRadius: 24,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    paddingTop: 10,
+    marginRight: 12,
+    fontSize: 16,
     color: COLORS.text,
+    maxHeight: 120,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.02)",
   },
   attachButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "rgba(37, 99, 235, 0.1)",
+    backgroundColor: "#f1f5f9",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 10,
-    marginBottom: 2,
-  },
-  attachIcon: {
-    fontSize: 22,
+    marginRight: 12,
   },
   sendButton: {
     backgroundColor: COLORS.primary,
@@ -498,34 +545,28 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 2,
     shadowColor: COLORS.primary,
     shadowOpacity: 0.3,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
   },
   sendButtonDisabled: {
     backgroundColor: COLORS.border,
     shadowOpacity: 0,
   },
-  sendButtonText: {
-    color: "#fff",
-    fontWeight: "900",
-    fontSize: 18,
-  },
   modalBackground: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.9)",
+    backgroundColor: "rgba(0,0,0,0.95)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalCloseButton: {
     position: "absolute",
-    top: 50,
-    right: 20,
+    top: 60,
+    right: 24,
     width: 44,
     height: 44,
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: "rgba(255,255,255,0.15)",
     borderRadius: 22,
     justifyContent: "center",
     alignItems: "center",
@@ -533,11 +574,11 @@ const styles = StyleSheet.create({
   },
   modalCloseText: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
   },
   fullScreenImage: {
     width: "100%",
-    height: "80%",
+    height: "85%",
   },
 });

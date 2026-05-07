@@ -18,7 +18,7 @@ sequenceDiagram
     Note over USER, DB: interaction : viewing assigned teaching staff
 
     USER->>FE: 1 : navigates to "My Teachers" page
-    FE->>IPC: 2 : Get-api-inspector-profile-my-teachers
+    FE->>IPC: 2 : getMyTeachers(getMyTeachersRequest)
     IPC->>IPS: 3 : getMyTeachers(inspectorId)
     IPS->>DB: 4 : findByUserId(inspectorId)
     
@@ -51,17 +51,17 @@ sequenceDiagram
     FE->>USER: 2 : open TeacherInsightsModal
     
     par parallel data fetching
-        FE->>IPC: 3 : Get-api-inspector-profile-teachers-{id}-timetable
+        FE->>IPC: 3 : getTeacherTimetable(getTeacherTimetableRequest)
         IPC->>IPS: 4 : getTeacherTimetable(inspectorId, teacherId)
         IPS->>DB: 5 : select * from timetables ...
         DB-->>FE: 6 : Timetable Data
     and
-        FE->>IPC: 7 : Get-api-inspector-profile-teachers-{id}-reports
+        FE->>IPC: 7 : getTeacherReports(getTeacherReportsRequest)
         IPC->>IPS: 8 : getTeacherReports(inspectorId, teacherId)
         IPS->>DB: 9 : select * from activity_reports ...
         DB-->>FE: 10 : Reports History
     and
-        FE->>IPC: 11 : Get-api-inspector-profile-teachers-{id}-quizzes
+        FE->>IPC: 11 : getTeacherQuizzes(getTeacherQuizzesRequest)
         IPC->>IPS: 12 : getTeacherQuizzes(inspectorId, teacherId)
         IPS->>DB: 13 : select * from quiz_submissions ...
         DB-->>FE: 14 : Quiz Results

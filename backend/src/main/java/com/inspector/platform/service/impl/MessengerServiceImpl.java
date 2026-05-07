@@ -8,6 +8,7 @@ import com.inspector.platform.service.MessengerService;
 import com.inspector.platform.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,6 +28,7 @@ public class MessengerServiceImpl implements MessengerService {
     private final InspectorProfileRepository inspectorProfileRepository;
     private final TeacherProfileRepository teacherProfileRepository;
     private final NotificationService notificationService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public List<ConversationDto> getConversations(Long userId) {
@@ -90,8 +92,12 @@ public class MessengerServiceImpl implements MessengerService {
                 .build();
 
         Message savedMessage = messageRepository.save(message);
+        MessageDto messageDto = mapToMessageDto(savedMessage);
 
-        // Notify recipient
+        // Broadcast via WebSocket to both conversation participants
+        messagingTemplate.convertAndSend("/topic/conversation." + conversation.getId(), messageDto);
+
+        // Also notify recipient via in-app notification
         notificationService.sendNotification(
                 recipientId,
                 "New Message",
@@ -100,7 +106,7 @@ public class MessengerServiceImpl implements MessengerService {
                 "/messages"
         );
 
-        return mapToMessageDto(savedMessage);
+        return messageDto;
     }
 
     @Override
@@ -111,7 +117,7 @@ public class MessengerServiceImpl implements MessengerService {
 
         if (user.getRole() == Role.INSPECTOR) {
             InspectorProfile p = inspectorProfileRepository.findByUserId(userId).orElse(null);
-            if (p == null || p.getDelegations() == null || p.getDelegations().isEmpty() || p.getSubject() == null) {
+            if (p == null || p.getDelegations() == null || p.getDelegations().isEmpty()) {
                 return List.of();
             }
             
@@ -119,22 +125,46 @@ public class MessengerServiceImpl implements MessengerService {
                     .map(Delegation::getId)
                     .collect(Collectors.toSet());
 
-            return teacherProfileRepository.findAll().stream()
-                    .filter(t -> t.getDelegation() != null && 
-                                inspectorDelegationIds.contains(t.getDelegation().getId()) && 
-                                t.getSubject() != null && 
-                                t.getSubject().equals(p.getSubject()))
-                    .map(t -> {
+            List<Map<String, Object>> contacts = new java.util.ArrayList<>();
+
+            // 1. Add Teachers in same delegations and same subject
+            if (p.getSubject() != null) {
+                contacts.addAll(teacherProfileRepository.findAll().stream()
+                        .filter(t -> t.getDelegation() != null && 
+                                    inspectorDelegationIds.contains(t.getDelegation().getId()) && 
+                                    t.getSubject() != null && 
+                                    t.getSubject().equals(p.getSubject()))
+                        .map(t -> {
+                            Map<String, Object> contact = new java.util.HashMap<>();
+                            contact.put("id", t.getUser() != null ? t.getUser().getId() : null);
+                            contact.put("name", t.getFirstName() + " " + t.getLastName());
+                            contact.put("role", "TEACHER");
+                            contact.put("details", t.getEtablissement() != null ? t.getEtablissement().getName() : "");
+                            contact.put("profileImageUrl", t.getUser() != null ? t.getUser().getProfileImageUrl() : null);
+                            return contact;
+                        })
+                        .filter(m -> m.get("id") != null)
+                        .collect(Collectors.toList()));
+            }
+
+            // 2. Add Other Inspectors sharing at least one delegation
+            contacts.addAll(inspectorProfileRepository.findAll().stream()
+                    .filter(i -> !i.getUser().getId().equals(userId)) // Not self
+                    .filter(i -> i.getDelegations() != null && 
+                                i.getDelegations().stream().anyMatch(d -> inspectorDelegationIds.contains(d.getId())))
+                    .map(i -> {
                         Map<String, Object> contact = new java.util.HashMap<>();
-                        contact.put("id", t.getUser() != null ? t.getUser().getId() : null);
-                        contact.put("name", t.getFirstName() + " " + t.getLastName());
-                        contact.put("role", "TEACHER");
-                        contact.put("details", t.getEtablissement() != null ? t.getEtablissement().getName() : "");
-                        contact.put("profileImageUrl", t.getUser() != null ? t.getUser().getProfileImageUrl() : null);
+                        contact.put("id", i.getUser() != null ? i.getUser().getId() : null);
+                        contact.put("name", i.getFirstName() + " " + i.getLastName());
+                        contact.put("role", "INSPECTOR");
+                        contact.put("details", (i.getRank() != null ? i.getRank().name() : "") + (i.getSubject() != null ? " (" + i.getSubject().name() + ")" : ""));
+                        contact.put("profileImageUrl", i.getUser() != null ? i.getUser().getProfileImageUrl() : null);
                         return contact;
                     })
                     .filter(m -> m.get("id") != null)
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList()));
+
+            return contacts;
 
         } else if (user.getRole() == Role.TEACHER) {
             TeacherProfile p = teacherProfileRepository.findByUserId(userId).orElse(null);
@@ -152,7 +182,7 @@ public class MessengerServiceImpl implements MessengerService {
                         contact.put("id", i.getUser() != null ? i.getUser().getId() : null);
                         contact.put("name", i.getFirstName() + " " + i.getLastName());
                         contact.put("role", "INSPECTOR");
-                        contact.put("details", i.getRank() != null ? i.getRank().name() : "");
+                        contact.put("details", (i.getRank() != null ? i.getRank().name() : "") + (i.getSubject() != null ? " (" + i.getSubject().name() + ")" : ""));
                         contact.put("profileImageUrl", i.getUser() != null ? i.getUser().getProfileImageUrl() : null);
                         return contact;
                     })

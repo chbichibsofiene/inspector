@@ -1,0 +1,23 @@
+services:
+  backend:
+    build: ./backend
+    container_name: inspector-backend
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      # Use host.docker.internal to connect to your local XAMPP MySQL on the host machine
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/inspector_system_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  frontend:
+    build: ./inspector-frontend
+    container_name: inspector-frontend
+    restart: always
+    ports:
+      - "8082:80"
+    depends_on:
+      - backend

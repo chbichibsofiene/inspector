@@ -28,9 +28,9 @@ export default function InspectorTeachers() {
   }
 
   const filteredTeachers = teachers.filter(t => 
-    `${t.firstName} ${t.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    t.serialCode?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    t.etablissement?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    `${t.firstName || ''} ${t.lastName || ''}`.toLowerCase().includes((searchTerm || '').toLowerCase()) ||
+    (t.serialCode || '').toLowerCase().includes((searchTerm || '').toLowerCase()) ||
+    (t.etablissement?.name || '').toLowerCase().includes((searchTerm || '').toLowerCase())
   );
 
   return (

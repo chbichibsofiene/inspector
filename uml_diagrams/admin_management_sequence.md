@@ -17,7 +17,7 @@ sequenceDiagram
     Note over ADMIN, DB: interaction : monitoring the user account registry
 
     ADMIN->>FE: 1 : navigates to User Management
-    FE->>AC: 2 : Get-api-admin-users
+    FE->>AC: 2 : getAllUsers()
     AC->>AS: 3 : getAllUsers()
     AS->>DB: 4 : select * from users ...
     DB-->>FE: 5 : User List (Profile & Status info)
@@ -39,7 +39,7 @@ sequenceDiagram
     Note over ADMIN, DB: interaction : system-wide activity tracking
 
     ADMIN->>FE: 1 : filters logs by User or Date
-    FE->>AC: 2 : Get-api-admin-logs (filters)
+    FE->>AC: 2 : getLogs(getLogsRequest)
     AC->>AUD: 3 : getLogs(userId, actionType, startDate, endDate)
     AUD->>DB: 4 : select from action_logs ...
     DB-->>AUD: 5 : List<ActionLog>
@@ -63,7 +63,7 @@ sequenceDiagram
     Note over ADMIN, DB: interaction : regional and subject-based BI
 
     ADMIN->>FE: 1 : filters by Region/Delegation/Subject
-    FE->>AC: 2 : Get-api-admin-analytics-kpis (filters)
+    FE->>AC: 2 : getAdminAnalytics(getAdminAnalyticsRequest)
     AC->>ANS: 3 : getAdminAnalytics(subject, regionId, delegationId)
     
     par parallel aggregation

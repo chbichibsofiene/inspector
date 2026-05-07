@@ -19,7 +19,7 @@ The objective of this sprint is to enhance professional collaboration through re
 * **General User (Inspector/Teacher)**: Utilize the messaging module to facilitate direct, secure communication without leaving the platform ecosystem.
 
 ### 4.4.4 Class Diagram
-The following class diagram represents the structural model for messaging and regional analytics.
+The following class diagram represents the complete structural model for the messaging and analytics subsystems, derived directly from the backend implementation.
 
 ```mermaid
 classDiagram
@@ -27,6 +27,13 @@ classDiagram
         +Long id
         +String email
         +String role
+        +String firstName
+        +String lastName
+    }
+
+    class Conversation {
+        +Long id
+        +LocalDateTime lastMessageTime
     }
 
     class Message {
@@ -34,57 +41,116 @@ classDiagram
         +String content
         +LocalDateTime timestamp
         +boolean isRead
-        +send()
-        +markAsRead()
+        +String fileUrl
+        +String fileName
+        +String fileType
     }
 
     class Region {
         +Long id
         +String name
-        +getDelegations()
     }
 
     class Delegation {
         +Long id
         +String name
-        +getSchools()
-    }
-    
-    class AnalyticsService <<Service>> {
-        +getGlobalKPIs()
-        +getRegionalPerformance()
     }
 
-    User "1" -- "0..*" Message : sender
-    User "1" -- "0..*" Message : receiver
+    class AnalyticsService {
+        <<interface>>
+        +getInspectorAnalytics(Long inspectorId) InspectorAnalyticsDto
+        +getAdminAnalytics(Subject, Long regionId, Long delegationId) AdminAnalyticsDto
+        +getTrends(Subject, Long regionId, Long delegationId) TrendAnalyticsDto
+    }
+
+    class MessengerService {
+        <<interface>>
+        +getConversations(Long userId) List~ConversationDto~
+        +getMessages(Long conversationId, Long userId) List~MessageDto~
+        +sendMessage(Long senderId, Long recipientId, String content, ...) MessageDto
+        +getContacts(Long userId) List~Map~
+    }
+
+    class AdminAnalyticsDto {
+        <<DTO>>
+        +long totalInspections
+        +double averageScore
+        +long numberOfTeachers
+        +long numberOfInspectors
+        +List~TeacherPerformanceDto~ topPerformingTeachers
+        +List~LocationPerformanceDto~ topPerformingRegions
+        +List~LocationPerformanceDto~ topPerformingDelegations
+    }
+
+    class InspectorAnalyticsDto {
+        <<DTO>>
+        +long totalActivities
+        +long inspections
+        +long trainings
+        +long totalReports
+        +double averageScore
+        +Map~String,Long~ activitiesByType
+        +List~TeacherPerformanceDto~ teacherPerformance
+    }
+
+    class TrendAnalyticsDto {
+        <<DTO>>
+        +Map~String,Long~ inspectionsPerMonth
+        +Map~String,Double~ performanceEvolution
+    }
+
+    %% Messaging relationships
+    Conversation "1" *-- "0..*" Message : contains
+    User "1" -- "0..*" Conversation : user1
+    User "1" -- "0..*" Conversation : user2
+    User "1" -- "0..*" Message : sends
+
+    %% Geography relationships
     Region "1" *-- "0..*" Delegation : contains
     User "0..*" --> "1" Delegation : belongs to
+
+    %% Analytics relationships
+    AnalyticsService ..> AdminAnalyticsDto : returns
+    AnalyticsService ..> InspectorAnalyticsDto : returns
+    AnalyticsService ..> TrendAnalyticsDto : returns
+    MessengerService ..> Conversation : manages
+    MessengerService ..> Message : manages
 ```
 
 ### 4.4.5 Use Case Diagram
-This diagram outlines the primary interactions for communication and analytics.
+This diagram outlines the primary interactions for the Communication and Governance modules.
 
 ```mermaid
-useCaseDiagram
-    actor "Administrator" as ADM
-    actor "User (Any Role)" as USR
-    
-    package "Communication & Governance" {
-        usecase "Send/Receive Direct Messages" as UC1
-        usecase "View Contact List" as UC2
-        usecase "Consult Global KPIs" as UC3
-        usecase "Filter Analytics by Region" as UC4
-        usecase "View Performance Rankings" as UC5
-    }
+flowchart LR
+    ADM(["👤 Administrator"])
+    USR(["👤 User\n(Inspector / Teacher)"])
+
+    subgraph Messenger ["📨 Messenger Module"]
+        UC1["View Contact List"]
+        UC2["Send Direct Message"]
+        UC3["Receive Real-time Message"]
+        UC4["Share File Attachment"]
+    end
+
+    subgraph Analytics ["📊 Governance / Analytics Module"]
+        UC5["Consult Global KPIs"]
+        UC6["Filter by Region / Delegation"]
+        UC7["View Performance Rankings"]
+        UC8["Analyze Trend Charts"]
+    end
 
     USR --> UC1
     USR --> UC2
-    
-    ADM --> UC3
-    ADM --> UC4
+    USR --> UC3
+    USR --> UC4
+
     ADM --> UC5
-    
-    UC4 ..> UC3 : <<extends>>
+    ADM --> UC6
+    ADM --> UC7
+    ADM --> UC8
+
+    UC6 -- extends --> UC5
+    UC7 -- extends --> UC5
 ```
 
 ### 4.4.6 Analysis of the Sprint

@@ -113,7 +113,7 @@ export default function UserHistory() {
                 <div className="timeline-dot"></div>
                 <div className="timeline-content card">
                   <div className="timeline-header">
-                    <span className={`badge badge-${item.actionType.toLowerCase()}`}>
+                    <span className={`badge badge-${(item.actionType || '').toLowerCase()}`}>
                       {item.actionType}
                     </span>
                     <span className="timeline-date">

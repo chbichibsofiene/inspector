@@ -4,7 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import MonthlyCalendar from "../components/MonthlyCalendar";
 import ScreenContainer from "../components/ScreenContainer";
 import { useAuth } from "../context/AuthContext";
-import { getCalendarForRole, API_BASE_URL } from "../services/api";
+import { getCalendarForRole, getDashboardForRole, API_BASE_URL } from "../services/api";
 import { COLORS, ROLES } from "../utils/constants";
 
 export default function RoleCalendarScreen({ navigation, route }) {
@@ -14,6 +14,7 @@ export default function RoleCalendarScreen({ navigation, route }) {
   const [error, setError] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [imgError, setImgError] = useState(false);
+  const [profileImg, setProfileImg] = useState(session?.profileImageUrl);
   const title = screenRole === ROLES.inspector 
 
   useLayoutEffect(() => {
@@ -49,8 +50,14 @@ export default function RoleCalendarScreen({ navigation, route }) {
   const loadActivities = useCallback(async () => {
     try {
       setError("");
-      const response = await getCalendarForRole(screenRole);
-      setActivities(Array.isArray(response) ? response : []);
+      const [activitiesData, dashboardData] = await Promise.all([
+        getCalendarForRole(screenRole),
+        getDashboardForRole(screenRole)
+      ]);
+      setActivities(Array.isArray(activitiesData) ? activitiesData : []);
+      if (dashboardData?.profileImageUrl) {
+        setProfileImg(dashboardData.profileImageUrl);
+      }
     } catch (loadError) {
       setError(loadError.message);
     }
@@ -106,12 +113,12 @@ export default function RoleCalendarScreen({ navigation, route }) {
             </View>
             
             <View style={styles.heroAvatar}>
-              {session?.profileImageUrl && session.profileImageUrl !== "null" && !imgError ? (
+              {profileImg && profileImg !== "null" && !imgError ? (
                 <Image 
                   source={{ 
-                    uri: session.profileImageUrl.startsWith("http") || session.profileImageUrl.startsWith("data:image")
-                      ? session.profileImageUrl 
-                      : `${API_BASE_URL}${session.profileImageUrl.startsWith('/') ? '' : '/'}${session.profileImageUrl}`
+                    uri: profileImg.startsWith("http") || profileImg.startsWith("data:image")
+                      ? profileImg 
+                      : `${API_BASE_URL}${profileImg.startsWith('/') ? '' : '/'}${profileImg}`
                   }}
                   style={styles.heroAvatarImage}
                   onError={() => setImgError(true)}
@@ -168,7 +175,7 @@ const styles = StyleSheet.create({
   },
   heroTextContainer: {
     flex: 1,
-    paddingRight: 16,
+    paddingRight: 24,
   },
   greeting: {
     color: "rgba(255, 255, 255, 0.8)",
@@ -205,24 +212,23 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   heroAvatar: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: "rgba(255,255,255,0.1)",
-    borderWidth: 2,
-    borderColor: "rgba(255,255,255,0.3)",
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: "#ffffff",
     alignItems: "center",
+    justifyContent: "center",
     justifyContent: "center",
   },
   heroAvatarText: {
-    color: "#ffffff",
-    fontSize: 24,
+    color: "#94a3b8",
+    fontSize: 28,
     fontWeight: "800",
   },
   heroAvatarImage: {
     width: "100%",
     height: "100%",
-    borderRadius: 28,
+    borderRadius: 32,
   },
   calendarContainer: {
     backgroundColor: "rgba(255, 255, 255, 0.7)",

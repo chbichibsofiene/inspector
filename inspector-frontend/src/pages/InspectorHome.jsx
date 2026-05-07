@@ -143,10 +143,10 @@ export default function InspectorHome() {
               <h3>{t("activityCalendar")}</h3>
             </div>
 
-            <div className="timetable-container" style={{ 
-              background: 'white', 
-              borderRadius: '24px', 
-              padding: '1.5rem', 
+            <div className="timetable-container" style={{
+              background: 'white',
+              borderRadius: '24px',
+              padding: '1.5rem',
               border: '1.5px solid #f1f5f9',
               display: 'flex',
               flexDirection: 'column',
@@ -160,7 +160,7 @@ export default function InspectorHome() {
                   {t("manageCalendar")}
                 </Link>
               </div>
-              
+
               <div className="timetable-days-grid" style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(7, 1fr)',
@@ -183,8 +183,8 @@ export default function InspectorHome() {
                           <div className="empty-day" style={{ padding: '1rem', color: '#94a3b8', fontSize: '0.8rem', textAlign: 'center' }}>{t("noEvents")}</div>
                         ) : (
                           dayActivities.map(activity => (
-                            <div 
-                              key={activity.id} 
+                            <div
+                              key={activity.id}
                               className={`slot-item inspector-slot ${activity.type ? activity.type.toLowerCase() : 'inspection'}`}
                               onClick={() => setSelectedActivity(activity)}
                               style={{ cursor: 'pointer' }}
@@ -206,16 +206,16 @@ export default function InspectorHome() {
                                 <div className="slot-guests-mini" style={{ display: 'flex', gap: '4px', marginTop: '6px', alignItems: 'center' }}>
                                   <div style={{ display: 'flex' }}>
                                     {activity.guests.slice(0, 3).map((guest, idx) => (
-                                      <div 
-                                        key={guest.id} 
-                                        title={`${guest.firstName} ${guest.lastName}`} 
-                                        style={{ 
-                                          width: '24px', 
-                                          height: '24px', 
-                                          borderRadius: '8px', 
-                                          overflow: 'hidden', 
-                                          background: '#f1f5f9', 
-                                          flexShrink: 0, 
+                                      <div
+                                        key={guest.id}
+                                        title={`${guest.firstName} ${guest.lastName}`}
+                                        style={{
+                                          width: '24px',
+                                          height: '24px',
+                                          borderRadius: '8px',
+                                          overflow: 'hidden',
+                                          background: '#f1f5f9',
+                                          flexShrink: 0,
                                           border: '2px solid white',
                                           marginLeft: idx > 0 ? '-8px' : '0',
                                           zIndex: 3 - idx,
@@ -232,17 +232,17 @@ export default function InspectorHome() {
                                       </div>
                                     ))}
                                     {activity.guests.length > 3 && (
-                                      <div style={{ 
-                                        width: '24px', 
-                                        height: '24px', 
-                                        borderRadius: '8px', 
-                                        background: '#e2e8f0', 
-                                        display: 'flex', 
-                                        alignItems: 'center', 
-                                        justifyContent: 'center', 
-                                        fontSize: '9px', 
-                                        fontWeight: 'bold', 
-                                        color: '#475569', 
+                                      <div style={{
+                                        width: '24px',
+                                        height: '24px',
+                                        borderRadius: '8px',
+                                        background: '#e2e8f0',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        fontSize: '9px',
+                                        fontWeight: 'bold',
+                                        color: '#475569',
                                         border: '2px solid white',
                                         marginLeft: '-8px',
                                         zIndex: 0
@@ -339,10 +339,10 @@ export default function InspectorHome() {
               </div>
               <button className="close-btn" onClick={() => setSelectedActivity(null)}></button>
             </div>
-            
+
             <div className="modal-body">
               <h2 className="modal-title">{selectedActivity.title}</h2>
-              
+
               <div className="modal-info-grid">
                 <div className="modal-info-item">
                   <Clock size={18} />
@@ -351,7 +351,7 @@ export default function InspectorHome() {
                     <span>{new Date(selectedActivity.startDateTime).toLocaleString()}</span>
                   </div>
                 </div>
-                
+
                 <div className="modal-info-item">
                   <MapPin size={18} />
                   <div>
@@ -375,7 +375,7 @@ export default function InspectorHome() {
                     {selectedActivity.guests.map(guest => (
                       <div key={guest.id} className="guest-card">
                         <div className="guest-avatar-lg">
-                          {guest.profileImageUrl 
+                          {guest.profileImageUrl
                             ? <img src={guest.profileImageUrl} alt={guest.firstName} />
                             : <span className="guest-initials">{(guest.firstName?.[0] || '?')}{(guest.lastName?.[0] || '')}</span>
                           }

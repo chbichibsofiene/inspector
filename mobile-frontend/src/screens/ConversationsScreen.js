@@ -8,6 +8,7 @@ import {
   Image,
   RefreshControl,
   ActivityIndicator,
+  TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { getConversations } from "../services/api";
@@ -17,6 +18,8 @@ import { useAuth } from "../context/AuthContext";
 
 export default function ConversationsScreen() {
   const [conversations, setConversations] = useState([]);
+  const [filteredConversations, setFilteredConversations] = useState([]);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
@@ -29,6 +32,7 @@ export default function ConversationsScreen() {
     try {
       const data = await getConversations();
       setConversations(data);
+      setFilteredConversations(data);
     } catch (error) {
       console.error("Error fetching conversations:", error);
     } finally {
@@ -36,6 +40,19 @@ export default function ConversationsScreen() {
       setRefreshing(false);
     }
   }, []);
+
+  useEffect(() => {
+    if (search.trim() === "") {
+      setFilteredConversations(conversations);
+    } else {
+      const q = search.toLowerCase();
+      const filtered = conversations.filter((c) =>
+        (c.otherUserName || "").toLowerCase().includes(q) ||
+        (c.lastMessage || "").toLowerCase().includes(q)
+      );
+      setFilteredConversations(filtered);
+    }
+  }, [search, conversations]);
 
   useEffect(() => {
     fetchConversations();
@@ -122,8 +139,18 @@ export default function ConversationsScreen() {
         </TouchableOpacity>
       </View>
 
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search conversations..."
+          placeholderTextColor={COLORS.textMuted}
+          value={search}
+          onChangeText={setSearch}
+        />
+      </View>
+
       <FlatList
-        data={conversations}
+        data={filteredConversations}
         keyExtractor={(item) => item.otherUserId.toString()}
         renderItem={renderItem}
         contentContainerStyle={{ paddingBottom: 40 }}
@@ -160,8 +187,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 24,
-    paddingBottom: 12,
+    paddingBottom: 4,
     marginTop: 10,
+  },
+  searchContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+  },
+  searchInput: {
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    height: 50,
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    fontSize: 16,
+    color: COLORS.text,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   listTitle: {
     fontSize: 28,

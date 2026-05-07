@@ -23,7 +23,7 @@ Features included:
 
 ## 1. Install dependencies
 
-From [front_mobile](C:\Users\SPIRIT\Desktop\pfe\inspector4\inspector\front_mobile):
+From the `mobile-frontend` directory:
 
 ```bash
 npm install

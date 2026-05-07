@@ -18,8 +18,8 @@ sequenceDiagram
 
     Note over USER, DB: interaction : AI question generation and publishing
 
-    USER->>FE: 1 : enters topic & subject
-    FE->>IQC: 2 : Post-api-inspector-quizzes-generate
+    USER->>FE: 1 : type(subject,topic)
+    FE->>IQC: 2 : generateAIQuestions(generateAIQuestionsRequest)
     IQC->>QS: 3 : generateAIQuestions(topic, subject)
     QS->>GS: 4 : generateQuizContent(topic, subject)
     GS-->>QS: 5 : AI-Generated JSON (Questions)
@@ -27,7 +27,7 @@ sequenceDiagram
     IQC-->>FE: 7 : display generated questions
     
     USER->>FE: 8 : review and click "Publish"
-    FE->>IQC: 9 : Post-api-inspector-quizzes
+    FE->>IQC: 9 : saveQuiz(saveQuizRequest)
     IQC->>QS: 10 : saveQuiz(userId, title, questions, ...)
     QS->>DB: 11 : Save(Quiz & QuizQuestions)
     
@@ -55,7 +55,7 @@ sequenceDiagram
     participant DB as Data Base
 
     USER->>FE: 1 : selects quiz & answers questions
-    FE->>TQC: 2 : Post-api-teacher-quizzes-{id}-submit
+    FE->>TQC: 2 : submitQuiz(quizId, answers)
     TQC->>QS: 3 : submitQuiz(teacherId, quizId, answers)
     QS->>DB: 4 : findById(quizId)
     

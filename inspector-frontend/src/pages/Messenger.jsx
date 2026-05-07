@@ -1,14 +1,17 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import messagesApi from "../api/messages";
 import { Link } from "react-router-dom";
 import { MessageCircle, Search, Paperclip, Send, ThumbsUp, Users, ChevronLeft, Image as ImageIcon, FileText, Info, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+import { getToken } from "../auth/session";
 
 export default function Messenger() {
   const { t } = useTranslation();
   const [conversations, setConversations] = useState([]);
   const [contacts, setContacts] = useState([]);
-  const [activeTab, setActiveTab] = useState("chats"); // "chats" or "contacts"
+  const [activeTab, setActiveTab] = useState("chats");
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -16,22 +19,81 @@ export default function Messenger() {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [inspectedImage, setInspectedImage] = useState(null);
+  const [wsConnected, setWsConnected] = useState(false);
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
+  const stompClientRef = useRef(null);
+  const subscriptionRef = useRef(null);
+  const selectedConvRef = useRef(null);
 
+  // Keep ref in sync with state so the WS callback always has the latest value
+  useEffect(() => {
+    selectedConvRef.current = selectedConversation;
+  }, [selectedConversation]);
+
+  // ---------- WebSocket Connection ----------
   useEffect(() => {
     loadConversations();
     loadContacts();
-    
-    const interval = setInterval(() => {
-        if (selectedConversation && !selectedConversation.temp) {
-            loadMessages(selectedConversation.id);
-        }
-        loadConversations();
-    }, 10000);
-    
-    return () => clearInterval(interval);
-  }, [selectedConversation]);
+
+    const token = getToken();
+    const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8081";
+    // If API_BASE has a path like /api, remove it to get the server root for /ws
+    const WS_URL = API_BASE.replace(/\/api$/, "") + "/ws";
+
+    const client = new Client({
+      webSocketFactory: () => new SockJS(WS_URL),
+      connectHeaders: { Authorization: `Bearer ${token}` },
+      reconnectDelay: 5000,
+      onConnect: () => {
+        setWsConnected(true);
+      },
+      onDisconnect: () => setWsConnected(false),
+      onStompError: (frame) => console.error("STOMP error", frame),
+    });
+
+    client.activate();
+    stompClientRef.current = client;
+
+    return () => {
+      if (subscriptionRef.current) subscriptionRef.current.unsubscribe();
+      client.deactivate();
+    };
+  }, []);
+
+  // ---------- Subscribe to conversation topic when selection changes ----------
+  useEffect(() => {
+    // Unsubscribe from old conversation
+    if (subscriptionRef.current) {
+      subscriptionRef.current.unsubscribe();
+      subscriptionRef.current = null;
+    }
+
+    if (!selectedConversation || selectedConversation.temp) return;
+
+    const subscribeWhenReady = () => {
+      if (stompClientRef.current?.connected) {
+        subscriptionRef.current = stompClientRef.current.subscribe(
+          `/topic/conversation.${selectedConversation.id}`,
+          (frame) => {
+            const msg = JSON.parse(frame.body);
+            setMessages((prev) => {
+              // Avoid duplicates (the sender already appended optimistically)
+              if (prev.some((m) => m.id === msg.id)) return prev;
+              return [...prev, msg];
+            });
+            // Refresh conversation list sidebar (unread counts, last message)
+            loadConversations();
+          }
+        );
+      } else {
+        // Client not yet connected — retry after short delay
+        setTimeout(subscribeWhenReady, 500);
+      }
+    };
+
+    subscribeWhenReady();
+  }, [selectedConversation?.id]);
 
   useEffect(() => {
     scrollToBottom();
@@ -133,7 +195,7 @@ export default function Messenger() {
   };
 
   const filteredConversations = conversations.filter(c => 
-    c.otherUserName.toLowerCase().includes(searchQuery.toLowerCase())
+    (c.otherUserName || '').toLowerCase().includes((searchQuery || '').toLowerCase())
   );
 
   const getAvatarUrl = (url) => {

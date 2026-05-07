@@ -48,9 +48,9 @@ export default function ContactsScreen() {
       setFilteredContacts(contacts);
     } else {
       const filtered = contacts.filter((c) =>
-        c.name.toLowerCase().includes(search.toLowerCase()) ||
-        c.email.toLowerCase().includes(search.toLowerCase()) ||
-        c.role.toLowerCase().includes(search.toLowerCase())
+        (c.name || '').toLowerCase().includes(search.toLowerCase()) ||
+        (c.email || '').toLowerCase().includes(search.toLowerCase()) ||
+        (c.role || '').toLowerCase().includes(search.toLowerCase())
       );
       setFilteredContacts(filtered);
     }
@@ -103,10 +103,15 @@ export default function ContactsScreen() {
 
   return (
     <ScreenContainer style={styles.container}>
+      <View style={styles.listHeader}>
+        <Text style={styles.listTitle}>Contacts</Text>
+      </View>
+
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search contacts..."
+          placeholderTextColor={COLORS.textMuted}
           value={search}
           onChangeText={setSearch}
         />
@@ -138,20 +143,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  listHeader: {
+    padding: 24,
+    paddingBottom: 4,
+    marginTop: 10,
+  },
+  listTitle: {
+    fontSize: 28,
+    fontWeight: "900",
+    color: COLORS.text,
+    letterSpacing: -1,
+  },
   searchContainer: {
-    padding: 16,
-    paddingTop: 20,
-    backgroundColor: "transparent",
+    paddingHorizontal: 20,
+    paddingVertical: 12,
   },
   searchInput: {
-    backgroundColor: "#fff",
-    borderRadius: 8, // Exact web match
-    paddingHorizontal: 16,
-    paddingVertical: 14,
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    height: 50,
+    borderRadius: 25,
+    paddingHorizontal: 20,
     fontSize: 16,
-    color: "#111827",
+    color: COLORS.text,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: COLORS.border,
   },
   contactItem: {
     flexDirection: "row",

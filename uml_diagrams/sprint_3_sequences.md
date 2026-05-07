@@ -55,6 +55,7 @@ Details the intelligent evaluation process when a teacher submits an assessment,
 
 ```mermaid
 sequenceDiagram
+title Quiz assessment Flow
     actor TCH as Teacher
     participant FE as React Frontend
     participant QC as QuizController
@@ -65,7 +66,7 @@ sequenceDiagram
     actor INS as Inspector
 
     TCH->>FE: Submit Quiz Answers
-    FE->>QC: POST /api/quizzes/{id}/submit
+    FE->>QC: submitQuiz(submitQuizRequest)
     QC->>QS: submitQuiz(teacherId, quizId, answers)
     
     QS->>QS: Calculate Numeric Score (MCQ)
@@ -83,7 +84,7 @@ sequenceDiagram
     
     Note over INS,DB: Inspector later views evaluation
     INS->>FE: Open Quiz Results
-    FE->>QC: GET /api/quizzes/submissions/{id}
+    FE->>QC: getSubmissionDetails(id)
     QC->>QS: getSubmissionDetails(id)
     QS->>DB: Fetch Submission & AI Feedback
     QS-->>FE: Return Detailed Evaluation
@@ -95,6 +96,7 @@ Details how the system records a teacher's completion of specific course materia
 
 ```mermaid
 sequenceDiagram
+title Lesson Progress Tracking Sequence
     actor TCH as Teacher
     participant FE as React Frontend
     participant LC as CourseController
@@ -102,10 +104,11 @@ sequenceDiagram
     participant DB as MySQL Database
 
     TCH->>FE: Click "Mark as Completed"
-    FE->>LC: POST /api/courses/lessons/{id}/progress
+    FE->>LC: updateLessonProgress(updateLessonProgressRequest)
     LC->>LS: updateLessonProgress(teacherId, lessonId, completed=true)
     
     LS->>DB: findProgress(teacherId, lessonId)
+    
     alt Progress exists
         LS->>DB: update(LessonProgress, completedAt=NOW)
     else First time

@@ -56,7 +56,7 @@ sequenceDiagram
     participant DB as Data Base
 
     USER->>FE: 1 : modify activity fields
-    FE->>AC: 2 : Put-api-inspector-activities-{id}
+    FE->>AC: 2 : updateActivity(id, request)
     AC->>AS: 3 : updateActivity(inspectorId, activityId, request)
     AS->>DB: 4 : findById(activityId)
     
@@ -97,7 +97,7 @@ sequenceDiagram
     participant DB as Data Base
 
     USER->>FE: 1 : click delete activity
-    FE->>AC: 2 : Delete-api-inspector-activities-{id}
+    FE->>AC: 2 : deleteActivity(id)
     AC->>AS: 3 : deleteActivity(inspectorId, activityId)
     AS->>DB: 4 : findById(activityId) & verify owner
     
