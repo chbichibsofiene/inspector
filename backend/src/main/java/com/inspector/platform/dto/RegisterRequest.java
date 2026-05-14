@@ -4,8 +4,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class RegisterRequest {
 
     @NotBlank(message = "Email is required")

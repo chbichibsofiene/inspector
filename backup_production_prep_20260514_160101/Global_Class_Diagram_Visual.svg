@@ -1,0 +1,359 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1820" viewBox="0 0 2200 1820">
+
+<style>
+  .bg{fill:#f8fafc}.section{fill:#ffffff;stroke:#cbd5e1;stroke-width:2;rx:16}.classbox{fill:#ffffff;stroke:#1f2937;stroke-width:2;rx:8}.enum{fill:#fefce8;stroke:#ca8a04;stroke-width:2;rx:8}.service{fill:#eff6ff;stroke:#2563eb;stroke-width:2;rx:8}.title{font:700 26px Arial,sans-serif;fill:#111827}.sectionTitle{font:700 18px Arial,sans-serif;fill:#334155}.name{font:700 15px Arial,sans-serif;fill:#111827}.attr{font:13px Consolas,monospace;fill:#1f2937}.small{font:12px Arial,sans-serif;fill:#475569}.assoc{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}.dep{stroke:#64748b;stroke-width:2;stroke-dasharray:7 5;fill:none;marker-end:url(#arrow)}.label{font:12px Arial,sans-serif;fill:#0f172a}.mult{font:12px Arial,sans-serif;fill:#475569}.divider{stroke:#94a3b8;stroke-width:1}
+</style>
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#334155"/></marker></defs>
+
+<rect class="bg" width="2200" height="1820"/>
+<text x="1100" y="42" text-anchor="middle" class="title">Global Class Diagram - Inspector Platform Backend</text>
+<rect x="35" y="55" width="1510" height="250" class="section"/><text x="55" y="83" class="sectionTitle">Identity and profiles</text>
+<rect x="35" y="330" width="1400" height="145" class="section"/><text x="55" y="358" class="sectionTitle">Organization</text>
+<rect x="35" y="585" width="1815" height="250" class="section"/><text x="55" y="613" class="sectionTitle">Supervision and scheduling</text>
+<rect x="35" y="910" width="1685" height="220" class="section"/><text x="55" y="938" class="sectionTitle">Training courses</text>
+<rect x="35" y="1210" width="1110" height="230" class="section"/><text x="55" y="1238" class="sectionTitle">AI quizzes</text>
+<rect x="35" y="1510" width="1400" height="230" class="section"/><text x="55" y="1538" class="sectionTitle">Communication and governance</text>
+<rect x="1625" y="55" width="540" height="420" class="section"/><text x="1645" y="83" class="sectionTitle">Common enumerations</text>
+<rect x="60" y="90" width="230" height="160" class="classbox"/>
+<text x="175.0" y="114" text-anchor="middle" class="name">Personnel</text>
+<line x1="60" y1="124" x2="290" y2="124" class="divider"/>
+<text x="72" y="144" class="attr">+cin: String</text>
+<text x="72" y="162" class="attr">+firstName: String</text>
+<text x="72" y="180" class="attr">+lastName: String</text>
+<text x="72" y="198" class="attr">+serialCode: String</text>
+<text x="72" y="216" class="attr">+role: Role</text>
+<rect x="420" y="70" width="260" height="200" class="classbox"/>
+<text x="550.0" y="94" text-anchor="middle" class="name">User</text>
+<line x1="420" y1="104" x2="680" y2="104" class="divider"/>
+<text x="432" y="124" class="attr">+email: String</text>
+<text x="432" y="142" class="attr">+serialCode: String</text>
+<text x="432" y="160" class="attr">+role: Role</text>
+<text x="432" y="178" class="attr">+enabled: boolean</text>
+<text x="432" y="196" class="attr">+profileCompleted: boolean</text>
+<text x="432" y="214" class="attr">+profileImageUrl: String</text>
+<text x="432" y="232" class="attr">+expoPushToken: String</text>
+<rect x="820" y="60" width="270" height="210" class="classbox"/>
+<text x="955.0" y="84" text-anchor="middle" class="name">InspectorProfile</text>
+<line x1="820" y1="94" x2="1090" y2="94" class="divider"/>
+<text x="832" y="114" class="attr">+firstName: String</text>
+<text x="832" y="132" class="attr">+lastName: String</text>
+<text x="832" y="150" class="attr">+rank: InspectorRank</text>
+<text x="832" y="168" class="attr">+subject: Subject</text>
+<text x="832" y="186" class="attr">+schoolLevel: SchoolLevel</text>
+<text x="832" y="204" class="attr">+phone: String</text>
+<text x="832" y="222" class="attr">+language: String</text>
+<rect x="1220" y="70" width="260" height="190" class="classbox"/>
+<text x="1350.0" y="94" text-anchor="middle" class="name">TeacherProfile</text>
+<line x1="1220" y1="104" x2="1480" y2="104" class="divider"/>
+<text x="1232" y="124" class="attr">+firstName: String</text>
+<text x="1232" y="142" class="attr">+lastName: String</text>
+<text x="1232" y="160" class="attr">+subject: Subject</text>
+<text x="1232" y="178" class="attr">+phone: String</text>
+<text x="1232" y="196" class="attr">+language: String</text>
+<rect x="60" y="360" width="180" height="90" class="classbox"/>
+<text x="150.0" y="384" text-anchor="middle" class="name">Region</text>
+<line x1="60" y1="394" x2="240" y2="394" class="divider"/>
+<text x="72" y="414" class="attr">+id: Long</text>
+<text x="72" y="432" class="attr">+name: String</text>
+<rect x="330" y="360" width="190" height="90" class="classbox"/>
+<text x="425.0" y="384" text-anchor="middle" class="name">Delegation</text>
+<line x1="330" y1="394" x2="520" y2="394" class="divider"/>
+<text x="342" y="414" class="attr">+id: Long</text>
+<text x="342" y="432" class="attr">+name: String</text>
+<rect x="610" y="360" width="190" height="90" class="classbox"/>
+<text x="705.0" y="384" text-anchor="middle" class="name">Dependency</text>
+<line x1="610" y1="394" x2="800" y2="394" class="divider"/>
+<text x="622" y="414" class="attr">+id: Long</text>
+<text x="622" y="432" class="attr">+name: String</text>
+<rect x="890" y="360" width="190" height="90" class="classbox"/>
+<text x="985.0" y="384" text-anchor="middle" class="name">Department</text>
+<line x1="890" y1="394" x2="1080" y2="394" class="divider"/>
+<text x="902" y="414" class="attr">+id: Long</text>
+<text x="902" y="432" class="attr">+name: String</text>
+<rect x="1170" y="350" width="220" height="110" class="classbox"/>
+<text x="1280.0" y="374" text-anchor="middle" class="name">Etablissement</text>
+<line x1="1170" y1="384" x2="1390" y2="384" class="divider"/>
+<text x="1182" y="404" class="attr">+id: Long</text>
+<text x="1182" y="422" class="attr">+name: String</text>
+<text x="1182" y="440" class="attr">+schoolLevel: SchoolLevel</text>
+<rect x="80" y="620" width="270" height="190" class="classbox"/>
+<text x="215.0" y="644" text-anchor="middle" class="name">Activity</text>
+<line x1="80" y1="654" x2="350" y2="654" class="divider"/>
+<text x="92" y="674" class="attr">+title: String</text>
+<text x="92" y="692" class="attr">+startDateTime: LocalDateTime</text>
+<text x="92" y="710" class="attr">+endDateTime: LocalDateTime</text>
+<text x="92" y="728" class="attr">+type: ActivityType</text>
+<text x="92" y="746" class="attr">+isOnline: boolean</text>
+<text x="92" y="764" class="attr">+meetingUrl: String</text>
+<rect x="460" y="610" width="280" height="200" class="classbox"/>
+<text x="600.0" y="634" text-anchor="middle" class="name">ActivityReport</text>
+<line x1="460" y1="644" x2="740" y2="644" class="divider"/>
+<text x="472" y="664" class="attr">+title: String</text>
+<text x="472" y="682" class="attr">+observations: String</text>
+<text x="472" y="700" class="attr">+recommendations: String</text>
+<text x="472" y="718" class="attr">+score: Integer</text>
+<text x="472" y="736" class="attr">+status: ReportStatus</text>
+<text x="472" y="754" class="attr">+importedPdfFileName: String</text>
+<rect x="860" y="630" width="220" height="140" class="classbox"/>
+<text x="970.0" y="654" text-anchor="middle" class="name">Inspection</text>
+<line x1="860" y1="664" x2="1080" y2="664" class="divider"/>
+<text x="872" y="684" class="attr">+id: Long</text>
+<text x="872" y="702" class="attr">+score: Integer</text>
+<text x="872" y="720" class="attr">+createdAt: LocalDateTime</text>
+<rect x="1190" y="620" width="260" height="170" class="classbox"/>
+<text x="1320.0" y="644" text-anchor="middle" class="name">TimetableSlot</text>
+<line x1="1190" y1="654" x2="1450" y2="654" class="divider"/>
+<text x="1202" y="674" class="attr">+dayOfWeek: DayOfWeek</text>
+<text x="1202" y="692" class="attr">+startTime: LocalTime</text>
+<text x="1202" y="710" class="attr">+endTime: LocalTime</text>
+<text x="1202" y="728" class="attr">+subject: Subject</text>
+<text x="1202" y="746" class="attr">+classroom: String</text>
+<rect x="1570" y="630" width="240" height="160" class="classbox"/>
+<text x="1690.0" y="654" text-anchor="middle" class="name">Notification</text>
+<line x1="1570" y1="664" x2="1810" y2="664" class="divider"/>
+<text x="1582" y="684" class="attr">+title: String</text>
+<text x="1582" y="702" class="attr">+message: String</text>
+<text x="1582" y="720" class="attr">+type: String</text>
+<text x="1582" y="738" class="attr">+targetUrl: String</text>
+<text x="1582" y="756" class="attr">+isRead: boolean</text>
+<rect x="80" y="950" width="260" height="170" class="classbox"/>
+<text x="210.0" y="974" text-anchor="middle" class="name">Course</text>
+<line x1="80" y1="984" x2="340" y2="984" class="divider"/>
+<text x="92" y="1004" class="attr">+title: String</text>
+<text x="92" y="1022" class="attr">+description: String</text>
+<text x="92" y="1040" class="attr">+subject: Subject</text>
+<text x="92" y="1058" class="attr">+status: CourseStatus</text>
+<text x="92" y="1076" class="attr">+createdAt: LocalDateTime</text>
+<rect x="440" y="950" width="230" height="130" class="classbox"/>
+<text x="555.0" y="974" text-anchor="middle" class="name">CourseModule</text>
+<line x1="440" y1="984" x2="670" y2="984" class="divider"/>
+<text x="452" y="1004" class="attr">+title: String</text>
+<text x="452" y="1022" class="attr">+description: String</text>
+<text x="452" y="1040" class="attr">+orderIndex: Integer</text>
+<rect x="760" y="940" width="250" height="170" class="classbox"/>
+<text x="885.0" y="964" text-anchor="middle" class="name">CourseLesson</text>
+<line x1="760" y1="974" x2="1010" y2="974" class="divider"/>
+<text x="772" y="994" class="attr">+title: String</text>
+<text x="772" y="1012" class="attr">+type: LessonType</text>
+<text x="772" y="1030" class="attr">+contentUrl: String</text>
+<text x="772" y="1048" class="attr">+durationMinutes: Integer</text>
+<text x="772" y="1066" class="attr">+orderIndex: Integer</text>
+<rect x="1120" y="950" width="230" height="120" class="classbox"/>
+<text x="1235.0" y="974" text-anchor="middle" class="name">CourseAssignment</text>
+<line x1="1120" y1="984" x2="1350" y2="984" class="divider"/>
+<text x="1132" y="1004" class="attr">+id: Long</text>
+<text x="1132" y="1022" class="attr">+assignedAt: LocalDateTime</text>
+<rect x="1450" y="940" width="230" height="145" class="classbox"/>
+<text x="1565.0" y="964" text-anchor="middle" class="name">LessonProgress</text>
+<line x1="1450" y1="974" x2="1680" y2="974" class="divider"/>
+<text x="1462" y="994" class="attr">+completed: boolean</text>
+<text x="1462" y="1012" class="attr">+completedAt: LocalDateTime</text>
+<text x="1462" y="1030" class="attr">+score: Integer</text>
+<rect x="80" y="1260" width="250" height="150" class="classbox"/>
+<text x="205.0" y="1284" text-anchor="middle" class="name">Quiz</text>
+<line x1="80" y1="1294" x2="330" y2="1294" class="divider"/>
+<text x="92" y="1314" class="attr">+title: String</text>
+<text x="92" y="1332" class="attr">+subject: Subject</text>
+<text x="92" y="1350" class="attr">+topic: String</text>
+<text x="92" y="1368" class="attr">+createdAt: LocalDateTime</text>
+<rect x="450" y="1250" width="260" height="160" class="classbox"/>
+<text x="580.0" y="1274" text-anchor="middle" class="name">QuizQuestion</text>
+<line x1="450" y1="1284" x2="710" y2="1284" class="divider"/>
+<text x="462" y="1304" class="attr">+questionText: String</text>
+<text x="462" y="1322" class="attr">+type: QuestionType</text>
+<text x="462" y="1340" class="attr">+options: String</text>
+<text x="462" y="1358" class="attr">+correctAnswer: String</text>
+<rect x="830" y="1240" width="280" height="180" class="classbox"/>
+<text x="970.0" y="1264" text-anchor="middle" class="name">QuizSubmission</text>
+<line x1="830" y1="1274" x2="1110" y2="1274" class="divider"/>
+<text x="842" y="1294" class="attr">+answers: String</text>
+<text x="842" y="1312" class="attr">+score: Integer</text>
+<text x="842" y="1330" class="attr">+evaluationText: String</text>
+<text x="842" y="1348" class="attr">+trainingSuggestion: String</text>
+<text x="842" y="1366" class="attr">+submittedAt: LocalDateTime</text>
+<rect x="80" y="1560" width="240" height="105" class="classbox"/>
+<text x="200.0" y="1584" text-anchor="middle" class="name">Conversation</text>
+<line x1="80" y1="1594" x2="320" y2="1594" class="divider"/>
+<text x="92" y="1614" class="attr">+id: Long</text>
+<text x="92" y="1632" class="attr">+lastMessageTime: LocalDateTime</text>
+<rect x="440" y="1540" width="260" height="180" class="classbox"/>
+<text x="570.0" y="1564" text-anchor="middle" class="name">Message</text>
+<line x1="440" y1="1574" x2="700" y2="1574" class="divider"/>
+<text x="452" y="1594" class="attr">+content: String</text>
+<text x="452" y="1612" class="attr">+timestamp: LocalDateTime</text>
+<text x="452" y="1630" class="attr">+isRead: boolean</text>
+<text x="452" y="1648" class="attr">+fileUrl: String</text>
+<text x="452" y="1666" class="attr">+fileName: String</text>
+<text x="452" y="1684" class="attr">+fileType: String</text>
+<rect x="840" y="1550" width="260" height="170" class="classbox"/>
+<text x="970.0" y="1574" text-anchor="middle" class="name">ActionLog</text>
+<line x1="840" y1="1584" x2="1100" y2="1584" class="divider"/>
+<text x="852" y="1604" class="attr">+actionType: ActionType</text>
+<text x="852" y="1622" class="attr">+entityType: String</text>
+<text x="852" y="1640" class="attr">+entityId: String</text>
+<text x="852" y="1658" class="attr">+description: String</text>
+<text x="852" y="1676" class="attr">+ipAddress: String</text>
+<text x="852" y="1694" class="attr">+createdAt: LocalDateTime</text>
+<rect x="1660" y="70" width="170" height="105" class="enum"/>
+<text x="1745.0" y="94" text-anchor="middle" class="name">Role</text>
+<line x1="1660" y1="104" x2="1830" y2="104" class="divider"/>
+<text x="1672" y="124" class="attr">ADMIN</text>
+<text x="1672" y="142" class="attr">INSPECTOR</text>
+<text x="1672" y="160" class="attr">TEACHER</text>
+<rect x="1660" y="220" width="230" height="225" class="enum"/>
+<text x="1775.0" y="244" text-anchor="middle" class="name">Subject</text>
+<line x1="1660" y1="254" x2="1890" y2="254" class="divider"/>
+<text x="1672" y="274" class="attr">ARABIC</text>
+<text x="1672" y="292" class="attr">FRENCH</text>
+<text x="1672" y="310" class="attr">ENGLISH</text>
+<text x="1672" y="328" class="attr">MATH</text>
+<text x="1672" y="346" class="attr">PHYSICS</text>
+<text x="1672" y="364" class="attr">CHEMISTRY</text>
+<text x="1672" y="382" class="attr">BIOLOGY</text>
+<text x="1672" y="400" class="attr">COMPUTER_SCIENCE</text>
+<rect x="1900" y="610" width="240" height="205" class="enum"/>
+<text x="2020.0" y="634" text-anchor="middle" class="name">ActivityType</text>
+<line x1="1900" y1="644" x2="2140" y2="644" class="divider"/>
+<text x="1912" y="664" class="attr">INVITATION_REUNION</text>
+<text x="1912" y="682" class="attr">VISITE_PEDAGOGIQUE</text>
+<text x="1912" y="700" class="attr">INSPECTION</text>
+<text x="1912" y="718" class="attr">FORMATION</text>
+<text x="1912" y="736" class="attr">LECON_TEMOIN</text>
+<text x="1912" y="754" class="attr">REUNION_TRAVAIL</text>
+<text x="1912" y="772" class="attr">TRAINING</text>
+<rect x="1790" y="930" width="220" height="180" class="enum"/>
+<text x="1900.0" y="954" text-anchor="middle" class="name">StatusEnums</text>
+<line x1="1790" y1="964" x2="2010" y2="964" class="divider"/>
+<text x="1802" y="984" class="attr">ReportStatus.DRAFT</text>
+<text x="1802" y="1002" class="attr">ReportStatus.FINAL</text>
+<text x="1802" y="1020" class="attr">CourseStatus.DRAFT</text>
+<text x="1802" y="1038" class="attr">CourseStatus.PUBLISHED</text>
+<text x="1802" y="1056" class="attr">LessonType.VIDEO</text>
+<text x="1802" y="1074" class="attr">LessonType.PDF</text>
+<text x="1802" y="1092" class="attr">LessonType.QUIZ</text>
+<rect x="1210" y="1550" width="180" height="140" class="enum"/>
+<text x="1300.0" y="1574" text-anchor="middle" class="name">ActionType</text>
+<line x1="1210" y1="1584" x2="1390" y2="1584" class="divider"/>
+<text x="1222" y="1604" class="attr">LOGIN</text>
+<text x="1222" y="1622" class="attr">LOGOUT</text>
+<text x="1222" y="1640" class="attr">CREATE</text>
+<text x="1222" y="1658" class="attr">UPDATE</text>
+<text x="1222" y="1676" class="attr">DELETE</text>
+<text x="1222" y="1694" class="attr">EXPORT</text>
+<path class="assoc" d="M420,170.0 L290,170.0"/>
+<text x="355.0" y="164.0" text-anchor="middle" class="label">validated by serialCode</text>
+<text x="426" y="164.0" class="mult">0..1</text>
+<text x="262" y="164.0" class="mult">1</text>
+<path class="assoc" d="M680,170.0 L820,165.0"/>
+<text x="750.0" y="161.5" text-anchor="middle" class="label">has</text>
+<text x="686" y="164.0" class="mult">1</text>
+<text x="792" y="159.0" class="mult">0..1</text>
+<path class="assoc" d="M680,170.0 L1220,165.0"/>
+<text x="950.0" y="161.5" text-anchor="middle" class="label">has</text>
+<text x="686" y="164.0" class="mult">1</text>
+<text x="1192" y="159.0" class="mult">0..1</text>
+<path class="assoc" d="M240,405.0 L330,405.0"/>
+<text x="285.0" y="399.0" text-anchor="middle" class="label">contains</text>
+<text x="246" y="399.0" class="mult">1</text>
+<text x="302" y="399.0" class="mult">0..*</text>
+<path class="assoc" d="M520,405.0 L610,405.0"/>
+<text x="565.0" y="399.0" text-anchor="middle" class="label">contains</text>
+<text x="526" y="399.0" class="mult">1</text>
+<text x="582" y="399.0" class="mult">0..*</text>
+<path class="assoc" d="M520,405.0 L890,405.0"/>
+<text x="705.0" y="399.0" text-anchor="middle" class="label">contains</text>
+<text x="526" y="399.0" class="mult">1</text>
+<text x="862" y="399.0" class="mult">0..*</text>
+<path class="assoc" d="M800,405.0 L1170,405.0"/>
+<text x="985.0" y="399.0" text-anchor="middle" class="label">contains</text>
+<text x="806" y="399.0" class="mult">1</text>
+<text x="1142" y="399.0" class="mult">0..*</text>
+<path class="assoc" d="M550.0,270 L215.0,620"/>
+<text x="382.5" y="439.0" text-anchor="middle" class="label">organizes</text>
+<text x="556.0" y="264" class="mult">1</text>
+<text x="187.0" y="614" class="mult">0..*</text>
+<path class="assoc" d="M350,715.0 L460,710.0"/>
+<text x="405.0" y="706.5" text-anchor="middle" class="label">refers to</text>
+<text x="356" y="709.0" class="mult">1</text>
+<text x="432" y="704.0" class="mult">0..*</text>
+<path class="assoc" d="M740,710.0 L1350.0,260"/>
+<text x="1045.0" y="479.0" text-anchor="middle" class="label">evaluates</text>
+<text x="746" y="704.0" class="mult">0..*</text>
+<text x="1322.0" y="254" class="mult">0..1</text>
+<path class="assoc" d="M350,715.0 L1350.0,260"/>
+<text x="850.0" y="481.5" text-anchor="middle" class="label">guests</text>
+<text x="356" y="709.0" class="mult">0..*</text>
+<text x="1322.0" y="254" class="mult">0..*</text>
+<path class="assoc" d="M1350.0,260 L1320.0,620"/>
+<text x="1335.0" y="434.0" text-anchor="middle" class="label">owns</text>
+<text x="1356.0" y="254" class="mult">1</text>
+<text x="1292.0" y="614" class="mult">0..*</text>
+<path class="assoc" d="M550.0,270 L1690.0,630"/>
+<text x="1120.0" y="444.0" text-anchor="middle" class="label">receives</text>
+<text x="556.0" y="264" class="mult">1</text>
+<text x="1662.0" y="624" class="mult">0..*</text>
+<path class="assoc" d="M955.0,270 L210.0,950"/>
+<text x="582.5" y="604.0" text-anchor="middle" class="label">creates</text>
+<text x="961.0" y="264" class="mult">1</text>
+<text x="182.0" y="944" class="mult">0..*</text>
+<path class="assoc" d="M340,1035.0 L440,1015.0"/>
+<text x="390.0" y="1019.0" text-anchor="middle" class="label">contains</text>
+<text x="346" y="1029.0" class="mult">1</text>
+<text x="412" y="1009.0" class="mult">0..*</text>
+<path class="assoc" d="M670,1015.0 L760,1025.0"/>
+<text x="715.0" y="1014.0" text-anchor="middle" class="label">contains</text>
+<text x="676" y="1009.0" class="mult">1</text>
+<text x="732" y="1019.0" class="mult">0..*</text>
+<path class="assoc" d="M340,1035.0 L1120,1010.0"/>
+<text x="730.0" y="1016.5" text-anchor="middle" class="label">assignments</text>
+<text x="346" y="1029.0" class="mult">1</text>
+<text x="1092" y="1004.0" class="mult">0..*</text>
+<path class="assoc" d="M1235.0,950 L1350.0,260"/>
+<text x="1292.5" y="599.0" text-anchor="middle" class="label">assigned to</text>
+<text x="1241.0" y="944" class="mult">0..*</text>
+<text x="1322.0" y="254" class="mult">1</text>
+<path class="assoc" d="M1010,1025.0 L1450,1012.5"/>
+<text x="1230.0" y="1012.75" text-anchor="middle" class="label">tracked by</text>
+<text x="1016" y="1019.0" class="mult">1</text>
+<text x="1422" y="1006.5" class="mult">0..*</text>
+<path class="assoc" d="M1565.0,940 L1350.0,260"/>
+<text x="1457.5" y="594.0" text-anchor="middle" class="label">teacher</text>
+<text x="1571.0" y="934" class="mult">0..*</text>
+<text x="1322.0" y="254" class="mult">1</text>
+<path class="assoc" d="M955.0,270 L205.0,1260"/>
+<text x="580.0" y="759.0" text-anchor="middle" class="label">creates</text>
+<text x="961.0" y="264" class="mult">1</text>
+<text x="177.0" y="1254" class="mult">0..*</text>
+<path class="assoc" d="M330,1335.0 L450,1330.0"/>
+<text x="390.0" y="1326.5" text-anchor="middle" class="label">questions</text>
+<text x="336" y="1329.0" class="mult">1</text>
+<text x="422" y="1324.0" class="mult">0..*</text>
+<path class="assoc" d="M330,1335.0 L830,1330.0"/>
+<text x="580.0" y="1326.5" text-anchor="middle" class="label">submissions</text>
+<text x="336" y="1329.0" class="mult">1</text>
+<text x="802" y="1324.0" class="mult">0..*</text>
+<path class="assoc" d="M970.0,1240 L1350.0,260"/>
+<text x="1160.0" y="744.0" text-anchor="middle" class="label">submitted by</text>
+<text x="976.0" y="1234" class="mult">0..*</text>
+<text x="1322.0" y="254" class="mult">1</text>
+<path class="assoc" d="M205.0,1260 L1350.0,260"/>
+<text x="777.5" y="754.0" text-anchor="middle" class="label">assigned teachers</text>
+<text x="211.0" y="1254" class="mult">0..*</text>
+<text x="1322.0" y="254" class="mult">0..*</text>
+<path class="assoc" d="M320,1612.5 L440,1630.0"/>
+<text x="380.0" y="1615.25" text-anchor="middle" class="label">contains</text>
+<text x="326" y="1606.5" class="mult">1</text>
+<text x="412" y="1624.0" class="mult">0..*</text>
+<path class="assoc" d="M200.0,1560 L550.0,270"/>
+<text x="375.0" y="909.0" text-anchor="middle" class="label">user1/user2</text>
+<text x="206.0" y="1554" class="mult">0..*</text>
+<text x="522.0" y="264" class="mult">1</text>
+<path class="assoc" d="M570.0,1540 L550.0,270"/>
+<text x="560.0" y="899.0" text-anchor="middle" class="label">sender</text>
+<text x="576.0" y="1534" class="mult">0..*</text>
+<text x="522.0" y="264" class="mult">1</text>
+<path class="assoc" d="M970.0,1550 L550.0,270"/>
+<text x="760.0" y="904.0" text-anchor="middle" class="label">audits</text>
+<text x="976.0" y="1544" class="mult">0..*</text>
+<text x="522.0" y="264" class="mult">0..1</text>
+</svg>

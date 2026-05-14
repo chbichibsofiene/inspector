@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
-import { getAdminKpis, getAdminAlerts, getAdminUsers, getActionLogs } from "../api/admin";
+import { getAdminKpis, getAdminAlerts, getAdminUsers, getActionLogs, getPlatformStatus, dismissAlert } from "../api/admin";
+import SystemHealthCard from "../components/SystemHealthCard";
 import { Link } from "react-router-dom";
 import {
   FileText, BarChart3, AlertTriangle, Users, ClipboardCheck,
-  ShieldCheck, Activity, TrendingUp, Eye, ArrowRight, Circle
+  ShieldCheck, Activity, TrendingUp, Eye, ArrowRight, Circle, X
 } from "lucide-react";
 
 export default function AdminDashboard() {
   const [kpis, setKpis] = useState(null);
   const [alerts, setAlerts] = useState([]);
   const [recentLogs, setRecentLogs] = useState([]);
+  const [platformStatus, setPlatformStatus] = useState(null);
+  const [selectedAlert, setSelectedAlert] = useState(null);
   const [totalUsers, setTotalUsers] = useState(0);
   const [loading, setLoading] = useState(true);
   const now = new Date();
@@ -17,24 +20,54 @@ export default function AdminDashboard() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [kpiRes, alertRes, usersRes, logsRes] = await Promise.all([
+        const [kpiRes, alertRes, usersRes, logsRes, statusRes] = await Promise.all([
           getAdminKpis(),
           getAdminAlerts(),
           getAdminUsers(),
-          getActionLogs({})
+          getActionLogs({}),
+          getPlatformStatus()
         ]);
         setKpis(kpiRes.data.data);
         setAlerts(alertRes.data.data || []);
         setTotalUsers((usersRes.data.data || []).length);
         setRecentLogs((logsRes.data.data || []).slice(0, 6));
+        setPlatformStatus(statusRes.data.data);
       } catch (error) {
         console.error("Error loading dashboard data", error);
       } finally {
         setLoading(false);
       }
     };
+    
     loadData();
+    
+    // Auto-refresh status and alerts every 10 seconds
+    const interval = setInterval(async () => {
+      try {
+        const [statusRes, alertRes] = await Promise.all([
+          getPlatformStatus(),
+          getAdminAlerts()
+        ]);
+        setPlatformStatus(statusRes.data.data);
+        setAlerts(alertRes.data.data || []);
+      } catch (err) {
+        // If backend is down, set status to offline
+        setPlatformStatus(prev => ({ ...prev, backend: 'Offline', database: 'Unknown' }));
+      }
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
+
+  const handleDismiss = async (userId) => {
+    try {
+      await dismissAlert(userId);
+      setAlerts(prev => prev.filter(a => a.userId !== userId));
+      setSelectedAlert(null);
+    } catch (error) {
+      console.error("Error dismissing alert", error);
+    }
+  };
 
   const actionColors = {
     LOGIN: { bg: '#dbeafe', color: '#1d4ed8' },
@@ -148,6 +181,11 @@ export default function AdminDashboard() {
         ))}
       </div>
 
+      {/* ── REAL-TIME SYSTEM MONITORING ── */}
+      <div style={{ marginBottom: '2rem' }}>
+        <SystemHealthCard />
+      </div>
+
       {/* ── MAIN GRID ── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '1.5rem' }}>
         
@@ -248,9 +286,19 @@ export default function AdminDashboard() {
               </span>
             </div>
             {alerts.length > 0 ? alerts.map((alert, i) => (
-              <div key={i} style={{ display: 'flex', gap: '10px', padding: '0.75rem', background: '#fff5f5', borderRadius: '10px', marginBottom: '0.5rem', border: '1px solid #fecaca' }}>
+              <div 
+                key={i} 
+                onClick={() => setSelectedAlert(alert)}
+                style={{ 
+                  display: 'flex', gap: '10px', padding: '0.75rem', background: '#fff5f5', 
+                  borderRadius: '10px', marginBottom: '0.5rem', border: '1px solid #fecaca',
+                  cursor: 'pointer', transition: 'all 0.2s'
+                }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.02)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+              >
                 <AlertTriangle size={16} color="#ef4444" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#7f1d1d', lineHeight: 1.4 }}>{alert}</p>
+                <p style={{ margin: 0, fontSize: '0.85rem', color: '#7f1d1d', lineHeight: 1.4 }}>{alert.message}</p>
               </div>
             )) : (
               <div style={{ textAlign: 'center', padding: '1.5rem', color: '#10b981' }}>
@@ -264,35 +312,30 @@ export default function AdminDashboard() {
           <section className="card" style={{ padding: '1.5rem' }}>
             <h2 style={{ margin: '0 0 1rem', fontSize: '1rem', fontWeight: 700, color: '#1e293b' }}>Platform Status</h2>
             {[
-              { label: 'Backend API', status: 'Operational', ok: true },
-              { label: 'Database', status: 'Connected', ok: true },
-              { label: 'Auth Service', status: 'Active', ok: true },
-              { label: 'Audit Logger', status: 'Running', ok: true },
+              { label: 'Backend API', status: platformStatus?.backend || 'Checking...', ok: platformStatus?.backend === 'Operational' },
+              { label: 'Database', status: platformStatus?.database || 'Checking...', ok: platformStatus?.database === 'Connected' },
+              { label: 'Auth Service', status: platformStatus?.auth || 'Checking...', ok: platformStatus?.auth === 'Active' },
+              { label: 'Audit Logger', status: platformStatus?.logger || 'Checking...', ok: platformStatus?.logger === 'Running' },
             ].map((s, i) => (
               <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.6rem 0', borderBottom: i < 3 ? '1px solid #f1f5f9' : 'none' }}>
                 <span style={{ fontSize: '0.875rem', color: '#475569', fontWeight: 500 }}>{s.label}</span>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#15803d', background: '#dcfce7', padding: '2px 10px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Circle size={6} fill="#15803d" color="#15803d" /> {s.status}
+                <span style={{ 
+                  fontSize: '0.75rem', 
+                  fontWeight: 700, 
+                  color: s.ok ? '#15803d' : '#b91c1c', 
+                  background: s.ok ? '#dcfce7' : '#fee2e2', 
+                  padding: '2px 10px', 
+                  borderRadius: '20px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '4px' 
+                }}>
+                  <Circle size={6} fill={s.ok ? '#15803d' : '#ef4444'} color={s.ok ? '#15803d' : '#ef4444'} /> {s.status}
                 </span>
               </div>
             ))}
           </section>
 
-          {/* Role Info */}
-          <section className="card" style={{ padding: '1.5rem', background: 'linear-gradient(135deg, #f8fafc, #f1f5f9)', border: '1px solid #e2e8f0' }}>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '1rem' }}>
-              <div style={{ background: '#eef2ff', borderRadius: '12px', padding: '8px', color: '#4f46e1' }}>
-                <ShieldCheck size={20} />
-              </div>
-              <div>
-                <p style={{ margin: 0, fontWeight: 700, color: '#1e293b', fontSize: '0.9rem' }}>Auditor Role</p>
-                <p style={{ margin: 0, fontSize: '0.75rem', color: '#64748b' }}>Read-Only Access</p>
-              </div>
-            </div>
-            <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', lineHeight: 1.6 }}>
-              You have <strong>monitoring privileges</strong> over all platform activities. Data is read-only and cannot be modified from this view.
-            </p>
-          </section>
         </div>
       </div>
 
@@ -300,6 +343,84 @@ export default function AdminDashboard() {
         @keyframes spin { to { transform: rotate(360deg); } }
         .spinner { animation: spin 1s linear infinite; }
       `}} />
+
+      {/* ── ALERT DETAIL MODAL ── */}
+      {selectedAlert && (
+        <div 
+          onClick={() => setSelectedAlert(null)}
+          style={{ 
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
+            background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(8px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '2rem'
+          }}
+        >
+          <div 
+            onClick={e => e.stopPropagation()}
+            style={{ 
+              background: 'white', borderRadius: '24px', width: '100%', maxWidth: '480px', 
+              padding: '2.5rem', boxShadow: '0 50px 100px -20px rgba(0,0,0,0.25)',
+              position: 'relative'
+            }}
+          >
+            <button 
+              onClick={() => setSelectedAlert(null)}
+              style={{ position: 'absolute', right: '20px', top: '20px', background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8' }}
+            >
+              <X size={24} />
+            </button>
+
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+              <div style={{ 
+                width: '70px', height: '70px', background: '#fee2e2', borderRadius: '50%', 
+                display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: '#ef4444' 
+              }}>
+                <AlertTriangle size={36} />
+              </div>
+              <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.4rem', fontWeight: 800, color: '#1e293b' }}>Investigate Alert</h3>
+              <p style={{ margin: 0, color: '#64748b', fontSize: '0.95rem' }}>Security incident detected for user profile</p>
+            </div>
+
+            <div style={{ background: '#f8fafc', borderRadius: '16px', padding: '1.5rem', marginBottom: '2rem' }}>
+              <div style={{ marginBottom: '1.25rem' }}>
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em' }}>User Responsible</span>
+                <p style={{ margin: '4px 0 0', fontWeight: 700, color: '#1e293b', fontSize: '1.1rem' }}>{selectedAlert.userName}</p>
+              </div>
+              <div style={{ marginBottom: '1.25rem' }}>
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em' }}>Contact Info</span>
+                <p style={{ margin: '4px 0 0', fontWeight: 600, color: '#4f46e1' }}>{selectedAlert.userEmail}</p>
+                <p style={{ margin: '4px 0 0', fontWeight: 700, color: '#1e293b' }}>{selectedAlert.userPhone || 'No phone recorded'}</p>
+              </div>
+              <div>
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em' }}>Incident Detail</span>
+                <p style={{ margin: '4px 0 0', color: '#475569', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                  This user has performed <strong>{selectedAlert.actionCount} deletions</strong> in the last 60 minutes.
+                </p>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button 
+                onClick={() => handleDismiss(selectedAlert.userId)}
+                style={{ 
+                  flex: 1, background: '#ef4444', color: 'white', padding: '12px', borderRadius: '12px', 
+                  border: 'none', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer'
+                }}
+              >
+                Dismiss & Resolve
+              </button>
+              <button 
+                onClick={() => setSelectedAlert(null)}
+                style={{ 
+                  background: 'white', color: '#475569', padding: '12px 24px', borderRadius: '12px', 
+                  border: '1px solid #e2e8f0', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

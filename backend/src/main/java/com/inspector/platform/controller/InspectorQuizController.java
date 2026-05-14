@@ -26,8 +26,11 @@ public class InspectorQuizController {
     @PostMapping("/generate")
     public ResponseEntity<ApiResponse<List<Map<String, Object>>>> generateQuiz(
             @RequestParam String topic,
-            @RequestParam String subject) {
-        return ResponseEntity.ok(ApiResponse.ok("AI questions generated", quizService.generateAIQuestions(topic, subject)));
+            @RequestParam String subject,
+            @RequestParam String schoolLevel,
+            @RequestParam String grade) {
+        return ResponseEntity
+                .ok(ApiResponse.ok("AI questions generated", quizService.generateAIQuestions(topic, subject, schoolLevel, grade)));
     }
 
     @PostMapping
@@ -35,14 +38,17 @@ public class InspectorQuizController {
             Authentication authentication,
             @RequestBody QuizSaveRequest request) {
         Long userId = extractUserId(authentication);
-        return ResponseEntity.ok(ApiResponse.ok("Quiz published successfully", 
-            quizService.saveQuiz(userId, request.getTitle(), request.getTopic(), request.getSubject(), request.getQuestions(), request.getTargetTeacherIds())));
+        return ResponseEntity.ok(ApiResponse.ok("Quiz published successfully",
+                quizService.saveQuiz(userId, request.getTitle(), request.getTopic(), request.getSubject(),
+                        request.getSchoolLevel(), request.getGrade(),
+                        request.getQuestions(), request.getTargetTeacherIds())));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<QuizResponse>>> getMyQuizzes(Authentication authentication) {
         Long userId = extractUserId(authentication);
-        return ResponseEntity.ok(ApiResponse.ok("Retrieved inspector quizzes", quizService.getInspectorQuizzes(userId)));
+        return ResponseEntity
+                .ok(ApiResponse.ok("Retrieved inspector quizzes", quizService.getInspectorQuizzes(userId)));
     }
 
     private Long extractUserId(Authentication authentication) {

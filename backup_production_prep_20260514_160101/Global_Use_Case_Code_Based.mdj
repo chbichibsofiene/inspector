@@ -1,0 +1,3513 @@
+{
+  "_type": "Project",
+  "_id": "GLOBAL_UC_PROJECT",
+  "name": "Inspector Platform Global Use Case - Code Based",
+  "ownedElements": [
+    {
+      "_type": "UMLModel",
+      "_id": "GLOBAL_UC_MODEL",
+      "_parent": {
+        "$ref": "GLOBAL_UC_PROJECT"
+      },
+      "name": "Global Use Case Model",
+      "ownedElements": [
+        {
+          "_type": "UMLUseCaseDiagram",
+          "_id": "GLOBAL_UC_DIAGRAM",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Global Use Case Diagram",
+          "defaultDiagram": true,
+          "ownedViews": [
+            {
+              "_type": "UMLActorView",
+              "_id": "V_USER_TOP",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "ACT_USER"
+              },
+              "left": 60,
+              "top": 80,
+              "width": 120,
+              "height": 70
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "V_EMAIL",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "ACT_EMAIL"
+              },
+              "left": 1780,
+              "top": 80,
+              "width": 130,
+              "height": 70
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "V_INSPECTOR_PROFILE",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "ACT_INSPECTOR"
+              },
+              "left": 60,
+              "top": 285,
+              "width": 120,
+              "height": 70
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "V_TEACHER_PROFILE",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "ACT_TEACHER"
+              },
+              "left": 1780,
+              "top": 285,
+              "width": 120,
+              "height": 70
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "V_INSPECTOR_SUP",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "ACT_INSPECTOR"
+              },
+              "left": 60,
+              "top": 535,
+              "width": 120,
+              "height": 70
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "V_TEACHER_SUP",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "ACT_TEACHER"
+              },
+              "left": 1780,
+              "top": 535,
+              "width": 120,
+              "height": 70
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "V_JITSI",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "ACT_JITSI"
+              },
+              "left": 1780,
+              "top": 665,
+              "width": 120,
+              "height": 70
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "V_INSPECTOR_LEARN",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "ACT_INSPECTOR"
+              },
+              "left": 60,
+              "top": 855,
+              "width": 120,
+              "height": 70
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "V_TEACHER_LEARN",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "ACT_TEACHER"
+              },
+              "left": 1780,
+              "top": 855,
+              "width": 120,
+              "height": 70
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "V_GEMINI",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "ACT_GEMINI"
+              },
+              "left": 1780,
+              "top": 1015,
+              "width": 120,
+              "height": 70
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "V_ADMIN",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "ACT_ADMIN"
+              },
+              "left": 60,
+              "top": 1240,
+              "width": 130,
+              "height": 70
+            },
+            {
+              "_type": "UMLActorView",
+              "_id": "V_STORAGE",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "ACT_STORAGE"
+              },
+              "left": 1780,
+              "top": 1240,
+              "width": 130,
+              "height": 70
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_REGISTER",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_REGISTER"
+              },
+              "left": 280,
+              "top": 70,
+              "width": 180,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_LOGIN",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_LOGIN"
+              },
+              "left": 520,
+              "top": 70,
+              "width": 150,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_RESET_PASSWORD",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_RESET_PASSWORD"
+              },
+              "left": 730,
+              "top": 70,
+              "width": 190,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_VIEW_DASHBOARD",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_VIEW_DASHBOARD"
+              },
+              "left": 980,
+              "top": 70,
+              "width": 190,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_NOTIFICATIONS",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_NOTIFICATIONS"
+              },
+              "left": 1220,
+              "top": 70,
+              "width": 210,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_MESSAGING",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_MESSAGING"
+              },
+              "left": 1490,
+              "top": 70,
+              "width": 190,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_UPLOAD_FILES",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_UPLOAD_FILES"
+              },
+              "left": 1490,
+              "top": 150,
+              "width": 220,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_INSPECTOR_PROFILE",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_INSPECTOR_PROFILE"
+              },
+              "left": 280,
+              "top": 285,
+              "width": 250,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_TEACHER_PROFILE",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_TEACHER_PROFILE"
+              },
+              "left": 1420,
+              "top": 285,
+              "width": 250,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_REFERENCE_DATA",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_REFERENCE_DATA"
+              },
+              "left": 690,
+              "top": 285,
+              "width": 220,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_MY_TEACHERS",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_MY_TEACHERS"
+              },
+              "left": 1000,
+              "top": 285,
+              "width": 260,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_MANAGE_ACTIVITIES",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_MANAGE_ACTIVITIES"
+              },
+              "left": 280,
+              "top": 520,
+              "width": 250,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_ONLINE_MEETING",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_ONLINE_MEETING"
+              },
+              "left": 600,
+              "top": 520,
+              "width": 240,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_TEACHER_ACTIVITIES",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_TEACHER_ACTIVITIES"
+              },
+              "left": 1420,
+              "top": 520,
+              "width": 250,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_TIMETABLE",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_TIMETABLE"
+              },
+              "left": 1420,
+              "top": 610,
+              "width": 240,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_INSPECT_TEACHER_HISTORY",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_INSPECT_TEACHER_HISTORY"
+              },
+              "left": 950,
+              "top": 610,
+              "width": 310,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_MANAGE_REPORTS",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_MANAGE_REPORTS"
+              },
+              "left": 280,
+              "top": 705,
+              "width": 250,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_IMPORT_REPORT_PDF",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_IMPORT_REPORT_PDF"
+              },
+              "left": 600,
+              "top": 705,
+              "width": 210,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_EXPORT_REPORT_PDF",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_EXPORT_REPORT_PDF"
+              },
+              "left": 950,
+              "top": 705,
+              "width": 230,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_TEACHER_REPORTS",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_TEACHER_REPORTS"
+              },
+              "left": 1420,
+              "top": 705,
+              "width": 230,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_CREATE_COURSES",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_CREATE_COURSES"
+              },
+              "left": 280,
+              "top": 855,
+              "width": 250,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_PUBLISH_COURSES",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_PUBLISH_COURSES"
+              },
+              "left": 570,
+              "top": 855,
+              "width": 200,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_ASSIGN_COURSES",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_ASSIGN_COURSES"
+              },
+              "left": 810,
+              "top": 855,
+              "width": 230,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_TRACK_COURSE_PROGRESS",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_TRACK_COURSE_PROGRESS"
+              },
+              "left": 1080,
+              "top": 855,
+              "width": 240,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_TAKE_COURSES",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_TAKE_COURSES"
+              },
+              "left": 1420,
+              "top": 855,
+              "width": 220,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_COMPLETE_LESSONS",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_COMPLETE_LESSONS"
+              },
+              "left": 1420,
+              "top": 935,
+              "width": 220,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_GENERATE_QUIZ",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_GENERATE_QUIZ"
+              },
+              "left": 280,
+              "top": 1015,
+              "width": 240,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_SAVE_QUIZ",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_SAVE_QUIZ"
+              },
+              "left": 570,
+              "top": 1015,
+              "width": 210,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_VIEW_QUIZZES",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_VIEW_QUIZZES"
+              },
+              "left": 1100,
+              "top": 1015,
+              "width": 220,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_SUBMIT_QUIZ",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_SUBMIT_QUIZ"
+              },
+              "left": 1420,
+              "top": 1015,
+              "width": 220,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_AI_EVALUATION",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_AI_EVALUATION"
+              },
+              "left": 1100,
+              "top": 1095,
+              "width": 220,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_ADMIN_USERS",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_ADMIN_USERS"
+              },
+              "left": 280,
+              "top": 1240,
+              "width": 220,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_AUDIT_LOGS",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_AUDIT_LOGS"
+              },
+              "left": 540,
+              "top": 1240,
+              "width": 240,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_ADMIN_REFERENCE",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_ADMIN_REFERENCE"
+              },
+              "left": 820,
+              "top": 1240,
+              "width": 250,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_ADMIN_ANALYTICS",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_ADMIN_ANALYTICS"
+              },
+              "left": 1110,
+              "top": 1240,
+              "width": 250,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_ALERTS",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_ALERTS"
+              },
+              "left": 1400,
+              "top": 1240,
+              "width": 230,
+              "height": 55
+            },
+            {
+              "_type": "UMLUseCaseView",
+              "_id": "V_UC_POWERBI",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "UC_POWERBI"
+              },
+              "left": 1110,
+              "top": 1320,
+              "width": 250,
+              "height": 55
+            },
+            {
+              "_type": "UMLNoteView",
+              "_id": "NOTE_1",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "left": 250,
+              "top": 25,
+              "width": 420,
+              "height": 35,
+              "text": "Authentication, communication and dashboards"
+            },
+            {
+              "_type": "UMLNoteView",
+              "_id": "NOTE_2",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "left": 250,
+              "top": 240,
+              "width": 420,
+              "height": 35,
+              "text": "Profiles and jurisdiction"
+            },
+            {
+              "_type": "UMLNoteView",
+              "_id": "NOTE_3",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "left": 250,
+              "top": 480,
+              "width": 420,
+              "height": 35,
+              "text": "Pedagogical supervision and reporting"
+            },
+            {
+              "_type": "UMLNoteView",
+              "_id": "NOTE_4",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "left": 250,
+              "top": 815,
+              "width": 420,
+              "height": 35,
+              "text": "Courses, quizzes and AI evaluation"
+            },
+            {
+              "_type": "UMLNoteView",
+              "_id": "NOTE_5",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "left": 250,
+              "top": 1200,
+              "width": 420,
+              "height": 35,
+              "text": "Administration, analytics and audit"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_001",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_001"
+              },
+              "tail": {
+                "$ref": "V_USER_TOP"
+              },
+              "head": {
+                "$ref": "V_UC_REGISTER"
+              },
+              "lineStyle": 1,
+              "points": "120:115;370:97"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_002",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_002"
+              },
+              "tail": {
+                "$ref": "V_USER_TOP"
+              },
+              "head": {
+                "$ref": "V_UC_LOGIN"
+              },
+              "lineStyle": 1,
+              "points": "120:115;595:97"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_003",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_003"
+              },
+              "tail": {
+                "$ref": "V_USER_TOP"
+              },
+              "head": {
+                "$ref": "V_UC_RESET_PASSWORD"
+              },
+              "lineStyle": 1,
+              "points": "120:115;825:97"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_004",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_004"
+              },
+              "tail": {
+                "$ref": "V_USER_TOP"
+              },
+              "head": {
+                "$ref": "V_UC_VIEW_DASHBOARD"
+              },
+              "lineStyle": 1,
+              "points": "120:115;1075:97"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_005",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_005"
+              },
+              "tail": {
+                "$ref": "V_USER_TOP"
+              },
+              "head": {
+                "$ref": "V_UC_NOTIFICATIONS"
+              },
+              "lineStyle": 1,
+              "points": "120:115;1325:97"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_006",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_006"
+              },
+              "tail": {
+                "$ref": "V_USER_TOP"
+              },
+              "head": {
+                "$ref": "V_UC_MESSAGING"
+              },
+              "lineStyle": 1,
+              "points": "120:115;1585:97"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_007",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_007"
+              },
+              "tail": {
+                "$ref": "V_USER_TOP"
+              },
+              "head": {
+                "$ref": "V_UC_UPLOAD_FILES"
+              },
+              "lineStyle": 1,
+              "points": "120:115;1600:177"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_008",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_008"
+              },
+              "tail": {
+                "$ref": "V_EMAIL"
+              },
+              "head": {
+                "$ref": "V_UC_RESET_PASSWORD"
+              },
+              "lineStyle": 1,
+              "points": "1845:115;825:97"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_009",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_009"
+              },
+              "tail": {
+                "$ref": "V_STORAGE"
+              },
+              "head": {
+                "$ref": "V_UC_UPLOAD_FILES"
+              },
+              "lineStyle": 1,
+              "points": "1845:1275;1600:177"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_010",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_010"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_PROFILE"
+              },
+              "head": {
+                "$ref": "V_UC_INSPECTOR_PROFILE"
+              },
+              "lineStyle": 1,
+              "points": "120:320;405:312"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_011",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_011"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_PROFILE"
+              },
+              "head": {
+                "$ref": "V_UC_REFERENCE_DATA"
+              },
+              "lineStyle": 1,
+              "points": "120:320;800:312"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_012",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_012"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_PROFILE"
+              },
+              "head": {
+                "$ref": "V_UC_MY_TEACHERS"
+              },
+              "lineStyle": 1,
+              "points": "120:320;1130:312"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_013",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_013"
+              },
+              "tail": {
+                "$ref": "V_TEACHER_PROFILE"
+              },
+              "head": {
+                "$ref": "V_UC_TEACHER_PROFILE"
+              },
+              "lineStyle": 1,
+              "points": "1840:320;1545:312"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_014",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_014"
+              },
+              "tail": {
+                "$ref": "V_TEACHER_PROFILE"
+              },
+              "head": {
+                "$ref": "V_UC_REFERENCE_DATA"
+              },
+              "lineStyle": 1,
+              "points": "1840:320;800:312"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_015",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_015"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_SUP"
+              },
+              "head": {
+                "$ref": "V_UC_MANAGE_ACTIVITIES"
+              },
+              "lineStyle": 1,
+              "points": "120:570;405:547"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_016",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_016"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_SUP"
+              },
+              "head": {
+                "$ref": "V_UC_ONLINE_MEETING"
+              },
+              "lineStyle": 1,
+              "points": "120:570;720:547"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_017",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_017"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_SUP"
+              },
+              "head": {
+                "$ref": "V_UC_INSPECT_TEACHER_HISTORY"
+              },
+              "lineStyle": 1,
+              "points": "120:570;1105:637"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_018",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_018"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_SUP"
+              },
+              "head": {
+                "$ref": "V_UC_MANAGE_REPORTS"
+              },
+              "lineStyle": 1,
+              "points": "120:570;405:732"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_019",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_019"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_SUP"
+              },
+              "head": {
+                "$ref": "V_UC_IMPORT_REPORT_PDF"
+              },
+              "lineStyle": 1,
+              "points": "120:570;705:732"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_020",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_020"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_SUP"
+              },
+              "head": {
+                "$ref": "V_UC_EXPORT_REPORT_PDF"
+              },
+              "lineStyle": 1,
+              "points": "120:570;1065:732"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_021",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_021"
+              },
+              "tail": {
+                "$ref": "V_TEACHER_SUP"
+              },
+              "head": {
+                "$ref": "V_UC_TEACHER_ACTIVITIES"
+              },
+              "lineStyle": 1,
+              "points": "1840:570;1545:547"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_022",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_022"
+              },
+              "tail": {
+                "$ref": "V_TEACHER_SUP"
+              },
+              "head": {
+                "$ref": "V_UC_TIMETABLE"
+              },
+              "lineStyle": 1,
+              "points": "1840:570;1540:637"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_023",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_023"
+              },
+              "tail": {
+                "$ref": "V_TEACHER_SUP"
+              },
+              "head": {
+                "$ref": "V_UC_TEACHER_REPORTS"
+              },
+              "lineStyle": 1,
+              "points": "1840:570;1535:732"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_024",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_024"
+              },
+              "tail": {
+                "$ref": "V_TEACHER_SUP"
+              },
+              "head": {
+                "$ref": "V_UC_EXPORT_REPORT_PDF"
+              },
+              "lineStyle": 1,
+              "points": "1840:570;1065:732"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_025",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_025"
+              },
+              "tail": {
+                "$ref": "V_JITSI"
+              },
+              "head": {
+                "$ref": "V_UC_ONLINE_MEETING"
+              },
+              "lineStyle": 1,
+              "points": "1840:700;720:547"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_026",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_026"
+              },
+              "tail": {
+                "$ref": "V_STORAGE"
+              },
+              "head": {
+                "$ref": "V_UC_IMPORT_REPORT_PDF"
+              },
+              "lineStyle": 1,
+              "points": "1845:1275;705:732"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_027",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_027"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_LEARN"
+              },
+              "head": {
+                "$ref": "V_UC_CREATE_COURSES"
+              },
+              "lineStyle": 1,
+              "points": "120:890;405:882"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_028",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_028"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_LEARN"
+              },
+              "head": {
+                "$ref": "V_UC_PUBLISH_COURSES"
+              },
+              "lineStyle": 1,
+              "points": "120:890;670:882"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_029",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_029"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_LEARN"
+              },
+              "head": {
+                "$ref": "V_UC_ASSIGN_COURSES"
+              },
+              "lineStyle": 1,
+              "points": "120:890;925:882"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_030",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_030"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_LEARN"
+              },
+              "head": {
+                "$ref": "V_UC_TRACK_COURSE_PROGRESS"
+              },
+              "lineStyle": 1,
+              "points": "120:890;1200:882"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_031",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_031"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_LEARN"
+              },
+              "head": {
+                "$ref": "V_UC_GENERATE_QUIZ"
+              },
+              "lineStyle": 1,
+              "points": "120:890;400:1042"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_032",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_032"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_LEARN"
+              },
+              "head": {
+                "$ref": "V_UC_SAVE_QUIZ"
+              },
+              "lineStyle": 1,
+              "points": "120:890;675:1042"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_033",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_033"
+              },
+              "tail": {
+                "$ref": "V_INSPECTOR_LEARN"
+              },
+              "head": {
+                "$ref": "V_UC_POWERBI"
+              },
+              "lineStyle": 1,
+              "points": "120:890;1235:1347"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_034",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_034"
+              },
+              "tail": {
+                "$ref": "V_TEACHER_LEARN"
+              },
+              "head": {
+                "$ref": "V_UC_TAKE_COURSES"
+              },
+              "lineStyle": 1,
+              "points": "1840:890;1530:882"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_035",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_035"
+              },
+              "tail": {
+                "$ref": "V_TEACHER_LEARN"
+              },
+              "head": {
+                "$ref": "V_UC_COMPLETE_LESSONS"
+              },
+              "lineStyle": 1,
+              "points": "1840:890;1530:962"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_036",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_036"
+              },
+              "tail": {
+                "$ref": "V_TEACHER_LEARN"
+              },
+              "head": {
+                "$ref": "V_UC_VIEW_QUIZZES"
+              },
+              "lineStyle": 1,
+              "points": "1840:890;1210:1042"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_037",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_037"
+              },
+              "tail": {
+                "$ref": "V_TEACHER_LEARN"
+              },
+              "head": {
+                "$ref": "V_UC_SUBMIT_QUIZ"
+              },
+              "lineStyle": 1,
+              "points": "1840:890;1530:1042"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_038",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_038"
+              },
+              "tail": {
+                "$ref": "V_GEMINI"
+              },
+              "head": {
+                "$ref": "V_UC_GENERATE_QUIZ"
+              },
+              "lineStyle": 1,
+              "points": "1840:1050;400:1042"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_039",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_039"
+              },
+              "tail": {
+                "$ref": "V_GEMINI"
+              },
+              "head": {
+                "$ref": "V_UC_AI_EVALUATION"
+              },
+              "lineStyle": 1,
+              "points": "1840:1050;1210:1122"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_040",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_040"
+              },
+              "tail": {
+                "$ref": "V_ADMIN"
+              },
+              "head": {
+                "$ref": "V_UC_ADMIN_USERS"
+              },
+              "lineStyle": 1,
+              "points": "125:1275;390:1267"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_041",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_041"
+              },
+              "tail": {
+                "$ref": "V_ADMIN"
+              },
+              "head": {
+                "$ref": "V_UC_AUDIT_LOGS"
+              },
+              "lineStyle": 1,
+              "points": "125:1275;660:1267"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_042",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_042"
+              },
+              "tail": {
+                "$ref": "V_ADMIN"
+              },
+              "head": {
+                "$ref": "V_UC_ADMIN_REFERENCE"
+              },
+              "lineStyle": 1,
+              "points": "125:1275;945:1267"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_043",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_043"
+              },
+              "tail": {
+                "$ref": "V_ADMIN"
+              },
+              "head": {
+                "$ref": "V_UC_ADMIN_ANALYTICS"
+              },
+              "lineStyle": 1,
+              "points": "125:1275;1235:1267"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_044",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_044"
+              },
+              "tail": {
+                "$ref": "V_ADMIN"
+              },
+              "head": {
+                "$ref": "V_UC_ALERTS"
+              },
+              "lineStyle": 1,
+              "points": "125:1275;1515:1267"
+            },
+            {
+              "_type": "UMLAssociationView",
+              "_id": "V_A_UC_045",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "A_UC_045"
+              },
+              "tail": {
+                "$ref": "V_ADMIN"
+              },
+              "head": {
+                "$ref": "V_UC_POWERBI"
+              },
+              "lineStyle": 1,
+              "points": "125:1275;1235:1347"
+            },
+            {
+              "_type": "UMLDependencyView",
+              "_id": "V_D_REGISTER_LOGIN",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "D_REGISTER_LOGIN"
+              },
+              "tail": {
+                "$ref": "V_UC_REGISTER"
+              },
+              "head": {
+                "$ref": "V_UC_LOGIN"
+              },
+              "lineStyle": 1,
+              "points": "370:97;595:97",
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "V_D_REGISTER_LOGIN_LBL",
+                  "_parent": {
+                    "$ref": "V_D_REGISTER_LOGIN"
+                  },
+                  "model": {
+                    "$ref": "D_REGISTER_LOGIN"
+                  },
+                  "font": "Arial;13;0",
+                  "left": 452,
+                  "top": 79,
+                  "width": 87,
+                  "height": 13,
+                  "text": "<<include>>",
+                  "hostEdge": {
+                    "$ref": "V_D_REGISTER_LOGIN"
+                  },
+                  "edgePosition": 1,
+                  "alpha": 1.5707963267948966,
+                  "distance": 18
+                }
+              ],
+              "nameLabel": {
+                "$ref": "V_D_REGISTER_LOGIN_LBL"
+              }
+            },
+            {
+              "_type": "UMLDependencyView",
+              "_id": "V_D_ACTIVITY_MEETING",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "D_ACTIVITY_MEETING"
+              },
+              "tail": {
+                "$ref": "V_UC_MANAGE_ACTIVITIES"
+              },
+              "head": {
+                "$ref": "V_UC_ONLINE_MEETING"
+              },
+              "lineStyle": 1,
+              "points": "405:547;720:547",
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "V_D_ACTIVITY_MEETING_LBL",
+                  "_parent": {
+                    "$ref": "V_D_ACTIVITY_MEETING"
+                  },
+                  "model": {
+                    "$ref": "D_ACTIVITY_MEETING"
+                  },
+                  "font": "Arial;13;0",
+                  "left": 532,
+                  "top": 529,
+                  "width": 87,
+                  "height": 13,
+                  "text": "<<include>>",
+                  "hostEdge": {
+                    "$ref": "V_D_ACTIVITY_MEETING"
+                  },
+                  "edgePosition": 1,
+                  "alpha": 1.5707963267948966,
+                  "distance": 18
+                }
+              ],
+              "nameLabel": {
+                "$ref": "V_D_ACTIVITY_MEETING_LBL"
+              }
+            },
+            {
+              "_type": "UMLDependencyView",
+              "_id": "V_D_REPORT_EXPORT",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "D_REPORT_EXPORT"
+              },
+              "tail": {
+                "$ref": "V_UC_MANAGE_REPORTS"
+              },
+              "head": {
+                "$ref": "V_UC_EXPORT_REPORT_PDF"
+              },
+              "lineStyle": 1,
+              "points": "405:732;1065:732",
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "V_D_REPORT_EXPORT_LBL",
+                  "_parent": {
+                    "$ref": "V_D_REPORT_EXPORT"
+                  },
+                  "model": {
+                    "$ref": "D_REPORT_EXPORT"
+                  },
+                  "font": "Arial;13;0",
+                  "left": 705,
+                  "top": 714,
+                  "width": 87,
+                  "height": 13,
+                  "text": "<<include>>",
+                  "hostEdge": {
+                    "$ref": "V_D_REPORT_EXPORT"
+                  },
+                  "edgePosition": 1,
+                  "alpha": 1.5707963267948966,
+                  "distance": 18
+                }
+              ],
+              "nameLabel": {
+                "$ref": "V_D_REPORT_EXPORT_LBL"
+              }
+            },
+            {
+              "_type": "UMLDependencyView",
+              "_id": "V_D_QUIZ_GENERATE_AI",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "D_QUIZ_GENERATE_AI"
+              },
+              "tail": {
+                "$ref": "V_UC_GENERATE_QUIZ"
+              },
+              "head": {
+                "$ref": "V_UC_AI_EVALUATION"
+              },
+              "lineStyle": 1,
+              "points": "400:1042;1210:1122",
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "V_D_QUIZ_GENERATE_AI_LBL",
+                  "_parent": {
+                    "$ref": "V_D_QUIZ_GENERATE_AI"
+                  },
+                  "model": {
+                    "$ref": "D_QUIZ_GENERATE_AI"
+                  },
+                  "font": "Arial;13;0",
+                  "left": 775,
+                  "top": 1064,
+                  "width": 80,
+                  "height": 13,
+                  "text": "AI assists",
+                  "hostEdge": {
+                    "$ref": "V_D_QUIZ_GENERATE_AI"
+                  },
+                  "edgePosition": 1,
+                  "alpha": 1.5707963267948966,
+                  "distance": 18
+                }
+              ],
+              "nameLabel": {
+                "$ref": "V_D_QUIZ_GENERATE_AI_LBL"
+              }
+            },
+            {
+              "_type": "UMLDependencyView",
+              "_id": "V_D_SUBMIT_EVALUATE",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "D_SUBMIT_EVALUATE"
+              },
+              "tail": {
+                "$ref": "V_UC_SUBMIT_QUIZ"
+              },
+              "head": {
+                "$ref": "V_UC_AI_EVALUATION"
+              },
+              "lineStyle": 1,
+              "points": "1530:1042;1210:1122",
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "V_D_SUBMIT_EVALUATE_LBL",
+                  "_parent": {
+                    "$ref": "V_D_SUBMIT_EVALUATE"
+                  },
+                  "model": {
+                    "$ref": "D_SUBMIT_EVALUATE"
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1340,
+                  "top": 1064,
+                  "width": 66,
+                  "height": 13,
+                  "text": "triggers",
+                  "hostEdge": {
+                    "$ref": "V_D_SUBMIT_EVALUATE"
+                  },
+                  "edgePosition": 1,
+                  "alpha": 1.5707963267948966,
+                  "distance": 18
+                }
+              ],
+              "nameLabel": {
+                "$ref": "V_D_SUBMIT_EVALUATE_LBL"
+              }
+            },
+            {
+              "_type": "UMLDependencyView",
+              "_id": "V_D_ANALYTICS_POWERBI",
+              "_parent": {
+                "$ref": "GLOBAL_UC_DIAGRAM"
+              },
+              "model": {
+                "$ref": "D_ANALYTICS_POWERBI"
+              },
+              "tail": {
+                "$ref": "V_UC_ADMIN_ANALYTICS"
+              },
+              "head": {
+                "$ref": "V_UC_POWERBI"
+              },
+              "lineStyle": 1,
+              "points": "1235:1267;1235:1347",
+              "subViews": [
+                {
+                  "_type": "EdgeLabelView",
+                  "_id": "V_D_ANALYTICS_POWERBI_LBL",
+                  "_parent": {
+                    "$ref": "V_D_ANALYTICS_POWERBI"
+                  },
+                  "model": {
+                    "$ref": "D_ANALYTICS_POWERBI"
+                  },
+                  "font": "Arial;13;0",
+                  "left": 1205,
+                  "top": 1289,
+                  "width": 59,
+                  "height": 13,
+                  "text": "extends",
+                  "hostEdge": {
+                    "$ref": "V_D_ANALYTICS_POWERBI"
+                  },
+                  "edgePosition": 1,
+                  "alpha": 1.5707963267948966,
+                  "distance": 18
+                }
+              ],
+              "nameLabel": {
+                "$ref": "V_D_ANALYTICS_POWERBI_LBL"
+              }
+            }
+          ]
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACT_USER",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Authenticated User"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACT_INSPECTOR",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Inspector"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACT_TEACHER",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Teacher"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACT_ADMIN",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Administrator"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACT_GEMINI",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Gemini AI"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACT_EMAIL",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Email Service"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACT_JITSI",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Jitsi Meet"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "ACT_STORAGE",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "File Storage"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_REGISTER",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Register account"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_LOGIN",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Login"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_RESET_PASSWORD",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Recover password"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_VIEW_DASHBOARD",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "View role dashboard"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_NOTIFICATIONS",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Manage notifications"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_MESSAGING",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Exchange messages"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_UPLOAD_FILES",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Upload/download message files"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_INSPECTOR_PROFILE",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Complete/update inspector profile"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_TEACHER_PROFILE",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Complete/update teacher profile"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_REFERENCE_DATA",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Consult reference data"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_MY_TEACHERS",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "View teachers in jurisdiction"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_MANAGE_ACTIVITIES",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Manage pedagogical activities"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_ONLINE_MEETING",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Generate online meeting link"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_TEACHER_ACTIVITIES",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Consult assigned activities"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_TIMETABLE",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Manage teacher timetable"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_INSPECT_TEACHER_HISTORY",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Consult teacher timetable/reports/quizzes"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_MANAGE_REPORTS",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Create/update/delete reports"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_IMPORT_REPORT_PDF",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Import report PDF"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_EXPORT_REPORT_PDF",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Export/download report PDF"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_TEACHER_REPORTS",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Consult own reports"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_CREATE_COURSES",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Create and structure courses"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_PUBLISH_COURSES",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Publish courses"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_ASSIGN_COURSES",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Assign/unassign teachers"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_TRACK_COURSE_PROGRESS",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Track course progress"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_TAKE_COURSES",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Follow assigned courses"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_COMPLETE_LESSONS",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Complete course lessons"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_GENERATE_QUIZ",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Generate quiz questions"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_SAVE_QUIZ",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Save and assign quiz"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_VIEW_QUIZZES",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "View available quizzes"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_SUBMIT_QUIZ",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Submit quiz answers"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_AI_EVALUATION",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Evaluate submission"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_ADMIN_USERS",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Manage user registry"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_AUDIT_LOGS",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Review audit logs and history"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_ADMIN_REFERENCE",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Manage regional references"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_ADMIN_ANALYTICS",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Analyze KPIs and trends"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_ALERTS",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Detect suspicious activity"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "UC_POWERBI",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "Export Power BI dataset"
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_001",
+          "_parent": {
+            "$ref": "ACT_USER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_001_E1",
+            "_parent": {
+              "$ref": "A_UC_001"
+            },
+            "reference": {
+              "$ref": "ACT_USER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_001_E2",
+            "_parent": {
+              "$ref": "A_UC_001"
+            },
+            "reference": {
+              "$ref": "UC_REGISTER"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_002",
+          "_parent": {
+            "$ref": "ACT_USER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_002_E1",
+            "_parent": {
+              "$ref": "A_UC_002"
+            },
+            "reference": {
+              "$ref": "ACT_USER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_002_E2",
+            "_parent": {
+              "$ref": "A_UC_002"
+            },
+            "reference": {
+              "$ref": "UC_LOGIN"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_003",
+          "_parent": {
+            "$ref": "ACT_USER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_003_E1",
+            "_parent": {
+              "$ref": "A_UC_003"
+            },
+            "reference": {
+              "$ref": "ACT_USER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_003_E2",
+            "_parent": {
+              "$ref": "A_UC_003"
+            },
+            "reference": {
+              "$ref": "UC_RESET_PASSWORD"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_004",
+          "_parent": {
+            "$ref": "ACT_USER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_004_E1",
+            "_parent": {
+              "$ref": "A_UC_004"
+            },
+            "reference": {
+              "$ref": "ACT_USER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_004_E2",
+            "_parent": {
+              "$ref": "A_UC_004"
+            },
+            "reference": {
+              "$ref": "UC_VIEW_DASHBOARD"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_005",
+          "_parent": {
+            "$ref": "ACT_USER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_005_E1",
+            "_parent": {
+              "$ref": "A_UC_005"
+            },
+            "reference": {
+              "$ref": "ACT_USER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_005_E2",
+            "_parent": {
+              "$ref": "A_UC_005"
+            },
+            "reference": {
+              "$ref": "UC_NOTIFICATIONS"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_006",
+          "_parent": {
+            "$ref": "ACT_USER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_006_E1",
+            "_parent": {
+              "$ref": "A_UC_006"
+            },
+            "reference": {
+              "$ref": "ACT_USER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_006_E2",
+            "_parent": {
+              "$ref": "A_UC_006"
+            },
+            "reference": {
+              "$ref": "UC_MESSAGING"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_007",
+          "_parent": {
+            "$ref": "ACT_USER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_007_E1",
+            "_parent": {
+              "$ref": "A_UC_007"
+            },
+            "reference": {
+              "$ref": "ACT_USER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_007_E2",
+            "_parent": {
+              "$ref": "A_UC_007"
+            },
+            "reference": {
+              "$ref": "UC_UPLOAD_FILES"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_008",
+          "_parent": {
+            "$ref": "ACT_EMAIL"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_008_E1",
+            "_parent": {
+              "$ref": "A_UC_008"
+            },
+            "reference": {
+              "$ref": "ACT_EMAIL"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_008_E2",
+            "_parent": {
+              "$ref": "A_UC_008"
+            },
+            "reference": {
+              "$ref": "UC_RESET_PASSWORD"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_009",
+          "_parent": {
+            "$ref": "ACT_STORAGE"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_009_E1",
+            "_parent": {
+              "$ref": "A_UC_009"
+            },
+            "reference": {
+              "$ref": "ACT_STORAGE"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_009_E2",
+            "_parent": {
+              "$ref": "A_UC_009"
+            },
+            "reference": {
+              "$ref": "UC_UPLOAD_FILES"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_010",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_010_E1",
+            "_parent": {
+              "$ref": "A_UC_010"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_010_E2",
+            "_parent": {
+              "$ref": "A_UC_010"
+            },
+            "reference": {
+              "$ref": "UC_INSPECTOR_PROFILE"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_011",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_011_E1",
+            "_parent": {
+              "$ref": "A_UC_011"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_011_E2",
+            "_parent": {
+              "$ref": "A_UC_011"
+            },
+            "reference": {
+              "$ref": "UC_REFERENCE_DATA"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_012",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_012_E1",
+            "_parent": {
+              "$ref": "A_UC_012"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_012_E2",
+            "_parent": {
+              "$ref": "A_UC_012"
+            },
+            "reference": {
+              "$ref": "UC_MY_TEACHERS"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_013",
+          "_parent": {
+            "$ref": "ACT_TEACHER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_013_E1",
+            "_parent": {
+              "$ref": "A_UC_013"
+            },
+            "reference": {
+              "$ref": "ACT_TEACHER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_013_E2",
+            "_parent": {
+              "$ref": "A_UC_013"
+            },
+            "reference": {
+              "$ref": "UC_TEACHER_PROFILE"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_014",
+          "_parent": {
+            "$ref": "ACT_TEACHER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_014_E1",
+            "_parent": {
+              "$ref": "A_UC_014"
+            },
+            "reference": {
+              "$ref": "ACT_TEACHER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_014_E2",
+            "_parent": {
+              "$ref": "A_UC_014"
+            },
+            "reference": {
+              "$ref": "UC_REFERENCE_DATA"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_015",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_015_E1",
+            "_parent": {
+              "$ref": "A_UC_015"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_015_E2",
+            "_parent": {
+              "$ref": "A_UC_015"
+            },
+            "reference": {
+              "$ref": "UC_MANAGE_ACTIVITIES"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_016",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_016_E1",
+            "_parent": {
+              "$ref": "A_UC_016"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_016_E2",
+            "_parent": {
+              "$ref": "A_UC_016"
+            },
+            "reference": {
+              "$ref": "UC_ONLINE_MEETING"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_017",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_017_E1",
+            "_parent": {
+              "$ref": "A_UC_017"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_017_E2",
+            "_parent": {
+              "$ref": "A_UC_017"
+            },
+            "reference": {
+              "$ref": "UC_INSPECT_TEACHER_HISTORY"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_018",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_018_E1",
+            "_parent": {
+              "$ref": "A_UC_018"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_018_E2",
+            "_parent": {
+              "$ref": "A_UC_018"
+            },
+            "reference": {
+              "$ref": "UC_MANAGE_REPORTS"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_019",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_019_E1",
+            "_parent": {
+              "$ref": "A_UC_019"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_019_E2",
+            "_parent": {
+              "$ref": "A_UC_019"
+            },
+            "reference": {
+              "$ref": "UC_IMPORT_REPORT_PDF"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_020",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_020_E1",
+            "_parent": {
+              "$ref": "A_UC_020"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_020_E2",
+            "_parent": {
+              "$ref": "A_UC_020"
+            },
+            "reference": {
+              "$ref": "UC_EXPORT_REPORT_PDF"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_021",
+          "_parent": {
+            "$ref": "ACT_TEACHER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_021_E1",
+            "_parent": {
+              "$ref": "A_UC_021"
+            },
+            "reference": {
+              "$ref": "ACT_TEACHER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_021_E2",
+            "_parent": {
+              "$ref": "A_UC_021"
+            },
+            "reference": {
+              "$ref": "UC_TEACHER_ACTIVITIES"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_022",
+          "_parent": {
+            "$ref": "ACT_TEACHER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_022_E1",
+            "_parent": {
+              "$ref": "A_UC_022"
+            },
+            "reference": {
+              "$ref": "ACT_TEACHER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_022_E2",
+            "_parent": {
+              "$ref": "A_UC_022"
+            },
+            "reference": {
+              "$ref": "UC_TIMETABLE"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_023",
+          "_parent": {
+            "$ref": "ACT_TEACHER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_023_E1",
+            "_parent": {
+              "$ref": "A_UC_023"
+            },
+            "reference": {
+              "$ref": "ACT_TEACHER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_023_E2",
+            "_parent": {
+              "$ref": "A_UC_023"
+            },
+            "reference": {
+              "$ref": "UC_TEACHER_REPORTS"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_024",
+          "_parent": {
+            "$ref": "ACT_TEACHER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_024_E1",
+            "_parent": {
+              "$ref": "A_UC_024"
+            },
+            "reference": {
+              "$ref": "ACT_TEACHER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_024_E2",
+            "_parent": {
+              "$ref": "A_UC_024"
+            },
+            "reference": {
+              "$ref": "UC_EXPORT_REPORT_PDF"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_025",
+          "_parent": {
+            "$ref": "ACT_JITSI"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_025_E1",
+            "_parent": {
+              "$ref": "A_UC_025"
+            },
+            "reference": {
+              "$ref": "ACT_JITSI"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_025_E2",
+            "_parent": {
+              "$ref": "A_UC_025"
+            },
+            "reference": {
+              "$ref": "UC_ONLINE_MEETING"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_026",
+          "_parent": {
+            "$ref": "ACT_STORAGE"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_026_E1",
+            "_parent": {
+              "$ref": "A_UC_026"
+            },
+            "reference": {
+              "$ref": "ACT_STORAGE"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_026_E2",
+            "_parent": {
+              "$ref": "A_UC_026"
+            },
+            "reference": {
+              "$ref": "UC_IMPORT_REPORT_PDF"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_027",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_027_E1",
+            "_parent": {
+              "$ref": "A_UC_027"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_027_E2",
+            "_parent": {
+              "$ref": "A_UC_027"
+            },
+            "reference": {
+              "$ref": "UC_CREATE_COURSES"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_028",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_028_E1",
+            "_parent": {
+              "$ref": "A_UC_028"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_028_E2",
+            "_parent": {
+              "$ref": "A_UC_028"
+            },
+            "reference": {
+              "$ref": "UC_PUBLISH_COURSES"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_029",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_029_E1",
+            "_parent": {
+              "$ref": "A_UC_029"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_029_E2",
+            "_parent": {
+              "$ref": "A_UC_029"
+            },
+            "reference": {
+              "$ref": "UC_ASSIGN_COURSES"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_030",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_030_E1",
+            "_parent": {
+              "$ref": "A_UC_030"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_030_E2",
+            "_parent": {
+              "$ref": "A_UC_030"
+            },
+            "reference": {
+              "$ref": "UC_TRACK_COURSE_PROGRESS"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_031",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_031_E1",
+            "_parent": {
+              "$ref": "A_UC_031"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_031_E2",
+            "_parent": {
+              "$ref": "A_UC_031"
+            },
+            "reference": {
+              "$ref": "UC_GENERATE_QUIZ"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_032",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_032_E1",
+            "_parent": {
+              "$ref": "A_UC_032"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_032_E2",
+            "_parent": {
+              "$ref": "A_UC_032"
+            },
+            "reference": {
+              "$ref": "UC_SAVE_QUIZ"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_033",
+          "_parent": {
+            "$ref": "ACT_INSPECTOR"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_033_E1",
+            "_parent": {
+              "$ref": "A_UC_033"
+            },
+            "reference": {
+              "$ref": "ACT_INSPECTOR"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_033_E2",
+            "_parent": {
+              "$ref": "A_UC_033"
+            },
+            "reference": {
+              "$ref": "UC_POWERBI"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_034",
+          "_parent": {
+            "$ref": "ACT_TEACHER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_034_E1",
+            "_parent": {
+              "$ref": "A_UC_034"
+            },
+            "reference": {
+              "$ref": "ACT_TEACHER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_034_E2",
+            "_parent": {
+              "$ref": "A_UC_034"
+            },
+            "reference": {
+              "$ref": "UC_TAKE_COURSES"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_035",
+          "_parent": {
+            "$ref": "ACT_TEACHER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_035_E1",
+            "_parent": {
+              "$ref": "A_UC_035"
+            },
+            "reference": {
+              "$ref": "ACT_TEACHER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_035_E2",
+            "_parent": {
+              "$ref": "A_UC_035"
+            },
+            "reference": {
+              "$ref": "UC_COMPLETE_LESSONS"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_036",
+          "_parent": {
+            "$ref": "ACT_TEACHER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_036_E1",
+            "_parent": {
+              "$ref": "A_UC_036"
+            },
+            "reference": {
+              "$ref": "ACT_TEACHER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_036_E2",
+            "_parent": {
+              "$ref": "A_UC_036"
+            },
+            "reference": {
+              "$ref": "UC_VIEW_QUIZZES"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_037",
+          "_parent": {
+            "$ref": "ACT_TEACHER"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_037_E1",
+            "_parent": {
+              "$ref": "A_UC_037"
+            },
+            "reference": {
+              "$ref": "ACT_TEACHER"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_037_E2",
+            "_parent": {
+              "$ref": "A_UC_037"
+            },
+            "reference": {
+              "$ref": "UC_SUBMIT_QUIZ"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_038",
+          "_parent": {
+            "$ref": "ACT_GEMINI"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_038_E1",
+            "_parent": {
+              "$ref": "A_UC_038"
+            },
+            "reference": {
+              "$ref": "ACT_GEMINI"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_038_E2",
+            "_parent": {
+              "$ref": "A_UC_038"
+            },
+            "reference": {
+              "$ref": "UC_GENERATE_QUIZ"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_039",
+          "_parent": {
+            "$ref": "ACT_GEMINI"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_039_E1",
+            "_parent": {
+              "$ref": "A_UC_039"
+            },
+            "reference": {
+              "$ref": "ACT_GEMINI"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_039_E2",
+            "_parent": {
+              "$ref": "A_UC_039"
+            },
+            "reference": {
+              "$ref": "UC_AI_EVALUATION"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_040",
+          "_parent": {
+            "$ref": "ACT_ADMIN"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_040_E1",
+            "_parent": {
+              "$ref": "A_UC_040"
+            },
+            "reference": {
+              "$ref": "ACT_ADMIN"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_040_E2",
+            "_parent": {
+              "$ref": "A_UC_040"
+            },
+            "reference": {
+              "$ref": "UC_ADMIN_USERS"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_041",
+          "_parent": {
+            "$ref": "ACT_ADMIN"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_041_E1",
+            "_parent": {
+              "$ref": "A_UC_041"
+            },
+            "reference": {
+              "$ref": "ACT_ADMIN"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_041_E2",
+            "_parent": {
+              "$ref": "A_UC_041"
+            },
+            "reference": {
+              "$ref": "UC_AUDIT_LOGS"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_042",
+          "_parent": {
+            "$ref": "ACT_ADMIN"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_042_E1",
+            "_parent": {
+              "$ref": "A_UC_042"
+            },
+            "reference": {
+              "$ref": "ACT_ADMIN"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_042_E2",
+            "_parent": {
+              "$ref": "A_UC_042"
+            },
+            "reference": {
+              "$ref": "UC_ADMIN_REFERENCE"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_043",
+          "_parent": {
+            "$ref": "ACT_ADMIN"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_043_E1",
+            "_parent": {
+              "$ref": "A_UC_043"
+            },
+            "reference": {
+              "$ref": "ACT_ADMIN"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_043_E2",
+            "_parent": {
+              "$ref": "A_UC_043"
+            },
+            "reference": {
+              "$ref": "UC_ADMIN_ANALYTICS"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_044",
+          "_parent": {
+            "$ref": "ACT_ADMIN"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_044_E1",
+            "_parent": {
+              "$ref": "A_UC_044"
+            },
+            "reference": {
+              "$ref": "ACT_ADMIN"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_044_E2",
+            "_parent": {
+              "$ref": "A_UC_044"
+            },
+            "reference": {
+              "$ref": "UC_ALERTS"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "A_UC_045",
+          "_parent": {
+            "$ref": "ACT_ADMIN"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_045_E1",
+            "_parent": {
+              "$ref": "A_UC_045"
+            },
+            "reference": {
+              "$ref": "ACT_ADMIN"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "A_UC_045_E2",
+            "_parent": {
+              "$ref": "A_UC_045"
+            },
+            "reference": {
+              "$ref": "UC_POWERBI"
+            }
+          }
+        },
+        {
+          "_type": "UMLDependency",
+          "_id": "D_REGISTER_LOGIN",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "<<include>>",
+          "source": {
+            "$ref": "UC_REGISTER"
+          },
+          "target": {
+            "$ref": "UC_LOGIN"
+          }
+        },
+        {
+          "_type": "UMLDependency",
+          "_id": "D_ACTIVITY_MEETING",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "<<include>>",
+          "source": {
+            "$ref": "UC_MANAGE_ACTIVITIES"
+          },
+          "target": {
+            "$ref": "UC_ONLINE_MEETING"
+          }
+        },
+        {
+          "_type": "UMLDependency",
+          "_id": "D_REPORT_EXPORT",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "<<include>>",
+          "source": {
+            "$ref": "UC_MANAGE_REPORTS"
+          },
+          "target": {
+            "$ref": "UC_EXPORT_REPORT_PDF"
+          }
+        },
+        {
+          "_type": "UMLDependency",
+          "_id": "D_QUIZ_GENERATE_AI",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "AI assists",
+          "source": {
+            "$ref": "UC_GENERATE_QUIZ"
+          },
+          "target": {
+            "$ref": "UC_AI_EVALUATION"
+          }
+        },
+        {
+          "_type": "UMLDependency",
+          "_id": "D_SUBMIT_EVALUATE",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "triggers",
+          "source": {
+            "$ref": "UC_SUBMIT_QUIZ"
+          },
+          "target": {
+            "$ref": "UC_AI_EVALUATION"
+          }
+        },
+        {
+          "_type": "UMLDependency",
+          "_id": "D_ANALYTICS_POWERBI",
+          "_parent": {
+            "$ref": "GLOBAL_UC_MODEL"
+          },
+          "name": "extends",
+          "source": {
+            "$ref": "UC_ADMIN_ANALYTICS"
+          },
+          "target": {
+            "$ref": "UC_POWERBI"
+          }
+        }
+      ]
+    }
+  ]
+}

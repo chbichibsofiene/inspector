@@ -41,6 +41,7 @@ public class ActivityServiceImpl implements ActivityService {
     private final OnlineMeetingService onlineMeetingService;
     private final InspectorProfileRepository inspectorProfileRepository;
     private final NotificationService notificationService;
+    private final com.inspector.platform.service.LogService logService;
 
 
     @Override
@@ -99,6 +100,7 @@ public class ActivityServiceImpl implements ActivityService {
             }
         }
 
+        logService.log(com.inspector.platform.entity.ActionType.CREATE, "Activity", savedActivity.getId().toString(), "Created activity: " + savedActivity.getTitle());
         return mapToResponse(savedActivity);
     }
 
@@ -138,7 +140,9 @@ public class ActivityServiceImpl implements ActivityService {
             activity.setLocation(request.getLocation());
         }
 
-        return mapToResponse(activityRepository.save(activity));
+        Activity updated = activityRepository.save(activity);
+        logService.log(com.inspector.platform.entity.ActionType.UPDATE, "Activity", updated.getId().toString(), "Updated activity: " + updated.getTitle());
+        return mapToResponse(updated);
 
     }
 
@@ -149,6 +153,7 @@ public class ActivityServiceImpl implements ActivityService {
         // Delete associated reports first to satisfy foreign key constraints
         activityReportRepository.deleteByActivityId(activityId);
         activityRepository.delete(activity);
+        logService.log(com.inspector.platform.entity.ActionType.DELETE, "Activity", activityId.toString(), "Deleted activity: " + activity.getTitle());
     }
 
     @Override
@@ -302,6 +307,10 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     private void validateActivityTimeAndDay(LocalDateTime start, LocalDateTime end) {
+        if (start.toLocalDate().isBefore(java.time.LocalDate.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Activities cannot be planned for a past date");
+        }
+
         if (start.getDayOfWeek() == DayOfWeek.SUNDAY || end.getDayOfWeek() == DayOfWeek.SUNDAY) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Activities cannot be planned on Sundays");
         }

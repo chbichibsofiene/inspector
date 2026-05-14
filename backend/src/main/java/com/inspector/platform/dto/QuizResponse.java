@@ -13,6 +13,8 @@ public class QuizResponse {
     private String title;
     private String subject;
     private String topic;
+    private String schoolLevel;
+    private String grade;
     private List<QuestionDto> questions;
     private String createdAt;
 

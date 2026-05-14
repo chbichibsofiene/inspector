@@ -1,0 +1,235 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1580 1350">
+<defs>
+    <style>
+        .bg { fill: #f8fafc; }
+        .title { fill: #1e293b; font-family: 'Segoe UI', sans-serif; font-size: 28px; font-weight: bold; }
+        .section { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 10; }
+        .sectionTitle { fill: #64748b; font-family: 'Segoe UI', sans-serif; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .classbox { fill: #f1f5f9; stroke: #475569; stroke-width: 1.5; rx: 5; }
+        .service { fill: #eff6ff; stroke: #2563eb; stroke-width: 1.5; rx: 5; }
+        .enum { fill: #fff7ed; stroke: #ea580c; stroke-width: 1.5; rx: 5; }
+        .name { fill: #1e293b; font-family: 'Segoe UI', sans-serif; font-size: 15px; font-weight: bold; }
+        .attr { fill: #334155; font-family: 'Consolas', monospace; font-size: 13px; }
+        .divider { stroke: #cbd5e1; stroke-width: 1; }
+        .assoc { stroke: #475569; stroke-width: 1.5; fill: none; stroke-dasharray: none; }
+        .dep { stroke: #2563eb; stroke-width: 1.2; fill: none; stroke-dasharray: 4,4; }
+        .label { fill: #64748b; font-family: 'Segoe UI', sans-serif; font-size: 11px; font-style: italic; }
+        .mult { fill: #475569; font-family: 'Segoe UI', sans-serif; font-size: 11px; }
+    </style>
+</defs>
+
+<rect class="bg" width="1580" height="1350"/>
+<text x="790" y="42" text-anchor="middle" class="title">Sprint 1 Class Diagram - Authentication, Profiles & Auditing</text>
+
+<!-- Authentication Section -->
+<rect x="35" y="60" width="1500" height="155" class="section"/><text x="55" y="88" class="sectionTitle">Authentication flow</text>
+<rect x="60" y="80" width="230" height="110" class="service"/>
+<text x="175.0" y="104" text-anchor="middle" class="name">AuthController</text>
+<line x1="60" y1="114" x2="290" y2="114" class="divider"/>
+<text x="72" y="134" class="attr">+register()</text>
+<text x="72" y="152" class="attr">+login()</text>
+<text x="72" y="170" class="attr">+forgotPassword()</text>
+<text x="72" y="188" class="attr">+resetPassword()</text>
+
+<rect x="360" y="80" width="230" height="120" class="service"/>
+<text x="475.0" y="104" text-anchor="middle" class="name">AuthService</text>
+<line x1="360" y1="114" x2="590" y2="114" class="divider"/>
+<text x="372" y="134" class="attr">&lt;&lt;interface&gt;&gt;</text>
+<text x="372" y="152" class="attr">+register(request)</text>
+<text x="372" y="170" class="attr">+login(request)</text>
+<text x="372" y="188" class="attr">+forgotPassword(email)</text>
+<text x="372" y="206" class="attr">+resetPassword(...)</text>
+
+<rect x="660" y="80" width="250" height="120" class="service"/>
+<text x="785.0" y="104" text-anchor="middle" class="name">AuthServiceImpl</text>
+<line x1="660" y1="114" x2="910" y2="114" class="divider"/>
+<text x="672" y="134" class="attr">implements AuthService</text>
+<text x="672" y="152" class="attr">uses UserRepository</text>
+<text x="672" y="170" class="attr">uses PersonnelRepository</text>
+<text x="672" y="188" class="attr">uses PasswordEncoder</text>
+
+<rect x="980" y="80" width="240" height="90" class="service"/>
+<text x="1100.0" y="104" text-anchor="middle" class="name">EmailService</text>
+<line x1="980" y1="114" x2="1220" y2="114" class="divider"/>
+<text x="992" y="134" class="attr">&lt;&lt;interface&gt;&gt;</text>
+<text x="992" y="152" class="attr">+sendPasswordResetEmail()</text>
+
+<rect x="1290" y="80" width="220" height="90" class="service"/>
+<text x="1400.0" y="104" text-anchor="middle" class="name">JwtUtil</text>
+<line x1="1290" y1="114" x2="1510" y2="114" class="divider"/>
+<text x="1302" y="134" class="attr">+generateToken(user)</text>
+<text x="1302" y="152" class="attr">+validateToken(token)</text>
+
+<!-- Entities Section -->
+<rect x="35" y="260" width="1450" height="290" class="section"/><text x="55" y="288" class="sectionTitle">Identity and profile entities</text>
+<rect x="60" y="300" width="250" height="180" class="classbox"/>
+<text x="185.0" y="324" text-anchor="middle" class="name">Personnel</text>
+<line x1="60" y1="334" x2="310" y2="334" class="divider"/>
+<text x="72" y="354" class="attr">+id: Long</text>
+<text x="72" y="372" class="attr">+cin: String</text>
+<text x="72" y="390" class="attr">+firstName: String</text>
+<text x="72" y="408" class="attr">+lastName: String</text>
+<text x="72" y="426" class="attr">+serialCode: String</text>
+<text x="72" y="444" class="attr">+role: Role</text>
+
+<rect x="380" y="285" width="280" height="240" class="classbox"/>
+<text x="520.0" y="309" text-anchor="middle" class="name">User</text>
+<line x1="380" y1="319" x2="660" y2="319" class="divider"/>
+<text x="392" y="339" class="attr">+id: Long</text>
+<text x="392" y="357" class="attr">+email: String</text>
+<text x="392" y="375" class="attr">+password: String</text>
+<text x="392" y="393" class="attr">+serialCode: String</text>
+<text x="392" y="411" class="attr">+role: Role</text>
+<text x="392" y="429" class="attr">+enabled: boolean</text>
+<text x="392" y="447" class="attr">+profileCompleted: boolean</text>
+<text x="392" y="465" class="attr">+resetCode: String</text>
+<text x="392" y="483" class="attr">+resetCodeExpiresAt: LocalDateTime</text>
+
+<rect x="760" y="285" width="290" height="235" class="classbox"/>
+<text x="905.0" y="309" text-anchor="middle" class="name">InspectorProfile</text>
+<line x1="760" y1="319" x2="1050" y2="319" class="divider"/>
+<text x="772" y="339" class="attr">+id: Long</text>
+<text x="772" y="357" class="attr">+firstName: String</text>
+<text x="772" y="375" class="attr">+lastName: String</text>
+<text x="772" y="393" class="attr">+rank: InspectorRank</text>
+<text x="772" y="411" class="attr">+subject: Subject</text>
+<text x="772" y="429" class="attr">+schoolLevel: SchoolLevel</text>
+<text x="772" y="447" class="attr">+phone: String</text>
+<text x="772" y="465" class="attr">+language: String</text>
+
+<rect x="1150" y="295" width="280" height="210" class="classbox"/>
+<text x="1290.0" y="319" text-anchor="middle" class="name">TeacherProfile</text>
+<line x1="1150" y1="329" x2="1430" y2="329" class="divider"/>
+<text x="1162" y="349" class="attr">+id: Long</text>
+<text x="1162" y="367" class="attr">+firstName: String</text>
+<text x="1162" y="385" class="attr">+lastName: String</text>
+<text x="1162" y="403" class="attr">+subject: Subject</text>
+<text x="1162" y="421" class="attr">+phone: String</text>
+<text x="1162" y="439" class="attr">+language: String</text>
+
+<!-- Reference Data Section -->
+<rect x="35" y="585" width="1300" height="145" class="section"/><text x="55" y="613" class="sectionTitle">Organizational reference data</text>
+<rect x="60" y="610" width="180" height="90" class="classbox"/>
+<text x="150.0" y="634" text-anchor="middle" class="name">Region</text>
+<line x1="60" y1="644" x2="240" y2="644" class="divider"/>
+<text x="72" y="664" class="attr">+id: Long</text>
+<text x="72" y="682" class="attr">+name: String</text>
+
+<rect x="310" y="610" width="190" height="90" class="classbox"/>
+<text x="405.0" y="634" text-anchor="middle" class="name">Delegation</text>
+<line x1="310" y1="644" x2="500" y2="644" class="divider"/>
+<text x="322" y="664" class="attr">+id: Long</text>
+<text x="322" y="682" class="attr">+name: String</text>
+
+<rect x="570" y="610" width="190" height="90" class="classbox"/>
+<text x="665.0" y="634" text-anchor="middle" class="name">Dependency</text>
+<line x1="570" y1="644" x2="760" y2="644" class="divider"/>
+<text x="582" y="664" class="attr">+id: Long</text>
+<text x="582" y="682" class="attr">+name: String</text>
+
+<rect x="830" y="610" width="190" height="90" class="classbox"/>
+<text x="925.0" y="634" text-anchor="middle" class="name">Department</text>
+<line x1="830" y1="644" x2="1020" y2="644" class="divider"/>
+<text x="842" y="664" class="attr">+id: Long</text>
+<text x="842" y="682" class="attr">+name: String</text>
+
+<rect x="1090" y="600" width="210" height="110" class="classbox"/>
+<text x="1195.0" y="624" text-anchor="middle" class="name">Etablissement</text>
+<line x1="1090" y1="634" x2="1300" y2="634" class="divider"/>
+<text x="1102" y="654" class="attr">+id: Long</text>
+<text x="1102" y="672" class="attr">+name: String</text>
+<text x="1102" y="690" class="attr">+schoolLevel: SchoolLevel</text>
+
+<!-- Enums Section -->
+<rect x="35" y="775" width="1230" height="255" class="section"/><text x="55" y="803" class="sectionTitle">Enumerations</text>
+<rect x="60" y="820" width="170" height="110" class="enum"/>
+<text x="145.0" y="844" text-anchor="middle" class="name">Role</text>
+<line x1="60" y1="854" x2="230" y2="854" class="divider"/>
+<text x="72" y="874" class="attr">ADMIN</text>
+<text x="72" y="892" class="attr">INSPECTOR</text>
+<text x="72" y="910" class="attr">TEACHER</text>
+
+<rect x="330" y="800" width="230" height="205" class="enum"/>
+<text x="445.0" y="824" text-anchor="middle" class="name">Subject</text>
+<line x1="330" y1="834" x2="560" y2="834" class="divider"/>
+<text x="342" y="854" class="attr">ARABIC</text>
+<text x="342" y="872" class="attr">FRENCH</text>
+<text x="342" y="890" class="attr">ENGLISH</text>
+<text x="342" y="908" class="attr">MATH</text>
+<text x="342" y="926" class="attr">PHYSICS</text>
+<text x="342" y="944" class="attr">CHEMISTRY</text>
+<text x="342" y="962" class="attr">BIOLOGY</text>
+<text x="342" y="980" class="attr">COMPUTER_SCIENCE</text>
+
+<rect x="670" y="800" width="260" height="145" class="enum"/>
+<text x="800.0" y="824" text-anchor="middle" class="name">InspectorRank</text>
+<line x1="670" y1="834" x2="930" y2="834" class="divider"/>
+<text x="682" y="854" class="attr">INSPECTOR</text>
+<text x="682" y="872" class="attr">INSPECTOR_PRINCIPAL</text>
+<text x="682" y="890" class="attr">INSPECTOR_GENERAL</text>
+<text x="682" y="908" class="attr">INSPECTOR_REGIONAL</text>
+
+<rect x="1040" y="820" width="190" height="110" class="enum"/>
+<text x="1135.0" y="844" text-anchor="middle" class="name">SchoolLevel</text>
+<line x1="1040" y1="854" x2="1230" y2="854" class="divider"/>
+<text x="1052" y="874" class="attr">PRIMARY</text>
+<text x="1052" y="892" class="attr">PREPARATORY</text>
+<text x="1052" y="910" class="attr">SECONDARY</text>
+
+<!-- Auditing & Logging Section (NEW) -->
+<rect x="35" y="1060" width="1500" height="240" class="section"/><text x="55" y="1088" class="sectionTitle">Auditing & Traceability</text>
+<rect x="60" y="1100" width="280" height="180" class="classbox"/>
+<text x="200.0" y="1124" text-anchor="middle" class="name">ActionLog</text>
+<line x1="60" y1="1134" x2="340" y2="1134" class="divider"/>
+<text x="72" y="1154" class="attr">+id: Long</text>
+<text x="72" y="1172" class="attr">+user: User</text>
+<text x="72" y="1190" class="attr">+actionType: ActionType</text>
+<text x="72" y="1208" class="attr">+entityType: String</text>
+<text x="72" y="1226" class="attr">+entityId: String</text>
+<text x="72" y="1244" class="attr">+description: String</text>
+<text x="72" y="1262" class="attr">+createdAt: LocalDateTime</text>
+
+<rect x="400" y="1100" width="200" height="150" class="enum"/>
+<text x="500.0" y="1124" text-anchor="middle" class="name">ActionType</text>
+<line x1="400" y1="1134" x2="600" y2="1134" class="divider"/>
+<text x="412" y="1154" class="attr">LOGIN, LOGOUT</text>
+<text x="412" y="1172" class="attr">CREATE</text>
+<text x="412" y="1190" class="attr">UPDATE</text>
+<text x="412" y="1208" class="attr">DELETE</text>
+<text x="412" y="1226" class="attr">EXPORT</text>
+
+<rect x="660" y="1100" width="250" height="100" class="service"/>
+<text x="785.0" y="1124" text-anchor="middle" class="name">LogService</text>
+<line x1="660" y1="1134" x2="910" y2="1134" class="divider"/>
+<text x="672" y="1154" class="attr">&lt;&lt;interface&gt;&gt;</text>
+<text x="672" y="1172" class="attr">+log(user, type, ...)</text>
+
+<rect x="980" y="1100" width="250" height="100" class="service"/>
+<text x="1105.0" y="1124" text-anchor="middle" class="name">AuditService</text>
+<line x1="980" y1="1134" x2="1230" y2="1134" class="divider"/>
+<text x="992" y="1154" class="attr">+getLogs(filters)</text>
+<text x="992" y="1172" class="attr">+getUserHistory(id)</text>
+<text x="992" y="1190" class="attr">+detectSuspicious()</text>
+
+<!-- Associations -->
+<path class="assoc" d="M290,135.0 L360,140.0"/>
+<text x="325.0" y="131.5" text-anchor="middle" class="label">uses</text>
+<text x="296" y="129.0" class="mult">1</text>
+<text x="332" y="134.0" class="mult">1</text>
+
+<path class="dep" d="M660,140.0 L590,140.0"/>
+<text x="625.0" y="134.0" text-anchor="middle" class="label">realizes</text>
+
+<path class="assoc" d="M380,405.0 L310,390.0"/>
+<text x="345.0" y="391.5" text-anchor="middle" class="label">validated by serialCode</text>
+
+<path class="assoc" d="M660,405.0 L760,402.5"/>
+<text x="710.0" y="397.75" text-anchor="middle" class="label">has</text>
+
+<path class="assoc" d="M660,405.0 L1150,400.0"/>
+<text x="905.0" y="396.5" text-anchor="middle" class="label">has</text>
+
+<path class="dep" d="M785,1100 L785,200"/>
+<text x="795" y="650" text-anchor="middle" class="label">logged by all services</text>
+
+</svg>

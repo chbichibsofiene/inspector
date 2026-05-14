@@ -68,6 +68,13 @@ export default function CreateActivityScreen() {
       const startDateTime = `${startDate}T${startTime}:00`;
       const endDateTime = `${endDate}T${endTime}:00`;
 
+      const todayStr = new Date().toISOString().split('T')[0];
+      if (startDate < todayStr) {
+        Alert.alert("Invalid Date", "Activities cannot be planned for a past date.");
+        setLoading(false);
+        return;
+      }
+
       if (new Date(startDateTime) >= new Date(endDateTime)) {
         Alert.alert("Invalid Schedule", "The end time must be after the start time.");
         setLoading(false);
@@ -264,6 +271,7 @@ export default function CreateActivityScreen() {
               </View>
               <Calendar
                 onDayPress={handleCalendarDayPress}
+                minDate={new Date().toISOString().split('T')[0]}
                 theme={{
                   selectedDayBackgroundColor: COLORS.primary,
                   todayTextColor: COLORS.primary,

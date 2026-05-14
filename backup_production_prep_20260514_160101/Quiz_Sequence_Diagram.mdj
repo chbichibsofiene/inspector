@@ -1,0 +1,448 @@
+{
+	"_type": "Project",
+	"_id": "AAAAAAFF+h6SjaM2Hec=",
+	"name": "QuizSequenceProject",
+	"ownedElements": [
+		{
+			"_type": "UMLModel",
+			"_id": "AAAAAAFF+qBWK6M3Z8Y=",
+			"_parent": {
+				"$ref": "AAAAAAFF+h6SjaM2Hec="
+			},
+			"name": "Model",
+			"ownedElements": [
+				{
+					"_type": "UMLInteraction",
+					"_id": "AAAAAAGqcfwAq1me3H1E",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "Quiz Sequence",
+					"ownedElements": [
+						{
+							"_type": "UMLSequenceDiagram",
+							"_id": "AAAAAAGFuUo4mwNH6Gsn",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "AI Quiz Generation",
+							"ownedViews": [
+								{
+									"_type": "UMLSeqLifelineView",
+									"_id": "AAAAAAGd2bqUfG4FCHs=",
+									"_parent": {
+										"$ref": "AAAAAAGFuUo4mwNH6Gsn"
+									},
+									"model": {
+										"$ref": "AAAAAAGsLpwZpcsO7ecc"
+									},
+									"subViews": [
+										{
+											"_type": "UMLNameCompartmentView",
+											"_id": "AAAAAAGd2bqUfG4GHfo=",
+											"_parent": {
+												"$ref": "AAAAAAGd2bqUfG4FCHs="
+											},
+											"model": {
+												"$ref": "AAAAAAGsLpwZpcsO7ecc"
+											},
+											"subViews": [
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAGd2bqUfG4H+6Y=",
+													"_parent": {
+														"$ref": "AAAAAAGd2bqUfG4GHfo="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"height": 13
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAGd2bqUfG4IE60=",
+													"_parent": {
+														"$ref": "AAAAAAGd2bqUfG4GHfo="
+													},
+													"font": "Arial;13;1",
+													"left": 8475,
+													"top": 47,
+													"width": 76,
+													"height": 13,
+													"text": "Inspecteur"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAGd2bqUfG4JNgI=",
+													"_parent": {
+														"$ref": "AAAAAAGd2bqUfG4GHfo="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"width": 126,
+													"height": 13,
+													"text": "(from Quiz Sequence)"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAGd2bqUfG4KGxk=",
+													"_parent": {
+														"$ref": "AAAAAAGd2bqUfG4GHfo="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"height": 13,
+													"horizontalAlignment": 1
+												}
+											],
+											"font": "Arial;13;0",
+											"left": 8470,
+											"top": 40,
+											"width": 86,
+											"height": 40,
+											"stereotypeLabel": {
+												"$ref": "AAAAAAGd2bqUfG4H+6Y="
+											},
+											"nameLabel": {
+												"$ref": "AAAAAAGd2bqUfG4IE60="
+											},
+											"namespaceLabel": {
+												"$ref": "AAAAAAGd2bqUfG4JNgI="
+											},
+											"propertyLabel": {
+												"$ref": "AAAAAAGd2bqUfG4KGxk="
+											}
+										},
+										{
+											"_type": "UMLLinePartView",
+											"_id": "AAAAAAGd2bqUfG4LG28=",
+											"_parent": {
+												"$ref": "AAAAAAGd2bqUfG4FCHs="
+											},
+											"model": {
+												"$ref": "AAAAAAGsLpwZpcsO7ecc"
+											},
+											"font": "Arial;13;0",
+											"left": 8513,
+											"top": 80,
+											"width": 1,
+											"height": 50
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 8470,
+									"top": 40,
+									"width": 86,
+									"height": 90,
+									"nameCompartment": {
+										"$ref": "AAAAAAGd2bqUfG4GHfo="
+									},
+									"linePart": {
+										"$ref": "AAAAAAGd2bqUfG4LG28="
+									}
+								}
+							]
+						}
+					],
+					"messages": [
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGBLX7UdFpvqq5e",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "prompt()",
+							"source": {
+								"$ref": "AAAAAAGkos1ZMm5H5fju"
+							},
+							"target": {
+								"$ref": "AAAAAAGTJu3GFkhHc1PD"
+							}
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGOmjkxIUOowSMT",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "201 Created",
+							"source": {
+								"$ref": "AAAAAAGmuvlFHSH4irsh"
+							},
+							"target": {
+								"$ref": "AAAAAAG7q5Ywwwb08BCV"
+							},
+							"messageSort": "reply"
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGEsj4aM5oFRIEm",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "save(Quiz)",
+							"source": {
+								"$ref": "AAAAAAGkos1ZMm5H5fju"
+							},
+							"target": {
+								"$ref": "AAAAAAGF9odpoC7bZNi4"
+							}
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGhHyi2nsTpjjIG",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "GET /api/quizzes/generate",
+							"source": {
+								"$ref": "AAAAAAG7q5Ywwwb08BCV"
+							},
+							"target": {
+								"$ref": "AAAAAAGmuvlFHSH4irsh"
+							}
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGEPsIO4FcorNDX",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "Quiz créé",
+							"source": {
+								"$ref": "AAAAAAGF9odpoC7bZNi4"
+							},
+							"target": {
+								"$ref": "AAAAAAGkos1ZMm5H5fju"
+							},
+							"messageSort": "reply"
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGOt07wr9TjitfI",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "POST /api/quizzes",
+							"source": {
+								"$ref": "AAAAAAG7q5Ywwwb08BCV"
+							},
+							"target": {
+								"$ref": "AAAAAAGmuvlFHSH4irsh"
+							}
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGK31tqBpNrapAN",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "List<Map>",
+							"source": {
+								"$ref": "AAAAAAGkos1ZMm5H5fju"
+							},
+							"target": {
+								"$ref": "AAAAAAGmuvlFHSH4irsh"
+							},
+							"messageSort": "reply"
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGrYxUdeKrCdmpg",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "Générer avec l'IA",
+							"source": {
+								"$ref": "AAAAAAGsLpwZpcsO7ecc"
+							},
+							"target": {
+								"$ref": "AAAAAAG7q5Ywwwb08BCV"
+							}
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGuPyoMQCbxbEsJ",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "generateAIQuestions",
+							"source": {
+								"$ref": "AAAAAAGmuvlFHSH4irsh"
+							},
+							"target": {
+								"$ref": "AAAAAAGkos1ZMm5H5fju"
+							}
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGX1MEHSWek6JUC",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "JSON Questions",
+							"source": {
+								"$ref": "AAAAAAGTJu3GFkhHc1PD"
+							},
+							"target": {
+								"$ref": "AAAAAAGkos1ZMm5H5fju"
+							},
+							"messageSort": "reply"
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAG3zdWGtRNslAKE",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "Questions générées",
+							"source": {
+								"$ref": "AAAAAAGmuvlFHSH4irsh"
+							},
+							"target": {
+								"$ref": "AAAAAAG7q5Ywwwb08BCV"
+							},
+							"messageSort": "reply"
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGfSZTfB4un4eUT",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "Affiche l'aperçu",
+							"source": {
+								"$ref": "AAAAAAG7q5Ywwwb08BCV"
+							},
+							"target": {
+								"$ref": "AAAAAAGsLpwZpcsO7ecc"
+							},
+							"messageSort": "reply"
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGfmsd7FgP0V3M7",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "Enregistrer le Quiz",
+							"source": {
+								"$ref": "AAAAAAGsLpwZpcsO7ecc"
+							},
+							"target": {
+								"$ref": "AAAAAAG7q5Ywwwb08BCV"
+							}
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGQ7rTjmseQfsdM",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "saveQuiz",
+							"source": {
+								"$ref": "AAAAAAGmuvlFHSH4irsh"
+							},
+							"target": {
+								"$ref": "AAAAAAGkos1ZMm5H5fju"
+							}
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAG8TrsETX378XLH",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "saveAll(Questions)",
+							"source": {
+								"$ref": "AAAAAAGkos1ZMm5H5fju"
+							},
+							"target": {
+								"$ref": "AAAAAAGF9odpoC7bZNi4"
+							}
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAG64ejNQ9k8Bm52",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "QuizResponse",
+							"source": {
+								"$ref": "AAAAAAGkos1ZMm5H5fju"
+							},
+							"target": {
+								"$ref": "AAAAAAGmuvlFHSH4irsh"
+							},
+							"messageSort": "reply"
+						},
+						{
+							"_type": "UMLMessage",
+							"_id": "AAAAAAGIxVJDS2G7spVt",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "Succès",
+							"source": {
+								"$ref": "AAAAAAG7q5Ywwwb08BCV"
+							},
+							"target": {
+								"$ref": "AAAAAAGsLpwZpcsO7ecc"
+							},
+							"messageSort": "reply"
+						}
+					],
+					"participants": [
+						{
+							"_type": "UMLLifeline",
+							"_id": "AAAAAAGsLpwZpcsO7ecc",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "Inspecteur"
+						},
+						{
+							"_type": "UMLLifeline",
+							"_id": "AAAAAAG7q5Ywwwb08BCV",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "UI Web"
+						},
+						{
+							"_type": "UMLLifeline",
+							"_id": "AAAAAAGmuvlFHSH4irsh",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "QuizController"
+						},
+						{
+							"_type": "UMLLifeline",
+							"_id": "AAAAAAGkos1ZMm5H5fju",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "QuizService"
+						},
+						{
+							"_type": "UMLLifeline",
+							"_id": "AAAAAAGTJu3GFkhHc1PD",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "API_IA"
+						},
+						{
+							"_type": "UMLLifeline",
+							"_id": "AAAAAAGF9odpoC7bZNi4",
+							"_parent": {
+								"$ref": "AAAAAAGqcfwAq1me3H1E"
+							},
+							"name": "Database"
+						}
+					]
+				}
+			]
+		}
+	]
+}

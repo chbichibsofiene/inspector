@@ -43,3 +43,11 @@ export const getDelegationAnalytics = (subject) =>
 export const getUserAnalytics = () => http.get("/admin/analytics/users");
 export const getAdminKpis = () => http.get("/admin/dashboard/kpis");
 export const getAdminAlerts = () => http.get("/admin/alerts");
+export const dismissAlert = (userId) => http.post(`/admin/alerts/dismiss/${userId}`);
+export const getPlatformStatus = () => http.get("/admin/status");
+
+// Actuator Monitoring (requires ADMIN role)
+export const getSystemHealth = () => http.get("../actuator/health");
+export const getSystemMetrics = () => http.get("../actuator/metrics");
+export const getMetricDetails = (metricName) => http.get(`../actuator/metrics/${metricName}`);
+export const getSystemInfo = () => http.get("../actuator/info");

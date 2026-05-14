@@ -9,6 +9,8 @@ public class QuizSaveRequest {
     private String title;
     private String topic;
     private String subject;
+    private String schoolLevel;
+    private String grade;
     private List<Map<String, Object>> questions;
     private List<Long> targetTeacherIds;
 }

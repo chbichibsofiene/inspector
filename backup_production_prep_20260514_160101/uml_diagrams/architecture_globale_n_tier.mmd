@@ -1,0 +1,45 @@
+flowchart LR
+    subgraph Clients["Client Tier"]
+        Web["Web Client\nReact + Vite"]
+        Mobile["Mobile Client\nReact Native + Expo"]
+    end
+
+    subgraph Network["Secure Communication"]
+        Rest["REST API\nHTTPS + JSON + JWT"]
+        WS["WebSocket/STOMP\nreal-time events"]
+    end
+
+    subgraph Backend["Application Tier\nSpring Boot"]
+        Security["Security Layer\nSpring Security + JWT Filter"]
+        Controllers["REST Controllers\nAuth, Admin, Inspector, Teacher"]
+        Messaging["Real-time Messaging\nNotifications + Chat"]
+        Services["Business Services\nActivities, Reports, Courses, Analytics"]
+        AI["AI Integration\nGemini Service"]
+        Meeting["Online Meeting\nJitsi Meet Links"]
+        Mail["Email Service\nOTP + Notifications"]
+    end
+
+    subgraph Data["Data Tier"]
+        Repositories["Spring Data JPA Repositories"]
+        Database[("MySQL 8.0 Database")]
+        Files["Static/File Storage\nlogos, uploads, exported PDFs"]
+    end
+
+    Web --> Rest
+    Mobile --> Rest
+    Web --> WS
+    Mobile --> WS
+
+    Rest --> Security
+    Security --> Controllers
+    WS --> Messaging
+    Controllers --> Services
+    Messaging --> Services
+
+    Services --> Repositories
+    Repositories --> Database
+    Services --> Files
+
+    Services --> AI
+    Services --> Meeting
+    Services --> Mail

@@ -1,0 +1,246 @@
+{
+	"_type": "Project",
+	"_id": "SPRINT4PROJ001===",
+	"name": "Sprint4 - Communication & Governance",
+	"ownedElements": [
+		{
+			"_type": "UMLModel",
+			"_id": "SPRINT4MODEL001==",
+			"_parent": { "$ref": "SPRINT4PROJ001===" },
+			"name": "Sprint4 - Class Diagram",
+			"ownedElements": [
+				{
+					"_type": "UMLClassDiagram",
+					"_id": "SPRINT4DIAG001===",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "Communication & Governance",
+					"defaultDiagram": true,
+					"ownedViews": []
+				},
+				{
+					"_type": "UMLClass",
+					"_id": "CLS_USER001======",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "User",
+					"visibility": "public",
+					"attributes": [
+						{ "_type": "UMLAttribute", "_id": "ATT_USER_ID001===", "_parent": { "$ref": "CLS_USER001======" }, "name": "id", "visibility": "private", "type": "Long" },
+						{ "_type": "UMLAttribute", "_id": "ATT_USER_EMAIL01=", "_parent": { "$ref": "CLS_USER001======" }, "name": "email", "visibility": "private", "type": "String" },
+						{ "_type": "UMLAttribute", "_id": "ATT_USER_ROLE01==", "_parent": { "$ref": "CLS_USER001======" }, "name": "role", "visibility": "private", "type": "String" },
+						{ "_type": "UMLAttribute", "_id": "ATT_USER_FNAME01=", "_parent": { "$ref": "CLS_USER001======" }, "name": "firstName", "visibility": "private", "type": "String" },
+						{ "_type": "UMLAttribute", "_id": "ATT_USER_LNAME01=", "_parent": { "$ref": "CLS_USER001======" }, "name": "lastName", "visibility": "private", "type": "String" },
+						{ "_type": "UMLAttribute", "_id": "ATT_USER_DELEG01=", "_parent": { "$ref": "CLS_USER001======" }, "name": "delegation", "visibility": "private", "type": "Delegation" }
+					]
+				},
+				{
+					"_type": "UMLClass",
+					"_id": "CLS_CONV001======",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "Conversation",
+					"visibility": "public",
+					"attributes": [
+						{ "_type": "UMLAttribute", "_id": "ATT_CONV_ID001===", "_parent": { "$ref": "CLS_CONV001======" }, "name": "id", "visibility": "private", "type": "Long" },
+						{ "_type": "UMLAttribute", "_id": "ATT_CONV_U1001===", "_parent": { "$ref": "CLS_CONV001======" }, "name": "user1", "visibility": "private", "type": "User" },
+						{ "_type": "UMLAttribute", "_id": "ATT_CONV_U2001===", "_parent": { "$ref": "CLS_CONV001======" }, "name": "user2", "visibility": "private", "type": "User" },
+						{ "_type": "UMLAttribute", "_id": "ATT_CONV_LMT001==", "_parent": { "$ref": "CLS_CONV001======" }, "name": "lastMessageTime", "visibility": "private", "type": "LocalDateTime" }
+					]
+				},
+				{
+					"_type": "UMLClass",
+					"_id": "CLS_MSG001=======",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "Message",
+					"visibility": "public",
+					"attributes": [
+						{ "_type": "UMLAttribute", "_id": "ATT_MSG_ID001====", "_parent": { "$ref": "CLS_MSG001=======" }, "name": "id", "visibility": "private", "type": "Long" },
+						{ "_type": "UMLAttribute", "_id": "ATT_MSG_CONV01===", "_parent": { "$ref": "CLS_MSG001=======" }, "name": "conversation", "visibility": "private", "type": "Conversation" },
+						{ "_type": "UMLAttribute", "_id": "ATT_MSG_SNDR01===", "_parent": { "$ref": "CLS_MSG001=======" }, "name": "sender", "visibility": "private", "type": "User" },
+						{ "_type": "UMLAttribute", "_id": "ATT_MSG_CONT01===", "_parent": { "$ref": "CLS_MSG001=======" }, "name": "content", "visibility": "private", "type": "String" },
+						{ "_type": "UMLAttribute", "_id": "ATT_MSG_TS001====", "_parent": { "$ref": "CLS_MSG001=======" }, "name": "timestamp", "visibility": "private", "type": "LocalDateTime" },
+						{ "_type": "UMLAttribute", "_id": "ATT_MSG_READ01===", "_parent": { "$ref": "CLS_MSG001=======" }, "name": "isRead", "visibility": "private", "type": "boolean" },
+						{ "_type": "UMLAttribute", "_id": "ATT_MSG_FURL01===", "_parent": { "$ref": "CLS_MSG001=======" }, "name": "fileUrl", "visibility": "private", "type": "String" },
+						{ "_type": "UMLAttribute", "_id": "ATT_MSG_FNAME01==", "_parent": { "$ref": "CLS_MSG001=======" }, "name": "fileName", "visibility": "private", "type": "String" },
+						{ "_type": "UMLAttribute", "_id": "ATT_MSG_FTYPE01==", "_parent": { "$ref": "CLS_MSG001=======" }, "name": "fileType", "visibility": "private", "type": "String" }
+					],
+					"operations": [
+						{ "_type": "UMLOperation", "_id": "OP_MSG_ONCREATE1=", "_parent": { "$ref": "CLS_MSG001=======" }, "name": "onCreate", "visibility": "protected" }
+					]
+				},
+				{
+					"_type": "UMLClass",
+					"_id": "CLS_REGION001====",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "Region",
+					"visibility": "public",
+					"attributes": [
+						{ "_type": "UMLAttribute", "_id": "ATT_RGN_ID001====", "_parent": { "$ref": "CLS_REGION001====" }, "name": "id", "visibility": "private", "type": "Long" },
+						{ "_type": "UMLAttribute", "_id": "ATT_RGN_NAME01===", "_parent": { "$ref": "CLS_REGION001====" }, "name": "name", "visibility": "private", "type": "String" }
+					]
+				},
+				{
+					"_type": "UMLClass",
+					"_id": "CLS_DELEG001=====",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "Delegation",
+					"visibility": "public",
+					"attributes": [
+						{ "_type": "UMLAttribute", "_id": "ATT_DLG_ID001====", "_parent": { "$ref": "CLS_DELEG001=====" }, "name": "id", "visibility": "private", "type": "Long" },
+						{ "_type": "UMLAttribute", "_id": "ATT_DLG_NAME01===", "_parent": { "$ref": "CLS_DELEG001=====" }, "name": "name", "visibility": "private", "type": "String" },
+						{ "_type": "UMLAttribute", "_id": "ATT_DLG_RGN001===", "_parent": { "$ref": "CLS_DELEG001=====" }, "name": "region", "visibility": "private", "type": "Region" }
+					]
+				},
+				{
+					"_type": "UMLInterface",
+					"_id": "CLS_ANLSVC001====",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "AnalyticsService",
+					"visibility": "public",
+					"operations": [
+						{ "_type": "UMLOperation", "_id": "OP_ANL_GETINSP01=", "_parent": { "$ref": "CLS_ANLSVC001====" }, "name": "getInspectorAnalytics", "visibility": "public", "parameters": [{ "_type": "UMLParameter", "_id": "PM_ANL_INSPID01=", "_parent": { "$ref": "OP_ANL_GETINSP01=" }, "name": "inspectorId", "type": "Long" }] },
+						{ "_type": "UMLOperation", "_id": "OP_ANL_GETADM01==", "_parent": { "$ref": "CLS_ANLSVC001====" }, "name": "getAdminAnalytics", "visibility": "public", "parameters": [{ "_type": "UMLParameter", "_id": "PM_ANL_SUBJ01===", "_parent": { "$ref": "OP_ANL_GETADM01==" }, "name": "subject", "type": "Subject" }, { "_type": "UMLParameter", "_id": "PM_ANL_RGNID01==", "_parent": { "$ref": "OP_ANL_GETADM01==" }, "name": "regionId", "type": "Long" }, { "_type": "UMLParameter", "_id": "PM_ANL_DLGID01==", "_parent": { "$ref": "OP_ANL_GETADM01==" }, "name": "delegationId", "type": "Long" }] },
+						{ "_type": "UMLOperation", "_id": "OP_ANL_GETTREND1=", "_parent": { "$ref": "CLS_ANLSVC001====" }, "name": "getTrends", "visibility": "public", "parameters": [{ "_type": "UMLParameter", "_id": "PM_ANL_SUBJ02===", "_parent": { "$ref": "OP_ANL_GETTREND1=" }, "name": "subject", "type": "Subject" }, { "_type": "UMLParameter", "_id": "PM_ANL_RGNID02==", "_parent": { "$ref": "OP_ANL_GETTREND1=" }, "name": "regionId", "type": "Long" }, { "_type": "UMLParameter", "_id": "PM_ANL_DLGID02==", "_parent": { "$ref": "OP_ANL_GETTREND1=" }, "name": "delegationId", "type": "Long" }] }
+					]
+				},
+				{
+					"_type": "UMLInterface",
+					"_id": "CLS_MSGSVC001====",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "MessengerService",
+					"visibility": "public",
+					"operations": [
+						{ "_type": "UMLOperation", "_id": "OP_MSG_GETCONV1==", "_parent": { "$ref": "CLS_MSGSVC001====" }, "name": "getConversations", "visibility": "public", "parameters": [{ "_type": "UMLParameter", "_id": "PM_MSG_USRID01==", "_parent": { "$ref": "OP_MSG_GETCONV1==" }, "name": "userId", "type": "Long" }] },
+						{ "_type": "UMLOperation", "_id": "OP_MSG_GETMSGS1==", "_parent": { "$ref": "CLS_MSGSVC001====" }, "name": "getMessages", "visibility": "public", "parameters": [{ "_type": "UMLParameter", "_id": "PM_MSG_CONVID01=", "_parent": { "$ref": "OP_MSG_GETMSGS1==" }, "name": "conversationId", "type": "Long" }, { "_type": "UMLParameter", "_id": "PM_MSG_USRID02==", "_parent": { "$ref": "OP_MSG_GETMSGS1==" }, "name": "userId", "type": "Long" }] },
+						{ "_type": "UMLOperation", "_id": "OP_MSG_SEND001===", "_parent": { "$ref": "CLS_MSGSVC001====" }, "name": "sendMessage", "visibility": "public", "parameters": [{ "_type": "UMLParameter", "_id": "PM_MSG_SNDRID1==", "_parent": { "$ref": "OP_MSG_SEND001===" }, "name": "senderId", "type": "Long" }, { "_type": "UMLParameter", "_id": "PM_MSG_RECID01==", "_parent": { "$ref": "OP_MSG_SEND001===" }, "name": "recipientId", "type": "Long" }, { "_type": "UMLParameter", "_id": "PM_MSG_CONT01===", "_parent": { "$ref": "OP_MSG_SEND001===" }, "name": "content", "type": "String" }] },
+						{ "_type": "UMLOperation", "_id": "OP_MSG_GETCONT1==", "_parent": { "$ref": "CLS_MSGSVC001====" }, "name": "getContacts", "visibility": "public", "parameters": [{ "_type": "UMLParameter", "_id": "PM_MSG_USRID03==", "_parent": { "$ref": "OP_MSG_GETCONT1==" }, "name": "userId", "type": "Long" }] }
+					]
+				},
+				{
+					"_type": "UMLClass",
+					"_id": "CLS_ADMINDTO01===",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "AdminAnalyticsDto",
+					"stereotype": "DTO",
+					"visibility": "public",
+					"attributes": [
+						{ "_type": "UMLAttribute", "_id": "ATT_ADM_TINSP01==", "_parent": { "$ref": "CLS_ADMINDTO01===" }, "name": "totalInspections", "visibility": "public", "type": "long" },
+						{ "_type": "UMLAttribute", "_id": "ATT_ADM_AVSC01===", "_parent": { "$ref": "CLS_ADMINDTO01===" }, "name": "averageScore", "visibility": "public", "type": "double" },
+						{ "_type": "UMLAttribute", "_id": "ATT_ADM_NTCH01===", "_parent": { "$ref": "CLS_ADMINDTO01===" }, "name": "numberOfTeachers", "visibility": "public", "type": "long" },
+						{ "_type": "UMLAttribute", "_id": "ATT_ADM_NINSP01==", "_parent": { "$ref": "CLS_ADMINDTO01===" }, "name": "numberOfInspectors", "visibility": "public", "type": "long" },
+						{ "_type": "UMLAttribute", "_id": "ATT_ADM_TOPTE01==", "_parent": { "$ref": "CLS_ADMINDTO01===" }, "name": "topPerformingTeachers", "visibility": "public", "type": "List<TeacherPerformanceDto>" },
+						{ "_type": "UMLAttribute", "_id": "ATT_ADM_TOPRE01==", "_parent": { "$ref": "CLS_ADMINDTO01===" }, "name": "topPerformingRegions", "visibility": "public", "type": "List<LocationPerformanceDto>" },
+						{ "_type": "UMLAttribute", "_id": "ATT_ADM_TOPDE01==", "_parent": { "$ref": "CLS_ADMINDTO01===" }, "name": "topPerformingDelegations", "visibility": "public", "type": "List<LocationPerformanceDto>" }
+					]
+				},
+				{
+					"_type": "UMLClass",
+					"_id": "CLS_INSPDTO01====",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "InspectorAnalyticsDto",
+					"stereotype": "DTO",
+					"visibility": "public",
+					"attributes": [
+						{ "_type": "UMLAttribute", "_id": "ATT_INS_TACT01===", "_parent": { "$ref": "CLS_INSPDTO01====" }, "name": "totalActivities", "visibility": "public", "type": "long" },
+						{ "_type": "UMLAttribute", "_id": "ATT_INS_INSP01===", "_parent": { "$ref": "CLS_INSPDTO01====" }, "name": "inspections", "visibility": "public", "type": "long" },
+						{ "_type": "UMLAttribute", "_id": "ATT_INS_TRAI01===", "_parent": { "$ref": "CLS_INSPDTO01====" }, "name": "trainings", "visibility": "public", "type": "long" },
+						{ "_type": "UMLAttribute", "_id": "ATT_INS_TREP01===", "_parent": { "$ref": "CLS_INSPDTO01====" }, "name": "totalReports", "visibility": "public", "type": "long" },
+						{ "_type": "UMLAttribute", "_id": "ATT_INS_AVSC01===", "_parent": { "$ref": "CLS_INSPDTO01====" }, "name": "averageScore", "visibility": "public", "type": "double" },
+						{ "_type": "UMLAttribute", "_id": "ATT_INS_ABTP01===", "_parent": { "$ref": "CLS_INSPDTO01====" }, "name": "activitiesByType", "visibility": "public", "type": "Map<String,Long>" },
+						{ "_type": "UMLAttribute", "_id": "ATT_INS_TPERF01==", "_parent": { "$ref": "CLS_INSPDTO01====" }, "name": "teacherPerformance", "visibility": "public", "type": "List<TeacherPerformanceDto>" }
+					]
+				},
+				{
+					"_type": "UMLClass",
+					"_id": "CLS_TRENDDTO01===",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "TrendAnalyticsDto",
+					"stereotype": "DTO",
+					"visibility": "public",
+					"attributes": [
+						{ "_type": "UMLAttribute", "_id": "ATT_TRD_IPM01====", "_parent": { "$ref": "CLS_TRENDDTO01===" }, "name": "inspectionsPerMonth", "visibility": "public", "type": "Map<String,Long>" },
+						{ "_type": "UMLAttribute", "_id": "ATT_TRD_PEVO01===", "_parent": { "$ref": "CLS_TRENDDTO01===" }, "name": "performanceEvolution", "visibility": "public", "type": "Map<String,Double>" }
+					]
+				},
+				{
+					"_type": "UMLAssociation",
+					"_id": "ASSOC_RGN_DLG01==",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "contains",
+					"end1": { "_type": "UMLAssociationEnd", "_id": "AE_RGN_DLG_E1===", "_parent": { "$ref": "ASSOC_RGN_DLG01==" }, "reference": { "$ref": "CLS_REGION001====" }, "multiplicity": "1", "aggregation": "composite" },
+					"end2": { "_type": "UMLAssociationEnd", "_id": "AE_RGN_DLG_E2===", "_parent": { "$ref": "ASSOC_RGN_DLG01==" }, "reference": { "$ref": "CLS_DELEG001=====" }, "multiplicity": "0..*" }
+				},
+				{
+					"_type": "UMLAssociation",
+					"_id": "ASSOC_USR_DLG01==",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "belongs to",
+					"end1": { "_type": "UMLAssociationEnd", "_id": "AE_USR_DLG_E1===", "_parent": { "$ref": "ASSOC_USR_DLG01==" }, "reference": { "$ref": "CLS_USER001======" }, "multiplicity": "0..*" },
+					"end2": { "_type": "UMLAssociationEnd", "_id": "AE_USR_DLG_E2===", "_parent": { "$ref": "ASSOC_USR_DLG01==" }, "reference": { "$ref": "CLS_DELEG001=====" }, "multiplicity": "1" }
+				},
+				{
+					"_type": "UMLAssociation",
+					"_id": "ASSOC_CNV_MSG01==",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "contains",
+					"end1": { "_type": "UMLAssociationEnd", "_id": "AE_CNV_MSG_E1===", "_parent": { "$ref": "ASSOC_CNV_MSG01==" }, "reference": { "$ref": "CLS_CONV001======" }, "multiplicity": "1", "aggregation": "composite" },
+					"end2": { "_type": "UMLAssociationEnd", "_id": "AE_CNV_MSG_E2===", "_parent": { "$ref": "ASSOC_CNV_MSG01==" }, "reference": { "$ref": "CLS_MSG001=======" }, "multiplicity": "0..*" }
+				},
+				{
+					"_type": "UMLAssociation",
+					"_id": "ASSOC_USR_CNV01==",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "participates",
+					"end1": { "_type": "UMLAssociationEnd", "_id": "AE_USR_CNV_E1===", "_parent": { "$ref": "ASSOC_USR_CNV01==" }, "reference": { "$ref": "CLS_USER001======" }, "multiplicity": "1" },
+					"end2": { "_type": "UMLAssociationEnd", "_id": "AE_USR_CNV_E2===", "_parent": { "$ref": "ASSOC_USR_CNV01==" }, "reference": { "$ref": "CLS_CONV001======" }, "multiplicity": "0..*" }
+				},
+				{
+					"_type": "UMLAssociation",
+					"_id": "ASSOC_USR_MSG01==",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "sends",
+					"end1": { "_type": "UMLAssociationEnd", "_id": "AE_USR_MSG_E1===", "_parent": { "$ref": "ASSOC_USR_MSG01==" }, "reference": { "$ref": "CLS_USER001======" }, "multiplicity": "1" },
+					"end2": { "_type": "UMLAssociationEnd", "_id": "AE_USR_MSG_E2===", "_parent": { "$ref": "ASSOC_USR_MSG01==" }, "reference": { "$ref": "CLS_MSG001=======" }, "multiplicity": "0..*" }
+				},
+				{
+					"_type": "UMLDependency",
+					"_id": "DEP_ANL_ADMNDTO1=",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "returns",
+					"source": { "$ref": "CLS_ANLSVC001====" },
+					"target": { "$ref": "CLS_ADMINDTO01===" }
+				},
+				{
+					"_type": "UMLDependency",
+					"_id": "DEP_ANL_INSPDTO1=",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "returns",
+					"source": { "$ref": "CLS_ANLSVC001====" },
+					"target": { "$ref": "CLS_INSPDTO01====" }
+				},
+				{
+					"_type": "UMLDependency",
+					"_id": "DEP_ANL_TRNDTO1==",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "returns",
+					"source": { "$ref": "CLS_ANLSVC001====" },
+					"target": { "$ref": "CLS_TRENDDTO01===" }
+				},
+				{
+					"_type": "UMLDependency",
+					"_id": "DEP_MSG_CONV001==",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "manages",
+					"source": { "$ref": "CLS_MSGSVC001====" },
+					"target": { "$ref": "CLS_CONV001======" }
+				},
+				{
+					"_type": "UMLDependency",
+					"_id": "DEP_MSG_MSG001===",
+					"_parent": { "$ref": "SPRINT4MODEL001==" },
+					"name": "manages",
+					"source": { "$ref": "CLS_MSGSVC001====" },
+					"target": { "$ref": "CLS_MSG001=======" }
+				}
+			]
+		}
+	]
+}

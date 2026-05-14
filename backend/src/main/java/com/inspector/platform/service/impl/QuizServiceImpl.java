@@ -31,10 +31,11 @@ public class QuizServiceImpl implements QuizService {
     private final GeminiService geminiService;
     private final ObjectMapper objectMapper;
     private final NotificationService notificationService;
+    private final com.inspector.platform.service.LogService logService;
 
     @Override
-    public List<Map<String, Object>> generateAIQuestions(String topic, String subject) {
-        String json = geminiService.generateQuizContent(topic, subject);
+    public List<Map<String, Object>> generateAIQuestions(String topic, String subject, String schoolLevel, String grade) {
+        String json = geminiService.generateQuizContent(topic, subject, schoolLevel, grade);
         try {
             return objectMapper.readValue(json, new TypeReference<List<Map<String, Object>>>() {});
         } catch (Exception e) {
@@ -45,7 +46,7 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     @Transactional
-    public QuizResponse saveQuiz(Long inspectorUserId, String title, String topic, String subject, List<Map<String, Object>> questionData, List<Long> targetTeacherIds) {
+    public QuizResponse saveQuiz(Long inspectorUserId, String title, String topic, String subject, String schoolLevel, String grade, List<Map<String, Object>> questionData, List<Long> targetTeacherIds) {
         InspectorProfile inspector = inspectorRepository.findByUserId(inspectorUserId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inspector profile not found"));
 
@@ -53,6 +54,8 @@ public class QuizServiceImpl implements QuizService {
                 .title(title)
                 .topic(topic)
                 .subject(Subject.valueOf(subject.toUpperCase()))
+                .schoolLevel(SchoolLevel.valueOf(schoolLevel.toUpperCase()))
+                .grade(grade)
                 .inspector(inspector)
                 .build();
 
@@ -60,8 +63,8 @@ public class QuizServiceImpl implements QuizService {
             QuizQuestion qq = QuizQuestion.builder()
                     .quiz(quiz)
                     .questionText((String) q.get("text"))
-                    .type(QuizQuestion.QuestionType.valueOf((String) q.get("type")))
-                    .correctAnswer((String) q.get("correctAnswer"))
+                    .type(QuizQuestion.QuestionType.valueOf(q.get("type").toString().toUpperCase()))
+                    .correctAnswer(q.get("correctAnswer") != null ? q.get("correctAnswer").toString() : "")
                     .build();
             
             if (q.containsKey("options")) {
@@ -96,6 +99,7 @@ public class QuizServiceImpl implements QuizService {
             );
         }
 
+        logService.log(com.inspector.platform.entity.ActionType.CREATE, "Quiz", saved.getId().toString(), "Created quiz: " + title);
         return mapToResponse(saved, true);
     }
 
@@ -156,9 +160,9 @@ public class QuizServiceImpl implements QuizService {
                     .quiz(quiz)
                     .teacher(teacher)
                     .answers(answersJson)
-                    .score((Integer) eval.get("score"))
-                    .evaluationText((String) eval.get("evaluation"))
-                    .trainingSuggestion((String) eval.get("trainingSuggestion"))
+                    .score(parseScore(eval.get("score")))
+                    .evaluationText(String.valueOf(eval.getOrDefault("evaluation", "")))
+                    .trainingSuggestion(String.valueOf(eval.getOrDefault("trainingSuggestion", "")))
                     .build();
 
             submissionRepository.save(submission);
@@ -172,10 +176,21 @@ public class QuizServiceImpl implements QuizService {
                 "/inspector/quizzes"
             );
 
+            logService.log(com.inspector.platform.entity.ActionType.CREATE, "QuizSubmission", submission.getId().toString(), "Teacher " + teacher.getLastName() + " submitted quiz: " + quiz.getTitle());
             return eval;
         } catch (Exception e) {
             log.error("Error evaluating quiz submission", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "AI evaluation failed");
+        }
+    }
+
+    private Integer parseScore(Object scoreObj) {
+        if (scoreObj == null) return 0;
+        if (scoreObj instanceof Number) return ((Number) scoreObj).intValue();
+        try {
+            return Integer.parseInt(scoreObj.toString());
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 
@@ -185,6 +200,8 @@ public class QuizServiceImpl implements QuizService {
                 .title(quiz.getTitle())
                 .subject(quiz.getSubject().name())
                 .topic(quiz.getTopic())
+                .schoolLevel(quiz.getSchoolLevel().name())
+                .grade(quiz.getGrade())
                 .createdAt(quiz.getCreatedAt().toString())
                 .questions(quiz.getQuestions().stream().map(q -> {
                     List<String> options = null;

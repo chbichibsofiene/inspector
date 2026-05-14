@@ -29,6 +29,13 @@ public class Quiz {
     @Column(nullable = false)
     private String topic;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SchoolLevel schoolLevel;
+
+    @Column(nullable = false)
+    private String grade;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "inspector_id", nullable = false)
     private InspectorProfile inspector;
@@ -38,11 +45,7 @@ public class Quiz {
     private List<QuizQuestion> questions = new ArrayList<>();
 
     @ManyToMany
-    @JoinTable(
-        name = "quiz_assignments",
-        joinColumns = @JoinColumn(name = "quiz_id"),
-        inverseJoinColumns = @JoinColumn(name = "teacher_id")
-    )
+    @JoinTable(name = "quiz_assignments", joinColumns = @JoinColumn(name = "quiz_id"), inverseJoinColumns = @JoinColumn(name = "teacher_id"))
     @Builder.Default
     private List<TeacherProfile> assignedTeachers = new ArrayList<>();
 

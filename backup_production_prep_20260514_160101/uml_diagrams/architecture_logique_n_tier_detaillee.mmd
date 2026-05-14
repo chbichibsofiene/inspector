@@ -1,0 +1,116 @@
+flowchart TB
+    Client["Clients\nWeb React / Mobile React Native"]
+
+    subgraph Presentation["Presentation Layer"]
+        AuthController["AuthController"]
+        AdminController["AdminController"]
+        InspectorControllers["Inspector Controllers\nActivities, Reports, Courses, Quizzes"]
+        TeacherControllers["Teacher Controllers\nCalendar, Reports, Courses, Quizzes"]
+        RealtimeControllers["MessengerController\nNotificationController"]
+    end
+
+    subgraph Security["Security and API Boundary"]
+        JwtFilter["JwtAuthenticationFilter"]
+        SecurityConfig["SecurityConfig\nRBAC rules"]
+        DTOs["DTOs / Request / Response Models"]
+        ExceptionHandler["GlobalExceptionHandler"]
+    end
+
+    subgraph Business["Business Logic Layer"]
+        AuthService["AuthService"]
+        UserService["UserService"]
+        ActivityService["ActivityService"]
+        ReportService["ReportService"]
+        CourseService["CourseService"]
+        QuizService["QuizService"]
+        DashboardService["DashboardService"]
+        AnalyticsService["AnalyticsService"]
+        MessengerService["MessengerService"]
+        NotificationService["NotificationService"]
+        GeminiService["GeminiService"]
+        EmailService["EmailService"]
+    end
+
+    subgraph DataAccess["Data Access Layer"]
+        UserRepository["UserRepository"]
+        ProfileRepositories["InspectorProfileRepository\nTeacherProfileRepository"]
+        ActivityRepository["ActivityRepository"]
+        ReportRepository["ActivityReportRepository"]
+        CourseRepositories["CourseRepository\nCourseModuleRepository\nCourseLessonRepository"]
+        QuizRepositories["QuizRepository\nQuizQuestionRepository\nQuizSubmissionRepository"]
+        MessageRepository["MessageRepository\nConversationRepository"]
+        NotificationRepository["NotificationRepository"]
+        ReferenceRepositories["Region / Delegation / Department\nDependency / Etablissement"]
+    end
+
+    subgraph Persistence["Persistence Layer"]
+        Entities["JPA Entities\nUser, Profiles, Activity, Report, Course, Quiz"]
+        MySQL[("MySQL Database")]
+    end
+
+    subgraph External["External Services"]
+        Gemini["Google Gemini API"]
+        SMTP["SMTP Email Provider"]
+        Jitsi["Jitsi Meet"]
+    end
+
+    Client --> JwtFilter
+    JwtFilter --> SecurityConfig
+    SecurityConfig --> AuthController
+    SecurityConfig --> AdminController
+    SecurityConfig --> InspectorControllers
+    SecurityConfig --> TeacherControllers
+    SecurityConfig --> RealtimeControllers
+
+    AuthController --> DTOs
+    AdminController --> DTOs
+    InspectorControllers --> DTOs
+    TeacherControllers --> DTOs
+    RealtimeControllers --> DTOs
+
+    DTOs --> AuthService
+    DTOs --> UserService
+    DTOs --> ActivityService
+    DTOs --> ReportService
+    DTOs --> CourseService
+    DTOs --> QuizService
+    DTOs --> DashboardService
+    DTOs --> AnalyticsService
+    DTOs --> MessengerService
+    DTOs --> NotificationService
+
+    AuthService --> UserRepository
+    UserService --> UserRepository
+    UserService --> ProfileRepositories
+    ActivityService --> ActivityRepository
+    ReportService --> ReportRepository
+    CourseService --> CourseRepositories
+    QuizService --> QuizRepositories
+    DashboardService --> ActivityRepository
+    DashboardService --> ReportRepository
+    AnalyticsService --> ReferenceRepositories
+    MessengerService --> MessageRepository
+    NotificationService --> NotificationRepository
+
+    QuizService --> GeminiService
+    ReportService --> GeminiService
+    NotificationService --> EmailService
+    ActivityService --> Jitsi
+    GeminiService --> Gemini
+    EmailService --> SMTP
+
+    UserRepository --> Entities
+    ProfileRepositories --> Entities
+    ActivityRepository --> Entities
+    ReportRepository --> Entities
+    CourseRepositories --> Entities
+    QuizRepositories --> Entities
+    MessageRepository --> Entities
+    NotificationRepository --> Entities
+    ReferenceRepositories --> Entities
+    Entities --> MySQL
+
+    ExceptionHandler -. handles errors .-> AuthController
+    ExceptionHandler -. handles errors .-> AdminController
+    ExceptionHandler -. handles errors .-> InspectorControllers
+    ExceptionHandler -. handles errors .-> TeacherControllers

@@ -192,6 +192,14 @@ export default function InspectorCalendar() {
     const start = new Date(form.startDateTime);
     const end = new Date(form.endDateTime);
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (start < today) {
+      setError("Activities cannot be planned for a past date.");
+      setSaving(false);
+      return;
+    }
+
     if (start.getDay() === 0 || end.getDay() === 0) {
       setError("Activities cannot be planned on Sundays.");
       setSaving(false);
@@ -574,6 +582,7 @@ export default function InspectorCalendar() {
                         type="datetime-local"
                         value={form.startDateTime}
                         onChange={(event) => updateForm("startDateTime", event.target.value)}
+                        min={toDateTimeLocalValue(new Date().setHours(0,0,0,0))}
                         required
                       />
                     </div>
@@ -590,6 +599,7 @@ export default function InspectorCalendar() {
                       type="datetime-local"
                       value={form.endDateTime}
                       onChange={(event) => updateForm("endDateTime", event.target.value)}
+                      min={form.startDateTime || toDateTimeLocalValue(new Date())}
                       required
                     />
                   </div>

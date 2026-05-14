@@ -1,0 +1,243 @@
+/* c:\Users\scsof\Downloads\Inspector_1-main\Inspector_1-main\inspector-frontend\src\pages\Welcome.css */
+
+.welcome-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background-color: #f8fafc; /* Very light, clean background */
+  color: #111827;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Decorative Dots */
+.dot {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.dot-blue {
+  width: 24px;
+  height: 24px;
+  background-color: #3b82f6;
+  top: 35%;
+  left: 3%;
+}
+
+.dot-green {
+  width: 30px;
+  height: 30px;
+  background-color: #10b981;
+  bottom: 8%;
+  left: 45%;
+}
+
+.dot-yellow {
+  width: 28px;
+  height: 28px;
+  background-color: #eab308;
+  bottom: 12%;
+  right: 5%;
+}
+
+/* Navigation */
+.welcome-nav {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 5rem;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.welcome-logo {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+}
+
+.nav-logo h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-link {
+  background: #2563eb !important; /* Brighter Blue */
+  color: white !important;
+  border: none !important;
+  padding: 0.6rem 1.5rem !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.nav-link:hover {
+  background: #1d4ed8 !important;
+  color: white !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Hero Section */
+.welcome-hero {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 4rem;
+}
+
+.hero-content {
+  flex: 1;
+  max-width: 600px;
+  animation: slideUpFade 0.8s ease forwards;
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-title {
+  font-size: 4rem;
+  line-height: 1.15;
+  font-weight: 800;
+  color: #111827; /* Dark slate */
+  margin: 0 0 1.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.brand-text {
+  color: #1e3a8a; /* Deep blue */
+}
+
+.hero-description {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: #4b5563; /* Gray */
+  margin-bottom: 2.5rem;
+  max-width: 90%;
+}
+
+.cta-primary {
+  background: #2b4b9b !important; /* Exact color approximation from user image */
+  color: white !important;
+  border: none !important;
+  padding: 1rem 2rem !important;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease, transform 0.2s ease !important;
+  box-shadow: 0 4px 14px rgba(43, 75, 155, 0.3) !important;
+}
+
+.cta-primary:hover {
+  background: #1e3a8a !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Image Showcase */
+.hero-visual {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  animation: slideLeftFade 1s ease forwards;
+  opacity: 0;
+}
+
+@keyframes slideLeftFade {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.image-backdrop {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(226,232,240,0.8) 0%, rgba(248,249,250,0) 70%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.hero-image {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  object-fit: contain;
+  /* Add a gentle floating animation */
+  animation: gentleFloat 6s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .welcome-hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-description {
+    margin: 0 auto 2rem auto;
+  }
+  
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .welcome-nav {
+    padding: 1rem 2rem;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .image-backdrop {
+    width: 300px;
+    height: 300px;
+  }
+}

@@ -6,6 +6,8 @@ import com.inspector.platform.repository.*;
 import com.inspector.platform.service.CourseService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,11 +25,13 @@ public class CourseServiceImpl implements CourseService {
     private final LessonProgressRepository progressRepository;
     private final InspectorProfileRepository inspectorProfileRepository;
     private final TeacherProfileRepository teacherProfileRepository;
+    private final com.inspector.platform.service.LogService logService;
 
     // ─── Inspector Operations ─────────────────────────────────────────────────
 
     @Override
     @Transactional
+    @CacheEvict(value = "courses", allEntries = true)
     public CourseResponse createCourse(Long inspectorUserId, CourseCreateRequest request) {
         InspectorProfile inspector = inspectorProfileRepository.findByUserId(inspectorUserId)
                 .orElseThrow(() -> new RuntimeException("Inspector profile not found"));
@@ -49,10 +53,12 @@ public class CourseServiceImpl implements CourseService {
         }
 
         Course saved = courseRepository.save(course);
+        logService.log(com.inspector.platform.entity.ActionType.CREATE, "Course", saved.getId().toString(), "Created course: " + saved.getTitle());
         return toCourseResponse(saved, null);
     }
 
     @Override
+    @Cacheable(value = "courses", key = "'inspector_' + #inspectorUserId")
     public List<CourseResponse> getInspectorCourses(Long inspectorUserId) {
         InspectorProfile inspector = inspectorProfileRepository.findByUserId(inspectorUserId)
                 .orElseThrow(() -> new RuntimeException("Inspector profile not found"));
@@ -63,6 +69,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Cacheable(value = "courses", key = "'detail_' + #courseId")
     public CourseResponse getCourseDetail(Long inspectorUserId, Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
@@ -71,11 +78,14 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "courses", allEntries = true)
     public CourseResponse publishCourse(Long inspectorUserId, Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
         course.setStatus(CourseStatus.PUBLISHED);
-        return toCourseResponse(courseRepository.save(course), null);
+        Course saved = courseRepository.save(course);
+        logService.log(com.inspector.platform.entity.ActionType.UPDATE, "Course", saved.getId().toString(), "Published course: " + saved.getTitle());
+        return toCourseResponse(saved, null);
     }
 
     @Override
@@ -104,6 +114,7 @@ public class CourseServiceImpl implements CourseService {
                     .assignedAt(LocalDateTime.now())
                     .build();
             assignmentRepository.save(assignment);
+            logService.log(com.inspector.platform.entity.ActionType.UPDATE, "Course", courseId.toString(), "Assigned course " + course.getTitle() + " to teacher " + teacher.getFirstName() + " " + teacher.getLastName());
         }
     }
 
@@ -113,6 +124,7 @@ public class CourseServiceImpl implements CourseService {
         TeacherProfile teacher = teacherProfileRepository.findByUserId(teacherUserId)
                 .orElseThrow(() -> new RuntimeException("Teacher profile not found"));
         assignmentRepository.deleteByCourseIdAndTeacherId(courseId, teacher.getId());
+        logService.log(com.inspector.platform.entity.ActionType.UPDATE, "Course", courseId.toString(), "Unassigned course from teacher " + teacher.getFirstName() + " " + teacher.getLastName());
     }
 
     @Override
@@ -136,6 +148,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "courses", allEntries = true)
     public void deleteCourse(Long inspectorUserId, Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
@@ -148,6 +161,7 @@ public class CourseServiceImpl implements CourseService {
         progressRepository.deleteByLessonModuleCourseId(courseId);
         assignmentRepository.deleteByCourseId(courseId);
         courseRepository.delete(course);
+        logService.log(com.inspector.platform.entity.ActionType.DELETE, "Course", courseId.toString(), "Deleted course: " + course.getTitle());
     }
 
     @Override
@@ -172,11 +186,13 @@ public class CourseServiceImpl implements CourseService {
         
         course.getModules().remove(module);
         moduleRepository.delete(module);
+        logService.log(com.inspector.platform.entity.ActionType.DELETE, "CourseModule", moduleId.toString(), "Deleted module: " + module.getTitle() + " from course: " + course.getTitle());
     }
 
     // ─── Teacher Operations ───────────────────────────────────────────────────
 
     @Override
+    @Cacheable(value = "courses", key = "'teacher_' + #teacherUserId")
     public List<CourseResponse> getTeacherCourses(Long teacherUserId) {
         TeacherProfile teacher = teacherProfileRepository.findByUserId(teacherUserId)
                 .orElseThrow(() -> new RuntimeException("Teacher profile not found"));
@@ -212,6 +228,7 @@ public class CourseServiceImpl implements CourseService {
         progress.setCompletedAt(LocalDateTime.now());
         if (score != null) progress.setScore(score);
         progressRepository.save(progress);
+        logService.log(com.inspector.platform.entity.ActionType.UPDATE, "LessonProgress", lessonId.toString(), "Teacher marked lesson as complete: " + lesson.getTitle());
     }
 
     // ─── Private Helpers ──────────────────────────────────────────────────────
