@@ -342,8 +342,8 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     private void validateActivityTimeAndDay(LocalDateTime start, LocalDateTime end) {
-        if (start.toLocalDate().isBefore(java.time.LocalDate.now())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Activities cannot be planned for a past date");
+        if (start.isBefore(LocalDateTime.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Activities cannot be planned for a past date or time");
         }
 
         if (start.getDayOfWeek() == DayOfWeek.SUNDAY || end.getDayOfWeek() == DayOfWeek.SUNDAY) {

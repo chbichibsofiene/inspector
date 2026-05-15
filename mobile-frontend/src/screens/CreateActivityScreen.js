@@ -68,9 +68,8 @@ export default function CreateActivityScreen() {
       const startDateTime = `${startDate}T${startTime}:00`;
       const endDateTime = `${endDate}T${endTime}:00`;
 
-      const todayStr = new Date().toISOString().split('T')[0];
-      if (startDate < todayStr) {
-        Alert.alert("Invalid Date", "Activities cannot be planned for a past date.");
+      if (new Date(startDateTime) < new Date()) {
+        Alert.alert("Invalid Schedule", "Activities cannot be planned for a past date or time.");
         setLoading(false);
         return;
       }
