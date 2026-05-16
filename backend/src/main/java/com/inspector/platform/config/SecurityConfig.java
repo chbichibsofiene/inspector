@@ -74,6 +74,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/dashboard/teacher").hasRole("TEACHER")
                         .requestMatchers("/api/dashboard/responsible").hasRole("PEDAGOGICAL_RESPONSIBLE")
                         .requestMatchers("/api/dashboard/admin").hasRole("ADMIN")
+                        // Health & info: public so UptimeRobot and the admin dashboard
+                        // health card can reach them without a JWT token
+                        .requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info").permitAll()
+                        // Metrics & prometheus: sensitive data — ADMIN only
                         .requestMatchers("/actuator/**").hasRole("ADMIN")
 
                         .requestMatchers("/uploads/**").permitAll()
