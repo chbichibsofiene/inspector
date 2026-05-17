@@ -400,33 +400,56 @@ public class AnalyticsServiceImpl implements AnalyticsService {
                 .filter(r -> regionId == null || (r.getTeacher() != null && r.getTeacher().getDelegation() != null && r.getTeacher().getDelegation().getRegion() != null && r.getTeacher().getDelegation().getRegion().getId().equals(regionId)))
                 .collect(Collectors.toList());
 
-        String pattern = "yyyy-MM"; // default
-        if ("year".equalsIgnoreCase(period)) {
-            pattern = "yyyy";
-        } else if ("week".equalsIgnoreCase(period)) {
-            pattern = "yyyy-'W'ww";
-        }
-        final String finalPattern = pattern;
+        final DateTimeFormatter monthFmt  = DateTimeFormatter.ofPattern("yyyy-MM");
+        final DateTimeFormatter weekFmt   = DateTimeFormatter.ofPattern("yyyy-'W'ww");
+        final DateTimeFormatter yearFmt   = DateTimeFormatter.ofPattern("yyyy");
 
+        // ── Inspections per period ─────────────────────────────────────────────
         Map<String, Long> inspectionsPerMonth = activities.stream()
                 .filter(a -> a.getType() == ActivityType.INSPECTION && a.getStartDateTime() != null)
                 .collect(Collectors.groupingBy(
-                        a -> a.getStartDateTime().format(DateTimeFormatter.ofPattern(finalPattern)),
-                        Collectors.counting()
-                ));
+                        a -> a.getStartDateTime().format(monthFmt), Collectors.counting()));
 
-        Map<String, Double> performanceEvolution = reports.stream()
-                .filter(r -> r.getScore() != null && r.getUpdatedAt() != null)
+        Map<String, Long> inspectionsPerWeek = activities.stream()
+                .filter(a -> a.getType() == ActivityType.INSPECTION && a.getStartDateTime() != null)
                 .collect(Collectors.groupingBy(
-                        r -> r.getUpdatedAt().format(DateTimeFormatter.ofPattern(finalPattern)),
-                        Collectors.averagingDouble(ActivityReport::getScore)
-                ));
-        
-        performanceEvolution.replaceAll((k, v) -> roundOneDecimal(v));
+                        a -> a.getStartDateTime().format(weekFmt), Collectors.counting()));
+
+        Map<String, Long> inspectionsPerYear = activities.stream()
+                .filter(a -> a.getType() == ActivityType.INSPECTION && a.getStartDateTime() != null)
+                .collect(Collectors.groupingBy(
+                        a -> a.getStartDateTime().format(yearFmt), Collectors.counting()));
+
+        // ── Performance evolution per period ───────────────────────────────────
+        List<ActivityReport> scoredReports = reports.stream()
+                .filter(r -> r.getScore() != null && r.getUpdatedAt() != null)
+                .collect(Collectors.toList());
+
+        Map<String, Double> perfMonth = scoredReports.stream()
+                .collect(Collectors.groupingBy(
+                        r -> r.getUpdatedAt().format(monthFmt),
+                        Collectors.averagingDouble(ActivityReport::getScore)));
+        perfMonth.replaceAll((k, v) -> roundOneDecimal(v));
+
+        Map<String, Double> perfWeek = scoredReports.stream()
+                .collect(Collectors.groupingBy(
+                        r -> r.getUpdatedAt().format(weekFmt),
+                        Collectors.averagingDouble(ActivityReport::getScore)));
+        perfWeek.replaceAll((k, v) -> roundOneDecimal(v));
+
+        Map<String, Double> perfYear = scoredReports.stream()
+                .collect(Collectors.groupingBy(
+                        r -> r.getUpdatedAt().format(yearFmt),
+                        Collectors.averagingDouble(ActivityReport::getScore)));
+        perfYear.replaceAll((k, v) -> roundOneDecimal(v));
 
         return TrendAnalyticsDto.builder()
                 .inspectionsPerMonth(inspectionsPerMonth)
-                .performanceEvolution(performanceEvolution)
+                .performanceEvolution(perfMonth)
+                .inspectionsPerWeek(inspectionsPerWeek)
+                .performanceEvolutionWeekly(perfWeek)
+                .inspectionsPerYear(inspectionsPerYear)
+                .performanceEvolutionYearly(perfYear)
                 .build();
     }
 

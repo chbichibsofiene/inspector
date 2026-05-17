@@ -164,7 +164,7 @@ export default function AdminAnalytics() {
 
   useEffect(() => {
     loadAllData();
-  }, [subject, regionId, delegationId, period]);
+  }, [subject, regionId, delegationId]);
 
   if (loading && !evaluationData) return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: '1rem' }}>
@@ -174,14 +174,97 @@ export default function AdminAnalytics() {
     </div>
   );
 
-  const trendData = trends ? Array.from(new Set([
-    ...Object.keys(trends.performanceEvolution || {}),
-    ...Object.keys(trends.inspectionsPerMonth || {})
-  ])).sort().map(timeKey => ({
+  const getPeriodMaps = () => {
+    if (!trends) return { inspMap: {}, perfMap: {} };
+    if (period === 'week') return { inspMap: trends.inspectionsPerWeek || {}, perfMap: trends.performanceEvolutionWeekly || {} };
+    if (period === 'year') return { inspMap: trends.inspectionsPerYear || {}, perfMap: trends.performanceEvolutionYearly || {} };
+    return { inspMap: trends.inspectionsPerMonth || {}, perfMap: trends.performanceEvolution || {} };
+  };
+
+  const { inspMap, perfMap } = getPeriodMaps();
+  const rawTrendData = Array.from(new Set([...Object.keys(inspMap), ...Object.keys(perfMap)])).sort().map(timeKey => ({
     month: timeKey,
-    score: trends.performanceEvolution?.[timeKey] || 0,
-    inspections: trends.inspectionsPerMonth?.[timeKey] || 0
-  })) : [];
+    score: perfMap[timeKey] || 0,
+    inspections: inspMap[timeKey] || 0
+  }));
+
+  // Dynamic timeline padding with null scores (no evaluations) and 0 inspections to keep data 100% authentic
+  const trendData = (() => {
+    if (!rawTrendData || rawTrendData.length === 0) {
+      // Fallback empty timeline with 6 periods ending in current period
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth() + 1;
+      const latestKey = period === 'week' ? `${year}-W20` : period === 'year' ? `${year}` : `${year}-${String(month).padStart(2, '0')}`;
+      rawTrendData.push({ month: latestKey, score: null, inspections: 0 });
+    }
+    
+    const latest = rawTrendData[rawTrendData.length - 1];
+    const latestKey = latest.month;
+    const padded = [];
+    
+    if (period === 'week') {
+      const parts = latestKey.split('-W');
+      const year = parseInt(parts[0]) || 2026;
+      const week = parseInt(parts[1]) || 20;
+      
+      for (let i = 5; i >= 1; i--) {
+        let w = week - i;
+        let y = year;
+        if (w <= 0) {
+          w = 52 + w;
+          y = y - 1;
+        }
+        const weekStr = String(w).padStart(2, '0');
+        const key = `${y}-W${weekStr}`;
+        const existing = rawTrendData.find(d => d.month === key);
+        
+        padded.push(existing || {
+          month: key,
+          score: null,
+          inspections: 0
+        });
+      }
+    } else if (period === 'month') {
+      const parts = latestKey.split('-');
+      const year = parseInt(parts[0]) || 2026;
+      const month = parseInt(parts[1]) || 5;
+      
+      for (let i = 5; i >= 1; i--) {
+        let m = month - i;
+        let y = year;
+        if (m <= 0) {
+          m = 12 + m;
+          y = y - 1;
+        }
+        const monthStr = String(m).padStart(2, '0');
+        const key = `${y}-${monthStr}`;
+        const existing = rawTrendData.find(d => d.month === key);
+        
+        padded.push(existing || {
+          month: key,
+          score: null,
+          inspections: 0
+        });
+      }
+    } else {
+      const year = parseInt(latestKey) || 2026;
+      
+      for (let i = 5; i >= 1; i--) {
+        const key = String(year - i);
+        const existing = rawTrendData.find(d => d.month === key);
+        
+        padded.push(existing || {
+          month: key,
+          score: null,
+          inspections: 0
+        });
+      }
+    }
+    
+    padded.push(latest);
+    return padded;
+  })();
 
   return (
     <div className="admin-page">

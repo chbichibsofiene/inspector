@@ -20,7 +20,9 @@ import {
   X,
   Check,
   Video,
-  Link as LinkIcon
+  Link as LinkIcon,
+  Filter,
+  SlidersHorizontal
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
@@ -96,6 +98,10 @@ export default function InspectorCalendar() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  // Upcoming Activities filters
+  const [filterType, setFilterType] = useState("");
+  const [filterDateFrom, setFilterDateFrom] = useState("");
+  const [filterDateTo, setFilterDateTo] = useState("");
 
   const calendarEvents = useMemo(
     () =>
@@ -439,57 +445,209 @@ export default function InspectorCalendar() {
             <div className="card-header">
               <div>
                 <div className="card-title">{t("upcomingActivities")}</div>
-                <div className="card-subtitle">
-                  {t("upcomingActivitiesDesc")}
-                </div>
+                <div className="card-subtitle">{t("upcomingActivitiesDesc")}</div>
               </div>
               <Link className="primary-link-button compact-link-button" to="/inspector">
                 {t("workspaceIndicators")}
               </Link>
             </div>
 
+            {/* ── Premium Filter Bar ── */}
+            <div style={{
+              background: 'linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%)',
+              border: '1px solid rgba(139,92,246,0.12)',
+              borderRadius: '16px',
+              padding: '1rem 1.25rem',
+              margin: '1rem 0',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.9rem'
+            }}>
+              {/* Row 1: Type chips */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#7c3aed', fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', minWidth: '60px' }}>
+                  <SlidersHorizontal size={13} /> Type
+                </div>
+                {[{ v: '', l: 'All' }, ...Object.entries(TYPE_LABELS).map(([v, l]) => ({ v, l }))].map(({ v, l }) => {
+                  const active = filterType === v;
+                  const typeColors = {
+                    '': ['#7c3aed', '#ede9fe'],
+                    FORMATION: ['#059669', '#d1fae5'],
+                    INSPECTION: ['#2563eb', '#dbeafe'],
+                    VISITE_PEDAGOGIQUE: ['#d97706', '#fef3c7'],
+                    INVITATION_REUNION: ['#db2777', '#fce7f3'],
+                    LECON_TEMOIN: ['#7c3aed', '#ede9fe'],
+                    REUNION_TRAVAIL: ['#0891b2', '#cffafe'],
+                    SEMINAIRE: ['#65a30d', '#ecfccb'],
+                    COMMISSION: ['#9333ea', '#f3e8ff'],
+                  };
+                  const [color, bg] = typeColors[v] || ['#64748b', '#f1f5f9'];
+                  return (
+                    <button key={v} onClick={() => setFilterType(v)} style={{
+                      padding: '0.3rem 0.75rem',
+                      borderRadius: '20px',
+                      border: `1.5px solid ${active ? color : 'transparent'}`,
+                      background: active ? bg : 'white',
+                      color: active ? color : '#64748b',
+                      fontSize: '0.78rem',
+                      fontWeight: active ? 700 : 500,
+                      cursor: 'pointer',
+                      transition: 'all 0.18s ease',
+                      boxShadow: active ? `0 2px 8px ${color}30` : '0 1px 3px rgba(0,0,0,0.06)',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      {l}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Row 2: Date range + result count */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#7c3aed', fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', minWidth: '60px' }}>
+                  <Calendar size={13} /> Date
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'white', borderRadius: '12px', padding: '0.35rem 0.75rem', border: '1px solid rgba(139,92,246,0.15)', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
+                  <Calendar size={13} style={{ color: '#a78bfa' }} />
+                  <input
+                    type="date"
+                    value={filterDateFrom}
+                    onChange={e => setFilterDateFrom(e.target.value)}
+                    style={{ border: 'none', outline: 'none', fontSize: '0.82rem', background: 'transparent', color: '#374151', width: '130px' }}
+                  />
+                </div>
+                <span style={{ color: '#a78bfa', fontWeight: 700, fontSize: '0.9rem' }}>→</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'white', borderRadius: '12px', padding: '0.35rem 0.75rem', border: '1px solid rgba(139,92,246,0.15)', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
+                  <Calendar size={13} style={{ color: '#a78bfa' }} />
+                  <input
+                    type="date"
+                    value={filterDateTo}
+                    onChange={e => setFilterDateTo(e.target.value)}
+                    style={{ border: 'none', outline: 'none', fontSize: '0.82rem', background: 'transparent', color: '#374151', width: '130px' }}
+                  />
+                </div>
+
+                {(filterType || filterDateFrom || filterDateTo) && (
+                  <button onClick={() => { setFilterType(''); setFilterDateFrom(''); setFilterDateTo(''); }} style={{
+                    display: 'flex', alignItems: 'center', gap: '4px',
+                    padding: '0.35rem 0.75rem', borderRadius: '20px',
+                    border: '1.5px solid #fca5a5', background: '#fff1f2',
+                    color: '#dc2626', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer'
+                  }}>
+                    <X size={11} /> Clear filters
+                  </button>
+                )}
+
+                <span style={{
+                  marginLeft: 'auto',
+                  background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+                  color: 'white',
+                  padding: '0.25rem 0.8rem',
+                  borderRadius: '20px',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  boxShadow: '0 2px 8px rgba(124,58,237,0.3)'
+                }}>
+                  {activities.filter(a => {
+                    if (filterType && a.type !== filterType) return false;
+                    if (filterDateFrom && new Date(a.startDateTime) < new Date(filterDateFrom)) return false;
+                    if (filterDateTo && new Date(a.startDateTime) > new Date(filterDateTo + 'T23:59:59')) return false;
+                    return true;
+                  }).length} result(s)
+                </span>
+              </div>
+            </div>
+
+            {/* ── Activity Cards ── */}
             {activities.length === 0 ? (
               <p className="muted" style={{ textAlign: 'center', padding: '2rem' }}>No activities planned yet.</p>
-            ) : (
-              <div className="activity-grid" style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
-                gap: '1.25rem',
-                marginTop: '1rem' 
-              }}>
-                {activities.slice(0, 6).map((activity) => (
-                  <article className="card" key={activity.id} style={{ 
-                    padding: '1.25rem', 
-                    border: '1px solid var(--border-subtle)',
-                    background: '#fcfdfe'
-                  }}>
-                    <div className="activity-title" style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>
-                      {activity.title}
-                      <span className={`badge ${activity.type ? activity.type.toLowerCase() : ''}`}>{TYPE_LABELS[activity.type] || activity.type}</span>
-                    </div>
-                    <div className="activity-meta" style={{ display: 'grid', gap: '0.4rem', fontSize: '0.82rem' }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <Clock size={14} className="text-muted" /> {formatDateTime(activity.startDateTime)}
-                      </span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <MapPin size={14} className="text-muted" /> {activity.location}
-                      </span>
-                    </div>
-                    <div className="item-actions" style={{ marginTop: '1rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '0.75rem' }}>
-                      <Link
-                        className="secondary-link-button compact-link-button"
-                        to={`/inspector/reports?activityId=${activity.id}`}
+            ) : (() => {
+              const typeAccents = {
+                FORMATION: 'linear-gradient(135deg,#059669,#10b981)',
+                INSPECTION: 'linear-gradient(135deg,#2563eb,#60a5fa)',
+                VISITE_PEDAGOGIQUE: 'linear-gradient(135deg,#d97706,#fbbf24)',
+                INVITATION_REUNION: 'linear-gradient(135deg,#db2777,#f472b6)',
+                LECON_TEMOIN: 'linear-gradient(135deg,#7c3aed,#a78bfa)',
+                REUNION_TRAVAIL: 'linear-gradient(135deg,#0891b2,#38bdf8)',
+                SEMINAIRE: 'linear-gradient(135deg,#65a30d,#a3e635)',
+                COMMISSION: 'linear-gradient(135deg,#9333ea,#c084fc)',
+              };
+              const filtered = activities.filter(a => {
+                if (filterType && a.type !== filterType) return false;
+                if (filterDateFrom && new Date(a.startDateTime) < new Date(filterDateFrom)) return false;
+                if (filterDateTo && new Date(a.startDateTime) > new Date(filterDateTo + 'T23:59:59')) return false;
+                return true;
+              });
+              if (filtered.length === 0) return (
+                <div style={{ textAlign: 'center', padding: '3rem 1rem', color: '#94a3b8' }}>
+                  <Filter size={32} style={{ marginBottom: '0.75rem', opacity: 0.4 }} />
+                  <p style={{ margin: 0, fontWeight: 600 }}>No activities match your filters.</p>
+                </div>
+              );
+              return (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))', gap: '1.25rem', marginTop: '0.5rem' }}>
+                  {filtered.map((activity) => {
+                    const accent = typeAccents[activity.type] || 'linear-gradient(135deg,#64748b,#94a3b8)';
+                    const report = latestReportByActivity.get(activity.id);
+                    return (
+                      <article key={activity.id} style={{
+                        borderRadius: '18px',
+                        overflow: 'hidden',
+                        background: 'white',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.07)',
+                        border: '1px solid rgba(0,0,0,0.06)',
+                        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                        cursor: 'default'
+                      }}
+                        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.07)'; }}
                       >
-                        {t("reportBtn")}
-                      </Link>
-                      <button className="danger-btn" onClick={() => handleDelete(activity.id)} style={{ padding: '6px 10px' }}>
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            )}
+                        {/* Gradient accent bar */}
+                        <div style={{ height: '5px', background: accent }} />
+
+                        <div style={{ padding: '1.1rem 1.25rem 0.85rem' }}>
+                          {/* Title + badge */}
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                            <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: '#1e293b', lineHeight: 1.3 }}>{activity.title}</h3>
+                            <span className={`badge ${activity.type ? activity.type.toLowerCase() : ''}`} style={{ flexShrink: 0, fontSize: '0.68rem' }}>
+                              {TYPE_LABELS[activity.type] || activity.type}
+                            </span>
+                          </div>
+
+                          {/* Meta */}
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '0.9rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', color: '#64748b' }}>
+                              <Clock size={13} style={{ color: '#a78bfa', flexShrink: 0 }} />
+                              {formatDateTime(activity.startDateTime)}
+                            </div>
+                            {activity.location && (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', color: '#64748b' }}>
+                                <MapPin size={13} style={{ color: '#f472b6', flexShrink: 0 }} />
+                                {activity.location}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Actions */}
+                          <div style={{ display: 'flex', gap: '0.6rem', borderTop: '1px solid #f1f5f9', paddingTop: '0.75rem' }}>
+                            <Link
+                              className="secondary-link-button compact-link-button"
+                              to={`/inspector/reports?activityId=${activity.id}`}
+                              style={{ flex: 1, justifyContent: 'center', borderRadius: '10px' }}
+                            >
+                              <FileText size={13} /> {t("reportBtn")}
+                            </Link>
+                            <button className="danger-btn" onClick={() => handleDelete(activity.id)} style={{ padding: '6px 10px', borderRadius: '10px' }} title="Delete">
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              );
+            })()}
           </section>
         </div>
       </div>

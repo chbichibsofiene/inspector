@@ -128,17 +128,33 @@ export default function InspectorPowerBi() {
       }))
     : [];
 
-  const impactData = analytics.averageScoresOverTime
-    ? Object.keys(analytics.averageScoresOverTime).map(month => {
-        // Get training count for this month from activitiesOverTimeYearly
-        const monthActivities = analytics.activitiesOverTimeYearly?.[month] || {};
-        return {
-          month,
-          avgScore: analytics.averageScoresOverTime[month],
-          trainings: monthActivities['FORMATION'] || 0
-        };
-      })
-    : [];
+  const impactData = (() => {
+    if (!analytics.averageScoresOverTime) return [];
+
+    // activitiesOverTimeYearly uses yyyy-MM keys — same format as averageScoresOverTime
+    const yearlyActivities = analytics.activitiesOverTimeYearly || {};
+    const scores = analytics.averageScoresOverTime;
+
+    let cumulativeTrainings = 0;
+    return Object.keys(scores)
+      .sort() // chronological order
+      .reduce((acc, month) => {
+        const bucket = yearlyActivities[month] || {};
+        const trainingCount = (bucket['FORMATION'] || 0) + (bucket['TRAINING'] || 0);
+        cumulativeTrainings += trainingCount;
+
+        // Only add a data point for months that HAVE a training activity
+        if (trainingCount > 0) {
+          acc.push({
+            month,
+            label: `T${cumulativeTrainings}`,
+            cumulativeTrainings,
+            avgScore: scores[month] || 0
+          });
+        }
+        return acc;
+      }, []);
+  })();
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', padding: '2rem' }}>
@@ -503,10 +519,6 @@ export default function InspectorPowerBi() {
             </div>
             <div style={{ display: 'flex', gap: '1rem', fontSize: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <div style={{ width: 12, height: 12, borderRadius: '2px', background: 'var(--primary-soft)' }}></div>
-                <span className="muted">Trainings</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 <div style={{ width: 12, height: 3, background: '#ec4899', borderRadius: '10px' }}></div>
                 <span className="muted">Avg Score</span>
               </div>
@@ -519,14 +531,16 @@ export default function InspectorPowerBi() {
               <ResponsiveContainer width="100%" height={350}>
                 <ComposedChart data={impactData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148, 163, 184, 0.1)" />
-                  <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: 'var(--text-muted)', fontSize: 10}} />
-                  <YAxis yAxisId="left" orientation="left" axisLine={false} tickLine={false} tick={{fill: 'var(--text-muted)', fontSize: 10}} label={{ value: 'Trainings', angle: -90, position: 'insideLeft', offset: 10, fill: 'var(--text-muted)', fontSize: 10 }} />
-                  <YAxis yAxisId="right" orientation="right" domain={[0, 100]} axisLine={false} tickLine={false} tick={{fill: 'var(--text-muted)', fontSize: 10}} label={{ value: 'Avg Score', angle: 90, position: 'insideRight', offset: 10, fill: 'var(--text-muted)', fontSize: 10 }} />
-                  <Tooltip 
+                  <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{fill: 'var(--text-muted)', fontSize: 11, fontWeight: 700}} />
+                  <YAxis domain={[0, 20]} axisLine={false} tickLine={false} tick={{fill: 'var(--text-muted)', fontSize: 10}} label={{ value: 'Avg Score /20', angle: -90, position: 'insideLeft', offset: 10, fill: 'var(--text-muted)', fontSize: 10 }} />
+                  <Tooltip
                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)' }}
+                    labelFormatter={(label, payload) => {
+                      const d = payload?.[0]?.payload;
+                      return d ? `${label}  (${d.month})` : label;
+                    }}
                   />
-                  <Bar yAxisId="left" dataKey="trainings" fill="var(--primary-soft)" radius={[4, 4, 0, 0]} barSize={40} />
-                  <Line yAxisId="right" type="monotone" dataKey="avgScore" stroke="#ec4899" strokeWidth={3} dot={{ fill: '#ec4899', r: 4 }} activeDot={{ r: 6 }} />
+                  <Line type="monotone" dataKey="avgScore" name="Avg Score" stroke="#ec4899" strokeWidth={3} dot={{ fill: '#ec4899', r: 5 }} activeDot={{ r: 7 }} />
                 </ComposedChart>
               </ResponsiveContainer>
             )}
