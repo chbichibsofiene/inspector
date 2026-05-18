@@ -276,7 +276,21 @@ const resources = {
       "attach": "Attach",
       "attachFile": "Attach file",
       "chooseFile": "Choose PDF",
-      "noFileSelected": "No file chosen"
+      "noFileSelected": "No file chosen",
+      "register": "Register",
+      "discoverTitle": "Platform Overview & Objectives",
+      "discoverSubtitle": "Pedagogy Center is a centralized workspace bridging the gap between inspectors and teachers to drive professional development and academic quality.",
+      "objectiveSupervision": "Pedagogical Supervision",
+      "objectiveSupervisionDesc": "Inspectors can schedule visits, track periodic class schedules, and publish comprehensive evaluation reports.",
+      "objectiveTraining": "Mentoring & Training",
+      "objectiveTrainingDesc": "Inspectors design courses with rich modules, lessons (videos, PDFs), and assign targeted learning paths to teachers.",
+      "objectiveEvaluation": "AI-Powered Evaluation",
+      "objectiveEvaluationDesc": "Leverage Gemini AI models to generate customized, curriculum-aligned pedagogy quizzes to validate teacher knowledge.",
+      "statsInspectors": "Active Inspectors",
+      "statsTeachers": "Registered Teachers",
+      "statsActivities": "Activities & Visits Done",
+      "readyToTransform": "Ready to transform your school's pedagogical standard?",
+      "requestAccessBtn": "Request Access Now"
     }
   },
   fr: {
@@ -552,7 +566,21 @@ const resources = {
       "attach": "Joindre",
       "attachFile": "Joindre un fichier",
       "chooseFile": "Choisir PDF",
-      "noFileSelected": "Aucun fichier choisi"
+      "noFileSelected": "Aucun fichier choisi",
+      "register": "S'inscrire",
+      "discoverTitle": "Présentation et Objectifs",
+      "discoverSubtitle": "Pedagogy Center est un espace de travail centralisé reliant les inspecteurs et les enseignants pour stimuler le développement professionnel et la qualité académique.",
+      "objectiveSupervision": "Supervision Pédagogique",
+      "objectiveSupervisionDesc": "Les inspecteurs peuvent planifier des visites, suivre les emplois du temps périodiques et publier des rapports d'évaluation complets.",
+      "objectiveTraining": "Mentorat & Formation",
+      "objectiveTrainingDesc": "Les inspecteurs conçoivent des cours avec des modules riches, des leçons (vidéos, PDF), et attribuent des parcours d'apprentissage ciblés.",
+      "objectiveEvaluation": "Évaluation assistée par l'IA",
+      "objectiveEvaluationDesc": "Exploitez les modèles d'IA Gemini pour générer des quiz de pédagogie personnalisés et alignés sur les programmes scolaires.",
+      "statsInspectors": "Inspecteurs Actifs",
+      "statsTeachers": "Enseignants Inscrits",
+      "statsActivities": "Activités & Visites Réalisées",
+      "readyToTransform": "Prêt à transformer les standards pédagogiques de votre établissement ?",
+      "requestAccessBtn": "Demander un accès maintenant"
     }
   },
   ar: {
@@ -826,7 +854,21 @@ const resources = {
       "noMessagesYet": "لا توجد رسائل بعد",
       "download": "تنزيل",
       "attach": "إرفاق",
-      "attachFile": "إرفاق ملف"
+      "attachFile": "إرفاق ملف",
+      "register": "إنشاء حساب",
+      "discoverTitle": "نظرة عامة وأهداف المنصة",
+      "discoverSubtitle": "مركز البيداغوجيا هو مساحة عمل مركزية تسد الفجوة بين المفتشين والمعلمين لدفع التطوير المهني والجودة الأكاديمية.",
+      "objectiveSupervision": "الإشراف البيداغوجي",
+      "objectiveSupervisionDesc": "يمكن للمفتشين جدولة الزيارات، وتتبع الجداول الدراسية الدورية، ونشر تقارير تقييم شاملة.",
+      "objectiveTraining": "التوجيه والتدريب",
+      "objectiveTrainingDesc": "يقوم المفتشون بتصميم دورات تحتوي على وحدات غنية، ودروس (فيديوهات، ملفات PDF)، وتعيين مسارات تعليمية مستهدفة للمعلمين.",
+      "objectiveEvaluation": "التقييم المدعوم بالذكاء الاصطناعي",
+      "objectiveEvaluationDesc": "الاستفادة من نماذج الذكاء الاصطناعي Gemini لإنشاء اختبارات بيداغوجية مخصصة ومتوافقة مع المناهج الدراسية للتحقق من معرفة المعلمين.",
+      "statsInspectors": "مفتشون نشطون",
+      "statsTeachers": "معلمون مسجلون",
+      "statsActivities": "الأنشطة والزيارات المنجزة",
+      "readyToTransform": "هل أنت مستعد لتحويل المعايير التربوية لمدرستك؟",
+      "requestAccessBtn": "طلب الوصول الآن"
     }
   }
 };

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { clearSession, getSession, saveSession } from "../services/storage";
-import { login as loginRequest } from "../services/api";
+import { login as loginRequest, setSignOutCallback } from "../services/api";
 import { registerForPushNotificationsAsync } from "../services/PushNotificationService";
 import { startNotificationPolling, stopNotificationPolling } from "../services/NotificationManager";
 import { ROLES } from "../utils/constants";
@@ -12,7 +12,11 @@ export function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setSignOutCallback(signOut);
     restoreSession();
+    return () => {
+      setSignOutCallback(null);
+    };
   }, []);
 
   async function restoreSession() {

@@ -41,9 +41,22 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
+let signOutCallback = null;
+
+export function setSignOutCallback(callback) {
+  signOutCallback = callback;
+}
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    const status = error?.response?.status;
+    if (status === 401 || status === 403) {
+      if (signOutCallback) {
+        signOutCallback();
+      }
+    }
+
     let message =
       error?.response?.data?.message ||
       error?.response?.data?.error ||
